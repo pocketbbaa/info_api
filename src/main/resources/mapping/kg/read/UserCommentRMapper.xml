@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.UserCommentRMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.model.out.UserCommentOutModel">
+        <id column="comment_id" jdbcType="BIGINT" property="commentId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="article_id" jdbcType="BIGINT" property="articleId"/>
+        <result column="parent_comment_id" jdbcType="BIGINT" property="parentCommentId"/>
+        <result column="comment_desc" jdbcType="VARCHAR" property="commentDesc"/>
+        <result column="comment_date" jdbcType="TIMESTAMP" property="commentDate"/>
+        <result column="comment_status" jdbcType="TINYINT" property="commentStatus"/>
+        <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason"/>
+        <result column="display_status" jdbcType="TINYINT" property="displayStatus"/>
+        <result column="article_image" property="articleImage"/>
+        <result column="article_img_size" property="articleImageSize"/>
+        <result column="article_title" property="articleTitle"/>
+        <result column="avaTar" property="avaTar"/>
+        <result column="userName" property="userName"/>
+        <result column="publish_kind" property="publishKind"/>
+        <result column="video_filename" property="videoFilename"/>
+        <result column="create_user" property="createUser"/>
+        <result column="user_role" property="userRole"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    comment_id, user_id, article_id, parent_comment_id, comment_desc, comment_date, comment_status, 
+    refuse_reason, display_status
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_user_comment
+        where comment_id = #{commentId,jdbcType=BIGINT}
+    </select>
+
+    <!-- 查询他人主页评论列表 -->
+    <select id="getCommentAll" parameterType="com.kg.platform.model.in.UserCommentInModel" resultMap="BaseResultMap">
+        SELECT  
+       ka.article_image,ka.article_title,kuc.comment_date,kuc.article_id,kuc.comment_id,kuc.comment_desc
+      FROM  
+       kg_user_comment kuc,kg_article ka  WHERE 
+       kuc.article_id=ka.article_id  and kuc.comment_status=1 AND kuc.display_status=1
+       AND kuc.user_id=#{userId}
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+
+    <!-- 查询我的评论列表 -->
+    <select id="getUserCommentAll" parameterType="com.kg.platform.model.in.UserCommentInModel"
+            resultMap="BaseResultMap">
+        SELECT  
+       ka.article_image,ka.article_title,kuc.comment_date,kuc.article_id,kuc.comment_id,kuc.comment_desc,kuc.display_status,kuc.comment_status,ka.publish_kind
+      FROM  
+       kg_user_comment kuc,kg_article ka  WHERE 
+       kuc.article_id=ka.article_id  
+       AND kuc.user_id=#{userId}
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+    <!-- 统计我的评论列表 -->
+    <select id="getUserCommentCount" parameterType="com.kg.platform.model.in.UserCommentInModel"
+            resultType="java.lang.Integer">
+        SELECT  COUNT(kuc.comment_id)  
+        FROM   
+        kg_user_comment kuc,kg_article ka   
+        WHERE kuc.article_id=ka.article_id 
+       AND kuc.user_id=#{userId}
+  </select>
+
+    <!-- 统计 -->
+    <select id="getCommentCount" parameterType="com.kg.platform.model.in.UserCommentInModel"
+            resultType="java.lang.Integer">
+        SELECT  COUNT(kuc.comment_id)  
+        FROM   
+        kg_user_comment kuc,kg_article ka   
+        WHERE kuc.article_id=ka.article_id 
+        AND kuc.display_status=1
+        AND kuc.comment_status=1 AND kuc.user_id=#{userId}
+  </select>
+
+
+    <!-- 文章评论列表 -->
+    <select id="getCommentArtAll" parameterType="com.kg.platform.model.in.UserCommentInModel" resultMap="BaseResultMap">
+  
+  SELECT ku.user_name AS userName,kup.avatar AS avaTar,kuc.comment_desc,kuc.comment_date,kuc.comment_id,kuc.user_id,ku.user_role
+   FROM kg_user_comment  kuc
+ 
+ LEFT JOIN kg_user ku ON kuc.user_id=ku.user_id
+ 
+ LEFT JOIN kg_user_profile  kup ON kuc.user_id=kup.user_id
+ WHERE kuc.article_id=#{articleId} AND  kuc.comment_status=1 AND kuc.display_status=1 ORDER BY kuc.comment_date DESC
+   limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  
+  </select>
+
+    <select id="getCommentArtCount" parameterType="com.kg.platform.model.in.UserCommentInModel"
+            resultType="java.lang.Integer">
+
+        SELECT COUNT(comment_id) FROM kg_user_comment WHERE comment_status=1 AND display_status != 0
+
+        <if test=" null != articleId and '' != articleId">
+            AND article_id=#{articleId}
+        </if>
+        <if test=" null != userId and '' != userId">
+            AND user_id=#{userId}
+        </if>
+
+
+    </select>
+
+    <select id="getOthersComment" parameterType="com.kg.platform.model.in.UserCommentInModel" resultMap="BaseResultMap">
+  
+  SELECT kuc.article_id,kuc.comment_desc,kuc.comment_date,ka.article_title,ka.publish_kind,ka.article_image,ka.article_img_size
+  
+  FROM 
+  kg_user_comment kuc LEFT  JOIN  kg_article ka ON  kuc.article_id = ka.article_id
+  
+  WHERE kuc.user_id=#{userId} AND kuc.comment_status=1 AND kuc.display_status=1  ORDER BY kuc.comment_date  DESC
+  
+  limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  
+  </select>
+
+
+    <!-- 获取用户的评论列表for-app -->
+    <select id="getUserCommentForApp" parameterType="com.kg.platform.model.in.UserCommentInModel"
+            resultMap="BaseResultMap">
+        SELECT
+            ku.user_name as userName,
+            kup.avatar as avaTar,
+            ka.article_image,
+            ka.article_title,
+            ka.publish_kind,
+            kuc.comment_date,
+            kuc.article_id,
+            kuc.comment_id,
+            kuc.comment_desc,
+            kuc.display_status,
+            kuc.comment_status
+        FROM
+            kg_user_comment kuc
+            LEFT JOIN kg_article ka ON kuc.article_id = ka.article_id
+            LEFT JOIN kg_user ku ON kuc.user_id = ku.user_id
+            LEFT JOIN kg_user_profile kup ON kuc.user_id = kup.user_id
+        WHERE
+            kuc.user_id=#{userId}
+        ORDER BY comment_date DESC
+            limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="getMoreUserArtCnt" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM kg_user_comment WHERE user_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectOrderByFilter" resultType="java.util.HashMap">
+	      SELECT COUNT(user_id) AS cnt,user_id FROM kg_user_comment GROUP BY user_id
+    </select>
+
+    <!--获取当前用户被关注的个数-->
+    <select id="getUserByCommentCnt" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT ka.publish_kind,kc.user_id,ka.article_id,ka.video_filename,ka.article_title,DATE_FORMAT(kc.comment_date, '%Y-%m-%d %H:%i:%s') AS comment_date
+    ,ka.create_user,kc.comment_desc,ku.user_name AS userName,kp.avatar AS avaTar
+            FROM kg_article ka
+            LEFT JOIN kg_user_comment kc ON ka.article_id = kc.article_id
+            LEFT JOIN kg_user ku ON kc.user_id = ku.user_id
+            LEFT JOIN kg_user_profile kp ON kp.user_id = ku.user_id
+            WHERE ka.create_user = #{userId} <![CDATA[ AND kc.comment_date >= #{time}
+
+
+
+
+        ]]>
+    </select>
+
+    <select id="getCommentUserIdsByTime" resultType="java.lang.Long">
+        select DISTINCT(user_id) from kg_user_comment where comment_status = 1 and comment_date >= #{start} and #{end} >= comment_date
+    </select>
+
+    <select id="getCommentList" resultType="com.kg.platform.model.out.UserCommentOutModel">
+        SELECT
+          comment_id as commentId,
+          user_id as userId,
+          article_id as articleId,
+          IF(display_status = 2,'',comment_desc) as commentDesc,
+          comment_date as commentDate,
+          display_status as displayStatus
+        FROM kg_user_comment
+        WHERE
+          article_id=#{articleId} AND comment_status=1 AND display_status != 0
+        ORDER BY comment_date DESC
+        limit #{start},#{limit}
+    </select>
+
+    <select id="getCommentReplyList" resultType="com.kg.platform.model.out.CommentReplyOutModel">
+        <foreach collection="list" index="index" item="item" separator="UNION ALL">
+            ( SELECT
+            parent_comment_id AS parentCommentId,
+            comment_id AS commentId,
+            user_id AS userId,
+            article_id AS articleId,
+            to_user_id AS toUserId,
+            IF(display_status = 2,'',comment_desc) as commentDesc,
+            comment_date AS commentDate,
+            display_status AS displayStatus
+            FROM
+            kg_user_comment_reply
+            WHERE
+            comment_status = 1 AND display_status != 0 AND parent_comment_id = #{item}
+            ORDER BY
+            comment_date ASC
+            LIMIT 3
+            )
+        </foreach>
+    </select>
+
+    <select id="getCommentReplyCountMap" resultType="com.kg.platform.model.response.CommentReplyCount">
+        SELECT
+        parent_comment_id as parentCommentId,
+        count( * ) as replyCount
+        FROM
+        kg_user_comment_reply
+        WHERE
+        comment_status = 1 AND display_status != 0 AND
+        parent_comment_id IN
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        GROUP BY
+        parent_comment_id
+    </select>
+
+    <select id="getCommentReplyByTopCommentId" resultType="com.kg.platform.model.out.CommentReplyOutModel">
+          SELECT
+            parent_comment_id AS parentCommentId,
+            comment_id AS commentId,
+            user_id AS userId,
+            article_id AS articleId,
+            to_user_id AS toUserId,
+            comment_desc AS commentDesc,
+            comment_date AS commentDate,
+            display_status AS displayStatus
+            FROM
+            kg_user_comment_reply
+            WHERE
+            comment_status = 1 AND display_status != 0 AND parent_comment_id = #{commentId}
+            ORDER BY
+            comment_date ASC
+            LIMIT #{start},#{limit}
+    </select>
+
+    <select id="getCommentReplyCountByTopCommentId" resultType="java.lang.Long">
+        SELECT
+            count(*)
+            FROM
+            kg_user_comment_reply
+            WHERE
+            comment_status = 1 AND display_status != 0 AND parent_comment_id = #{commentId}
+    </select>
+
+    <select id="getUserIdByCommentId" resultType="java.lang.Long">
+         select user_id from kg_user_comment where comment_id = #{connentId}
+    </select>
+
+    <select id="getUserIdByCommentReplyId" resultType="java.lang.Long">
+        select user_id from kg_user_comment_reply where comment_id = #{connentId}
+    </select>
+
+    <select id="updateByCommentId" resultType="java.lang.Integer">
+        update kg_user_comment set display_status = 2 where comment_id = #{connentId}
+    </select>
+
+    <select id="updateByCommentReplyId" resultType="java.lang.Integer">
+        update kg_user_comment_reply set display_status = 2 where comment_id = #{connentId}
+    </select>
+
+    <select id="getMyCommentListByUserId" resultType="com.kg.platform.model.out.CommentReplyOutModel">
+        SELECT
+            comment_id as commentId,
+            article_id as articleId,
+            user_id as userId,
+            '' toUserId,
+            comment_desc as commentDesc,
+            comment_date as commentDate,
+            display_status as displayStatus,
+            1 floorState,
+            0 parentCommentId
+        FROM
+            kg_user_comment
+        WHERE
+            user_id = #{userId} AND comment_status = 1 AND display_status = 1
+        UNION ALL
+        SELECT
+            comment_id as commentId,
+            article_id as articleId,
+            user_id as userId,
+            to_user_id as toUserId,
+            comment_desc as commentDesc,
+            comment_date as commentDate,
+            display_status as displayStatus,
+            2 floorState,
+            parent_comment_id as parentCommentId
+        FROM
+            kg_user_comment_reply
+        WHERE
+            user_id = #{userId} AND comment_status = 1 AND display_status = 1
+        ORDER BY
+            commentDate DESC
+            LIMIT #{start},#{limit}
+    </select>
+
+    <select id="getCommentListByUserId" resultType="com.kg.platform.model.out.CommentReplyOutModel">
+        SELECT
+            comment_id as commentId,
+            article_id as articleId,
+            user_id as userId,
+            '' toUserId,
+            IF(display_status = 2,'',comment_desc) as commentDesc,
+            comment_date as commentDate,
+            display_status as displayStatus,
+            1 floorState,
+            0 parentCommentId
+        FROM
+          kg_user_comment
+        WHERE
+          user_id = #{userId} AND comment_status = 1 AND display_status != 0
+        UNION ALL
+        SELECT
+            comment_id as commentId,
+            article_id as articleId,
+            user_id as userId,
+            to_user_id as toUserId,
+            IF(display_status = 2,'',comment_desc) as commentDesc,
+            comment_date as commentDate,
+            display_status as displayStatus,
+            2 floorState,
+            parent_comment_id as parentCommentId
+        FROM
+            kg_user_comment_reply
+        WHERE
+            user_id = #{userId} AND comment_status = 1 AND display_status != 0
+        ORDER BY
+            commentDate DESC
+            LIMIT #{start},#{limit}
+    </select>
+
+    <select id="getMyCommentListByUserIdCount" resultType="java.lang.Long">
+        SELECT
+            sum( total )
+        FROM
+            ( SELECT count( * ) AS total FROM kg_user_comment WHERE user_id = #{userId} AND comment_status = 1 AND display_status = 1 UNION ALL SELECT count( * ) AS total FROM kg_user_comment_reply WHERE user_id = #{userId} AND comment_status = 1 AND display_status = 1 ) t
+    </select>
+
+    <select id="getCommentListByUserIdCount" resultType="java.lang.Long">
+        SELECT
+        sum( total )
+        FROM
+        ( SELECT count( * ) AS total FROM kg_user_comment WHERE user_id = #{userId} AND comment_status = 1 AND display_status != 0 UNION ALL SELECT count( * ) AS total FROM kg_user_comment_reply WHERE user_id = #{userId} AND comment_status = 1 AND display_status != 0 ) t
+    </select>
+
+    <select id="getCommentListByIds" resultType="com.kg.platform.model.out.CommentReplyOutModel">
+        SELECT
+        comment_id as commentId,
+        user_id as userId,
+        article_id as articleId,
+        IF(display_status = 2,'',comment_desc) as commentDesc,
+        comment_date as commentDate,
+        display_status as displayStatus
+        FROM kg_user_comment
+        WHERE
+        comment_id IN
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getCommentById" resultType="com.kg.platform.model.out.UserCommentOutModel">
+        SELECT
+          comment_id as commentId,
+          user_id as userId,
+          article_id as articleId,
+          IF(display_status = 2,'',comment_desc) as commentDesc,
+          comment_date as commentDate,
+          display_status as displayStatus
+        FROM kg_user_comment
+        WHERE
+          comment_id=#{commentId}
+        LIMIT 1
+    </select>
+
+    <select id="getCommentTotalCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT
+            sum( total )
+        FROM(
+            SELECT
+                count(comment_id) AS total FROM kg_user_comment WHERE comment_status = 1 AND article_id = #{articleId}
+            UNION ALL
+            SELECT count(comment_id) AS total FROM kg_user_comment_reply WHERE comment_status = 1 AND article_id = #{articleId}
+            ) t
+    </select>
+
+    <select id="getCommentTotalCountByUserId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT
+            sum( total )
+        FROM(
+            SELECT
+                count(comment_id) AS total FROM kg_user_comment WHERE
+                comment_status = 1 AND display_status = 1 AND user_id = #{userId}
+            UNION ALL
+            SELECT count(comment_id) AS total FROM kg_user_comment_reply WHERE
+                comment_status = 1 AND display_status = 1 AND user_id = #{userId}
+            ) t
+    </select>
+
+    <select id="getAdminCommentTotalCountByUserId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT
+        sum( total )
+        FROM(
+        SELECT
+        count(comment_id) AS total FROM kg_user_comment WHERE
+        comment_status = 1 AND user_id = #{userId}
+        UNION ALL
+        SELECT count(comment_id) AS total FROM kg_user_comment_reply WHERE
+        comment_status = 1 AND user_id = #{userId}
+        ) t
+    </select>
+
+    <select id="getCommentReplyById" resultType="com.kg.platform.model.out.CommentReplyOutModel">
+        SELECT
+            comment_id AS commentId,
+            user_id AS userId,
+            article_id AS articleId,
+            parent_comment_id AS parentCommentId,
+            to_user_id AS toUserId,
+            comment_desc AS commentDesc,
+            comment_date AS commentDate,
+            display_status AS displayStatus,
+            2 AS floorState
+        FROM
+            kg_user_comment_reply
+        WHERE
+            comment_status = 1 AND comment_id = #{commentId}
+    </select>
+
+    <select id="getCommentTotalCountByUserIds" resultType="com.kg.platform.model.CommentCntModel">
+        SELECT
+            user_id as userId,
+            sum( total ) as total
+        FROM
+            (
+            SELECT
+                count( comment_id ) AS total,
+                user_id
+            FROM
+                kg_user_comment
+            WHERE
+                comment_status = 1
+                AND user_id IN
+                <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+        GROUP BY
+                user_id UNION ALL
+            SELECT
+                count( comment_id ) AS total,
+                user_id
+            FROM
+                kg_user_comment_reply
+            WHERE
+                comment_status = 1
+                AND user_id IN
+                <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            GROUP BY
+                user_id
+            ) t
+        GROUP BY
+            user_id
+    </select>
+</mapper>

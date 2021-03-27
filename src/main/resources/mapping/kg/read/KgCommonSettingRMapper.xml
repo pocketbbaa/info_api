@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgCommonSettingRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgCommonSettingOutModel">
+    <id column="setting_id" jdbcType="INTEGER" property="settingId" />
+    <result column="setting_key" jdbcType="VARCHAR" property="settingKey" />
+    <result column="setting_value" jdbcType="CHAR" property="settingValue" />
+    <result column="setting_desc" jdbcType="VARCHAR" property="settingDesc" />
+    <result column="setting_status" jdbcType="INTEGER" property="settingStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    setting_id, setting_key, setting_value, setting_desc, setting_status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_common_setting
+    where setting_id = #{settingId,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySettingKey" parameterType="com.kg.platform.model.in.KgCommonSettingInModel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_common_setting
+    where setting_key = #{settingKey,jdbcType=VARCHAR} and setting_status=1
+  </select>
+</mapper>

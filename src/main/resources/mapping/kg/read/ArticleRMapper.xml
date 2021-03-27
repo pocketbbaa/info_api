@@ -1,0 +1,1028 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.ArticleRMapper">
+    <resultMap id="ArticleResultMap" type="com.kg.platform.model.out.ArticleOutModel">
+        <id column="article_id" property="articleId" jdbcType="BIGINT"/>
+        <result column="article_title" property="articleTitle" jdbcType="VARCHAR"/>
+        <result column="article_text" property="articleText"/>
+        <result column="article_tags" property="articleTags" jdbcType="VARCHAR"/>
+        <result column="article_description" property="articleDescription" jdbcType="VARCHAR"/>
+        <result column="article_image" property="articleImage" jdbcType="VARCHAR"/>
+        <result column="article_type" property="articleType" jdbcType="BIT"/>
+        <result column="article_source" property="articleSource" jdbcType="VARCHAR"/>
+        <result column="article_link" property="articleLink" jdbcType="VARCHAR"/>
+        <result column="column_id" property="columnId" jdbcType="INTEGER"/>
+        <result column="second_column" property="secondColumn" jdbcType="INTEGER"/>
+        <result column="display_status" property="displayStatus" jdbcType="BIT"/>
+        <result column="display_order" property="displayOrder" jdbcType="INTEGER"/>
+        <result column="comment_set" property="commentSet" jdbcType="BIT"/>
+        <result column="publish_set" property="publishSet" jdbcType="BIT"/>
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="publish_status" property="publishStatus" jdbcType="BIT"/>
+        <result column="create_user" property="createUser" jdbcType="BIGINT"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="BIGINT"/>
+        <result column="audit_user" property="auditUser" jdbcType="INTEGER"/>
+        <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP"/>
+        <result column="sys_user" property="sysUser" jdbcType="INTEGER"/>
+        <result column="refuse_reason" property="refuseReason" jdbcType="VARCHAR"/>
+        <result column="bowse_num" property="bowseNum" jdbcType="INTEGER"/>
+        <result column="browse_num" property="browseNum" jdbcType="INTEGER"/>
+
+        <result column="collect" property="collect"/>
+        <result column="comments" property="comments"/>
+        <result column="profilename" property="profilename"/>
+        <result column="profileavatar" property="profileavatar"/>
+        <result column="columnintro" property="columnintro"/>
+        <result column="columnname" property="columnname"/>
+        <result column="article_tagnames" property="articleTagnames" jdbcType="VARCHAR"/>
+        <result column="column_name" property="columnname"/>
+        <result column="username" property="username"/>
+        <result column="collectstatus" property="collectstatus"/>
+        <result column="secondcolumn_name" property="secondcolumnname"/>
+
+        <result column="user_column" property="userColumn"/>
+        <result column="column_avatar" property="columnAvatar"/>
+
+        <result column="thumbup_num" property="thumbupNum"/>
+        <result column="bonus_status" property="bonusStatus"/>
+        <result column="bonus" property="bonus"/>
+
+        <result column="article_from" property="articlefrom"/>
+
+        <result column="praisestatus" property="praisestatus"/>
+
+        <result column="getStatus" property="getStatus"/>
+        <result column="searchword" property="searchword"/>
+        <result column="article_textnum" property="textnum" jdbcType="INTEGER"/>
+
+        <result column="publish_kind" property="publishKind" jdbcType="BIT"/>
+        <result column="video_url" property="videoUrl" jdbcType="VARCHAR"/>
+        <result column="video_filename" property="videoFilename" jdbcType="VARCHAR"/>
+        <result column="isPublishBonus" property="isPublishBonus" jdbcType="INTEGER"/>
+        <result column="article_mark" property="articleMark" jdbcType="INTEGER"/>
+        <result column="publish_bonus_status" property="publishBonusStatus" jdbcType="INTEGER"/>
+        <result column="freeze_reason" property="freezeReason" jdbcType="VARCHAR"/>
+
+        <result column="article_img_size" property="articleImgSize" jdbcType="INTEGER"/>
+
+        <result column="blockchain_url" jdbcType="VARCHAR" property="blockchainUrl" />
+
+        <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate"/>
+    </resultMap>
+
+    <resultMap id="ArticleForAppResultMap" type="com.kg.platform.model.out.ArticleOutModel">
+        <id column="article_id" property="articleId" jdbcType="BIGINT"/>
+        <result column="article_title" property="articleTitle" jdbcType="VARCHAR"/>
+        <result column="article_text" property="articleText"/>
+        <result column="article_tags" property="articleTags" jdbcType="VARCHAR"/>
+        <result column="article_description" property="articleDescription" jdbcType="VARCHAR"/>
+        <result column="article_image" property="articleImage" jdbcType="VARCHAR"/>
+        <result column="article_type" property="articleType" jdbcType="BIT"/>
+        <result column="article_source" property="articleSource" jdbcType="VARCHAR"/>
+        <result column="article_link" property="articleLink" jdbcType="VARCHAR"/>
+        <result column="column_id" property="columnId" jdbcType="INTEGER"/>
+        <result column="second_column" property="secondColumn" jdbcType="INTEGER"/>
+        <result column="display_status" property="displayStatus" jdbcType="BIT"/>
+        <result column="display_order" property="displayOrder" jdbcType="INTEGER"/>
+        <result column="comment_set" property="commentSet" jdbcType="BIT"/>
+        <result column="publish_set" property="publishSet" jdbcType="BIT"/>
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="publish_status" property="publishStatus" jdbcType="BIT"/>
+        <result column="create_user" property="createUser" jdbcType="BIGINT"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="BIGINT"/>
+        <result column="audit_user" property="auditUser" jdbcType="INTEGER"/>
+        <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP"/>
+        <result column="sys_user" property="sysUser" jdbcType="INTEGER"/>
+        <result column="refuse_reason" property="refuseReason" jdbcType="VARCHAR"/>
+        <result column="bowse_num" property="bowseNum" jdbcType="INTEGER"/>
+        <result column="browse_num" property="browseNum" jdbcType="INTEGER"/>
+        <result column="collect" property="collect"/>
+        <result column="comments" property="comments"/>
+        <result column="profilename" property="profilename"/>
+        <result column="profileavatar" property="profileavatar"/>
+        <result column="columnintro" property="columnintro"/>
+        <result column="columnname" property="columnname"/>
+        <result column="article_tagnames" property="articleTagnames" jdbcType="VARCHAR"/>
+        <result column="column_name" property="columnname"/>
+        <result column="username" property="username"/>
+        <result column="collectstatus" property="collectstatus"/>
+        <result column="secondcolumn_name" property="secondcolumnname"/>
+        <result column="user_column" property="userColumn"/>
+        <result column="column_avatar" property="columnAvatar"/>
+        <result column="thumbup_num" property="thumbupNum"/>
+        <result column="bonus_status" property="bonusStatus"/>
+        <result column="bonus" property="bonus"/>
+        <result column="article_from" property="articlefrom"/>
+        <result column="video_url" property="videoUrl"/>
+        <result column="publish_kind" property="publishKind"/>
+
+        <result column="praisestatus" property="praisestatus"/>
+
+        <result column="getStatus" property="getStatus"/>
+        <result column="searchword" property="searchword"/>
+        <result column="article_textnum" property="textnum" jdbcType="INTEGER"/>
+        <result column="readNum" property="readNum"/>
+        <result column="article_img_size" property="articleImgSize"/>
+        <result column="collectStatusInfo" property="collectStatusInfo"/>
+
+        <result column="blockchain_url" jdbcType="VARCHAR" property="blockchainUrl" />
+    </resultMap>
+
+    <resultMap id="articleCntResMap" type="java.util.HashMap">
+        <result column="user_id" property="userId"/>
+        <result column="cnt" property="cnt"/>
+    </resultMap>
+
+
+    <sql id="Base_Article_List">
+    article_id,
+    article_title,
+    article_text,
+    article_tags,
+    article_description,
+    article_image,
+    article_type,
+    article_source,
+    article_link,
+    article_from,
+    column_id,
+    second_column,
+    display_status,
+    display_order,
+    comment_set,
+     publish_set,
+     publish_time,
+     publish_status,
+      audit_date,
+     create_user,
+     create_date,
+    update_date,
+    update_user,
+    sys_user,
+    refuse_reason,
+    bowse_num,
+    bonus_status,
+    article_tagnames,article_textnum,
+    publish_kind,video_url,video_filename,if_platform_publish_award,if_push,article_img_size
+  </sql>
+    <sql id="Base_articleList">
+    article_text
+  </sql>
+
+    <sql id="Article_Base">
+        kg.article_id,
+        kg.article_textnum,
+        kg.article_tags,
+        kg.article_tagnames,
+        kg.article_image,
+        kg.article_type,
+        kg.article_source,
+        kg.article_link,
+        kg.column_id,
+        kg.second_column,
+        kg.display_status,
+        kg.display_order,
+        kg.comment_set,
+        kg.publish_set,
+        kg.publish_time,
+        kg.publish_status,
+        kg.create_user,
+        kg.create_date,
+        kg.update_date,
+        kg.update_user,
+        kg.audit_user,
+        kg.audit_date,
+        kg.sys_user,
+        kg.update_sys_user,
+        kg.refuse_reason,
+        kg.bowse_num,
+        kg.share_num,
+        kg.bonus_status,
+        kg.article_from,
+        kg.video_url,
+        kg.video_filename,
+        kg.publish_kind,
+        kg.article_mark,
+        kg.added_bonus_reason,
+        kg.freeze_reason,
+        kg.oper_bonus_user,
+        kg.publish_bonus_status,
+        kg.oper_freeze_user,
+        kg.oper_freeze_time,
+        kg.added_bonus_time,
+        kg.if_platform_publish_award,
+        kg.if_push,
+        kg.article_img_size
+    </sql>
+    <sql id="Article_Text">
+        article_title,article_text,article_description
+    </sql>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ArticleResultMap">
+        select
+        <include refid="Base_Article_List"/>
+        ,
+        <include refid="Base_articleList"/>
+        from kg_article
+        where article_id = #{articleId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectArticleNormal" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+   SELECT
+      c.article_id,c.article_title,c.article_image,c.article_description,c.column_id,c.second_column,c.article_description,c.article_from, c.publish_kind,c.video_url,video_filename,c.article_img_size,
+      (select browse_num from kg_article_statistics where article_id = c.article_id) browse_num,
+      (SELECT column_name FROM kg_column WHERE column_id=c.column_id) columnname,(SELECT column_name FROM kg_column WHERE column_id=c.second_column) secondcolumn_name,
+      (SELECT user_name FROM kg_user WHERE user_id=c.create_user) AS username,
+      c.create_user,c.update_date,c.article_tags,c.article_tagnames,
+      c.display_order FROM  kg_article c
+        WHERE c.publish_status = 1 AND c.display_status =1
+        ORDER BY c.display_order ASC,c.update_date DESC
+limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectArticleAll" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+        SELECT
+         c.article_id,
+         c.article_title,
+         c.article_image,
+         c.article_description,
+         c.article_type,
+         c.column_id,
+         c.second_column,
+         c.article_from,c.publish_kind,c.video_url,video_filename,c.article_mark,
+         ( SELECT browse_num FROM kg_article_statistics WHERE article_id = c.article_id ) browse_num,
+         ( SELECT column_name FROM kg_column WHERE column_id = c.column_id ) columnname,
+         ( SELECT column_name FROM kg_column WHERE column_id = c.second_column ) secondcolumn_name,
+         ( SELECT column_avatar FROM kg_user_profile WHERE user_id = c.create_user ) profileavatar,
+         ( SELECT user_name FROM kg_user WHERE user_id = c.create_user ) AS username,
+         c.create_user,
+         c.update_date,
+         c.article_tags,
+         c.article_tagnames,
+         c.display_order,
+         c.display_status,
+         c.article_img_size,
+         c.audit_date,kae.blockchain_url,
+        IF ( c.display_status = 2, 3, IF ( c.display_status = 3, 2, 1 ) ) AS article_order
+        FROM
+         kg_article c LEFT JOIN kg_article_extend kae ON c.article_id=kae.article_id
+        WHERE
+         c.publish_status = 1 and c.article_from =1
+         AND  (c.display_status=2 OR c.display_status=3 OR (c.display_status=1 AND kae.if_into_index=1))
+        ORDER BY
+         article_order ASC ,
+         c.display_order DESC ,
+         c.audit_date ASC
+        LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectCountArticle" parameterType="com.kg.platform.model.in.ArticleInModel" resultType="java.lang.Long">
+        SELECT
+        count(kg.article_id)
+        FROM kg_article kg WHERE 1=1 AND kg.display_status !=4
+
+        <if test=" null != publishStatus and '' != publishStatus">
+            and kg.publish_status=#{publishStatus}
+        </if>
+
+        <if test=" null != createUser and '' != createUser">
+            and kg.create_user =#{createUser}
+        </if>
+
+        <if test=" null != columnId and '' != columnId">
+            and ( kg.column_id=#{columnId} or kg.second_column=#{columnId} )
+        </if>
+    </select>
+
+
+    <select id="selectAdvisory" resultMap="ArticleResultMap">
+  SELECT kg.article_title,kg.update_date,kg.article_id,kg.article_image,kg.create_user,kg.article_from,kg.article_img_size
+   FROM kg_article kg WHERE  kg.display_status!=4 AND kg.publish_status=1
+   <![CDATA[ AND kg.update_date>=DATE(NOW()) AND kg.update_date<DATE_ADD(DATE(NOW()),INTERVAL 1 DAY)]]>
+    ORDER BY kg.update_date DESC
+    limit 10;
+  </select>
+
+    <select id="selectTopArticle" resultMap="ArticleResultMap">
+         SELECT
+	        kg.article_title,
+	        kg.update_date,
+	        kg.article_id,
+	        kg.article_image,
+	        kg.create_user,
+	        kas.browse_num,
+	        kg.article_from,
+	        kg.article_img_size,
+	        kg.audit_date
+	     FROM
+            kg_article kg LEFT JOIN kg_article_statistics kas ON kas.article_id=kg.article_id  where  kg.display_status!=4 AND kg.publish_status=1 AND kg.publish_kind = 1
+            AND kg.audit_date>=DATE_SUB(DATE(NOW()),INTERVAL 3 DAY) ORDER BY kas.browse_num DESC, kg.audit_date desc LIMIT 10
+  </select>
+
+    <!-- 文章详情 -->
+    <select id="selectByIdDetails" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+        SELECT c.*,(select column_name from kg_user_profile where user_id=c.create_user) user_column,
+        (select column_avatar from kg_user_profile where user_id=c.create_user) column_avatar,IFNULL(z.c_article_id,0) AS comments,
+        publish_kind,video_url,video_filename
+        FROM (
+        SELECT kg.*,kco.column_name FROM kg_article kg LEFT JOIN kg_column kco ON kco.column_id=kg.column_id WHERE
+        kg.article_id=#{articleId,jdbcType=BIGINT}) c
+        LEFT JOIN (SELECT u.article_id AS u_article_id,COUNT(article_id) AS c_article_id FROM kg_user_comment u where
+        u.comment_status=1 and u.display_status=1 GROUP BY u.article_id) AS z ON c.article_id = z.u_article_id
+    </select>
+
+    <select id="selectBaseDetailsForApp" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleForAppResultMap">
+        SELECT<include refid="Article_Base"/>, kup.column_name as user_column,kup.column_avatar,kf.column_name,
+        (SELECT COUNT(1) FROM kg_user_comment kuc where kuc.comment_status = 1 AND kuc.display_status = 1 and
+        kuc.article_id=kg.article_id) as comments,
+        ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = kg.article_id ) blockchain_url
+        from kg_article kg
+        LEFT JOIN kg_user_profile kup on kg.create_user=kup.user_id
+        LEFT JOIN kg_column kf on kg.column_id=kf.column_id
+        where kg.article_id=#{articleId} and kg.display_status IN (1,2,3)
+
+    </select>
+
+    <select id="selectTextDetailsForApp" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleForAppResultMap">
+        SELECT
+        <include refid="Article_Text"/>
+        FROM
+        kg_article
+        WHERE
+        article_id = #{articleId}
+    </select>
+
+
+    <select id="selectArticleBase" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+       SELECT
+        article_id,
+        video_url,
+        article_img_size,
+        video_filename,
+        article_image,
+        article_title,
+        article_from,
+        publish_kind,
+        column_id,
+        article_tags,
+        update_date FROM kg_article  WHERE
+        publish_status = 1 AND display_status != 4 AND article_id=#{articleId}
+  </select>
+
+
+    <!-- 感兴趣文章 前三条-->
+    <select id="selectColumnid" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+        select * from (
+        SELECT c.article_id,
+        c.article_title,
+        c.article_image,
+        c.article_description,
+        c.article_type,
+        c.column_id,
+        c.second_column,
+        c.article_from,
+        c.publish_kind,
+        c.video_url,
+        c.video_filename,
+        c.article_mark,
+        ( SELECT browse_num FROM kg_article_statistics WHERE article_id = c.article_id ) browse_num,
+        ( SELECT column_name FROM kg_column WHERE column_id = c.column_id ) columnname,
+        ( SELECT column_name FROM kg_column WHERE column_id = c.second_column ) secondcolumn_name,
+        ( SELECT user_name FROM kg_user WHERE user_id = c.create_user ) AS username,
+        ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = c.article_id ) blockchain_url,
+        c.create_user,
+        c.update_date,
+        c.article_tags,
+        c.article_tagnames,
+        c.display_order,
+        c.article_img_size,
+        c.audit_date,
+        c.display_status FROM kg_article AS c
+        where  column_id=#{columnId} and update_date &lt; #{updateDate} AND display_status != 4 AND publish_status = 1
+        ORDER BY audit_date desc LIMIT 6) art
+        order by rand() limit 3;
+
+    </select>
+
+    <!-- 感兴趣文章 后三条-->
+    <select id="selectTagname" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+ SELECT kat.article_id,kat.article_title,kat.article_image,kat.column_id,kat.article_from,kat.publish_kind,kat.article_img_size  FROM kg_article kat
+ WHERE  kat.article_tags LIKE #{articleTags} and kat.article_id != #{articleId}  AND kat.display_status!=4 and kat.publish_status=1
+ ORDER BY kat.audit_date  DESC LIMIT 6
+  </select>
+
+    <!-- 下一篇文章 -->
+    <select id="UndeArticle" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+  <![CDATA[
+SELECT article_title,article_id,create_user,publish_kind
+FROM kg_article
+WHERE audit_date>(
+SELECT audit_date
+FROM kg_article
+WHERE article_id=#{articleId})
+and display_status!=4 AND publish_status=1
+order by audit_date
+LIMIT 1
+        ]]>
+    </select>
+
+    <!-- 上一篇文章 -->
+    <select id="OnArticle" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+  	 <![CDATA[
+SELECT article_title,article_id,create_user,publish_kind
+FROM kg_article
+WHERE audit_date<(
+SELECT audit_date
+FROM kg_article
+WHERE article_id=#{articleId})
+and display_status!=4 AND publish_status=1
+order by audit_date desc
+LIMIT 1
+        ]]>
+
+  </select>
+
+
+    <select id="getUserArticleAll" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+        SELECT (SELECT column_name FROM kg_column WHERE column_id=kg.column_id) columnname,(SELECT column_name FROM
+        kg_column WHERE column_id=kg.second_column) secondcolumn_name,
+        (select column_avatar from kg_user_profile where user_id=kg.create_user) column_avatar,
+        kg.article_id,
+        kg.article_title,
+        kg.article_tags,
+        kg.article_description,
+        kg.article_image,
+        kg.article_type,
+        kg.article_source,
+        kg.article_link,
+        kg.article_from,
+        kg.article_text,
+        kg.column_id,
+        kg.second_column,
+        kg.display_status,
+        kg.display_order,
+        kg.comment_set,
+        kg.publish_set,
+        kg.publish_time,
+        kg.publish_status,
+        kg.create_user,
+        kg.create_date,
+        kg.update_date,
+        kg.update_user,
+        kg.sys_user,
+        kg.refuse_reason,
+        kg.bowse_num,
+        kg.bonus_status,
+        kg.article_img_size,
+        if( (select count(1) from kg_account_flow kf WHERE
+        kf.article_id=kg.article_id and kf.business_type_id=540 and kf.amount>0)>0
+        ,0,1
+        ) as isPublishBonus,
+        if(kg.article_mark is null,0,kg.article_mark) as article_mark,
+        if(kg.publish_bonus_status is null,0,kg.publish_bonus_status) as publish_bonus_status,
+        kg.freeze_reason,
+        kg.article_tagnames,kg.article_textnum ,
+        kg.publish_kind,kg.video_url,kg.video_filename, (SELECT user_name FROM kg_user WHERE user_id=kg.create_user) AS
+        username,
+        ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = kg.article_id ) blockchain_url
+        FROM kg_article kg
+        WHERE 1=1 AND display_status !=4 AND kg.create_user =#{createUser}
+        <if test="null != publishStatus and '' != publishStatus">
+            AND kg.publish_status=#{publishStatus}
+        </if>
+        ORDER BY kg.update_date DESC
+
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+
+    </select>
+
+    <!-- 二级频道页右侧 热门资讯-->
+    <select id="getChannelAll" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+	SELECT kga.article_title,article_description,km.column_name AS columnname,kus.user_name AS username,kga.update_date,
+   kga.article_image,kga.article_tagnames,kga.article_id,kga.article_tags,kga.article_img_size,kga.audit_date,
+    publish_kind,video_url,video_filename
+    FROM kg_article kga
+	LEFT JOIN  kg_article_statistics kas ON kga. article_id=kas.article_id
+	LEFT JOIN kg_column km ON km.column_id=kga.column_id
+	LEFT JOIN kg_user kus ON kus.user_id=kga.create_user
+	WHERE kga.publish_status=1 AND kga.display_status!=4 AND kga.column_id=#{columnId}  ORDER BY kas.browse_num DESC  LIMIT 8
+   </select>
+
+
+    <!-- 频道页热门文章 ，栏目下的文章,tag查询-->
+    <select id="getChannelArt" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+        SELECT
+        kga.article_title,article_description,kga.display_status,kga.article_mark,kga.article_img_size,kga.audit_date,
+        kga.publish_kind,video_url,video_filename,
+        if(kga.publish_kind=2,(SELECT count(comment_id) from kg_user_comment where article_id=kga.article_id and
+        display_status=1),0) AS comments,
+        kga.second_column,
+        kup.column_avatar AS profileavatar,
+        kup.column_name AS username,kga.create_user,kga.update_date,
+        kga.article_image,kga.article_tagnames,kga.article_id,kga.article_tags,kas.collect_num AS
+        collect,kas.browse_num,
+        kga.column_id,kga.display_order,kga.article_from,
+        ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = kga.article_id ) blockchain_url
+        FROM kg_article kga
+        LEFT JOIN kg_article_statistics kas ON kga. article_id=kas.article_id
+        LEFT JOIN kg_user_profile kup ON kup.user_id=kga.create_user
+        WHERE 1=1
+        <if test=" null != createUser and '' != createUser">
+            and kga.create_user =#{createUser}
+        </if>
+        <if test=" null != columnId and '' != columnId">
+            <!--栏目为-2时查询关注作者文章-->
+            <if test="columnId ==-2">
+                and kga.create_user in
+                <foreach collection="authorIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="columnId !=-2">
+                and ( kga.column_id=#{columnId} or kga.second_column=#{columnId} )
+            </if>
+        </if>
+        and kga.display_status !=4 and kga.publish_status=1
+
+        ORDER BY kga.audit_date ASC
+
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+
+    </select>
+
+    <select id="getArticleByTag" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+        SELECT
+        kga.article_title,article_description,kga.display_status,kga.article_mark,kga.article_img_size,kga.audit_date,
+        kga.publish_kind,video_url,video_filename,
+        kup.column_avatar AS profileavatar,
+        kup.column_name AS username,kga.create_user,kga.update_date,
+        kga.article_image,kga.article_tagnames,kga.article_id,kga.article_tags,kga.column_id,kga.display_order,kga.article_from,kas.browse_num,
+        ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = kga.article_id ) blockchain_url
+        FROM kg_article kga
+        LEFT JOIN kg_user_profile kup ON kup.user_id=kga.create_user LEFT JOIN kg_article_statistics kas ON
+        kga.article_id=kas.article_id
+        WHERE 1=1
+        <if test=" null != articleTagnames and '' != articleTagnames">
+            and kga.article_tagnames LIKE concat(concat('%',#{articleTagnames},'%'))
+        </if>
+        and kga.display_status !=4 and kga.publish_status=1
+
+        ORDER BY kga.audit_date ASC
+
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+
+    </select>
+
+    <!-- APP底部视频tab的视频列表-->
+    <select id="getVideoArt" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+        SELECT kga.article_title,article_description,kga.display_status,kga.article_mark,kga.article_img_size,kga.audit_date,
+        kga.publish_kind,video_url,video_filename,
+        (SELECT count(comment_id)  from kg_user_comment where article_id=kga.article_id and display_status=1) AS comments,
+        kga.second_column,
+        kup.column_name AS username,kga.create_user,kga.update_date,
+        kga.article_image,kga.article_tagnames,kga.article_id,kga.article_tags,kas.collect_num AS
+        collect,kga.column_id,kga.display_order,kga.article_from,kup.column_avatar,kas.browse_num,
+        ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = kga.article_id ) blockchain_url
+        FROM kg_article kga
+        LEFT JOIN kg_article_statistics kas ON kga. article_id=kas.article_id
+        LEFT JOIN kg_user_profile kup ON kup.user_id=kga.create_user
+        WHERE 1=1
+        and kga.display_status !=4 and kga.publish_status=1 and kga.publish_kind=2
+        ORDER BY kga.audit_date ASC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="countChannelArt" parameterType="com.kg.platform.model.in.ArticleInModel" resultType="java.lang.Long">
+        SELECT
+        count(kg.article_id)
+        FROM kg_article kg WHERE 1=1
+        <if test=" null != createUser and '' != createUser">
+            and kg.create_user =#{createUser}
+        </if>
+        <if test=" null != columnId and '' != columnId">
+            <!--栏目为-2时查询关注作者文章-->
+            <if test="columnId ==-2">
+                and kg.create_user in
+                <foreach collection="authorIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="columnId !=-2">
+                and ( kg.column_id=#{columnId} or kg.second_column=#{columnId} )
+            </if>
+        </if>
+        <if test=" null != articleTagnames and '' != articleTagnames">
+            and kg.article_tagnames LIKE concat(concat('%',#{articleTagnames}),'%')
+        </if>
+        and kg.display_status !=4 AND kg.publish_status=1
+
+    </select>
+
+    <select id="countArticleForSitemap" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultType="java.lang.Long">
+        SELECT
+        count(kg.article_id)
+        FROM kg_article kg
+        WHERE
+        kg.display_status !=4 AND kg.publish_status=1 AND kg.publish_kind=#{publishKind}
+    </select>
+
+    <select id="getArticleForSitemap" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+        SELECT
+        article_id,audit_date
+        FROM kg_article
+        WHERE
+        display_status !=4 AND publish_status=1 AND publish_kind=#{publishKind}
+        ORDER BY audit_date DESC limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="countFirstColumnForMQ" resultType="com.kg.platform.model.out.CountArticleNumOutModel">
+        SELECT
+        column_id,count(article_id) as articleNum
+        FROM kg_article
+        WHERE 1=1
+        and display_status !=4 AND publish_status=1 GROUP BY column_id
+    </select>
+
+    <select id="countSecondColumnForMQ" resultType="com.kg.platform.model.out.CountArticleNumOutModel">
+        SELECT
+        second_column column_id,count(article_id) as articleNum
+        FROM kg_article
+        WHERE 1=1
+        and display_status !=4 AND publish_status=1 and column_id is not null and column_id!=second_column and second_column is not null GROUP BY second_column;
+    </select>
+
+    <select id="countSecondColumnForMQ2" resultType="com.kg.platform.model.out.CountArticleNumOutModel">
+        SELECT
+        second_column column_id,count(article_id) as articleNum
+        FROM kg_article
+        WHERE 1=1
+        and display_status !=4 AND publish_status=1 and column_id is not null and second_column is not null GROUP BY second_column;
+    </select>
+
+    <select id="countVideoArt" parameterType="com.kg.platform.model.in.ArticleInModel" resultType="java.lang.Long">
+        SELECT
+        count(kg.article_id)
+        FROM kg_article kg WHERE 1=1
+        and kg.display_status !=4 and kg.publish_status=1 and kg.publish_kind=2
+
+    </select>
+
+    <!-- 搜索 -->
+    <select id="getSearchArticle" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+
+        SELECT
+        ka.article_mark,ka.article_id,ka.article_description,ka.article_title,ka.article_tags,ka.article_image,ka.article_tagnames,ka.article_from,(
+        SELECT COUNT(comment_id) FROM kg_user_comment kuc WHERE kuc.article_id=ka.article_id) AS comments,
+        ka.update_date,ka.create_user,kc.column_name,kup.column_name as
+        username,kas.thumbup_num,ka.display_order,ka.column_id,ka.second_column,
+        publish_kind,video_url,video_filename,ka.article_img_size,ka.audit_date,kup.column_avatar,
+        ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = ka.article_id ) blockchain_url
+        FROM kg_article ka LEFT JOIN kg_column kc ON ka.column_id=kc.column_id
+        LEFT JOIN kg_user_profile kup ON ka.create_user=kup.user_id
+        LEFT JOIN kg_article_statistics kas ON ka.article_id=kas.article_id
+        WHERE (ka.article_title LIKE concat('%',#{articleTitle},'%') OR ka.article_tagnames LIKE
+        concat('%',#{articleTitle},'%') )
+        and ka.publish_status=1 and ka.display_status!=4
+
+        <if test=" null != publishKind ">
+            and ka.publish_kind =#{publishKind}
+        </if>
+        ORDER BY ka.audit_date DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+
+    </select>
+
+    <!-- 搜索 -->
+    <select id="getSearchArticleForApp" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+        SELECT
+            ka.article_mark,
+            ka.article_id,
+            ka.article_description,
+            ka.article_title,
+            ka.article_tags,
+            ka.article_image,
+            ka.article_tagnames,
+            ka.article_from,
+            ka.display_status,
+            ( SELECT COUNT( comment_id ) FROM kg_user_comment kuc WHERE kuc.article_id = ka.article_id ) AS comments,
+            ka.update_date,
+            ka.create_user,
+            kc.column_name,
+            ku.user_name,
+            kas.thumbup_num,
+            ka.display_order,
+            ( SELECT user_name FROM kg_user WHERE user_id = ka.create_user ) username,
+            ka.column_id,
+            ka.second_column,
+            ka.article_img_size,
+            ka.audit_date,
+            ka.publish_kind,
+            ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = ka.article_id ) blockchain_url
+        FROM
+            kg_article ka
+            LEFT JOIN kg_column kc ON ka.column_id = kc.column_id
+            LEFT JOIN kg_user ku ON ka.create_user = ku.user_id
+            LEFT JOIN kg_article_statistics kas ON ka.article_id = kas.article_id
+        WHERE
+            (
+            ka.article_title LIKE concat(
+            '%',#{articleTitle},'%')  OR  ka.article_tagnames LIKE concat('%',#{articleTitle},'%') )
+
+            AND ka.publish_status = 1
+            AND ka.display_status != 4
+        ORDER BY
+            ka.audit_date DESC
+            LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="SearchCount" parameterType="com.kg.platform.model.in.ArticleInModel" resultType="java.lang.Long">
+        SELECT COUNT(ka.article_id) FROM kg_article ka WHERE
+
+        (ka.article_title LIKE concat('%',#{articleTitle},'%') OR ka.article_tagnames LIKE
+        concat('%',#{articleTitle},'%'))
+        and ka.publish_status=1 and ka.display_status!=4
+        <if test=" null != publishKind ">
+            and ka.publish_kind =#{publishKind}
+        </if>
+    </select>
+
+    <select id="getArticleCreateuser" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+     SELECT ka.article_id,ka.create_user,ka.article_title FROM kg_article ka WHERE ka.article_id=#{articleId}
+   </select>
+
+
+    <select id="getArticleContent" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+
+        SELECT<include refid="Base_Article_List"/>,
+        (SELECT COUNT(kab.bonus_id) FROM kg_article_bonus kab WHERE kab.article_id=ka.article_id) AS bonus
+
+        FROM kg_article ka WHERE ka.article_id=#{articleId}
+    </select>
+
+
+    <select id="getOutterNews" parameterType="java.util.Map" resultMap="ArticleResultMap">
+        SELECT
+        ka.article_title
+        FROM kg_article ka WHERE 1=1 AND ka.article_from =#{articleFrom}
+        <if test=" null != columnId and '' != columnId">
+            and ka.column_id =#{columnId}
+        </if>
+        <if test=" null != secondColumn and '' != secondColumn">
+            and ka.second_column =#{secondColumn}
+        </if>
+        <if test=" null == secondColumn">
+            and ka.second_column is null
+        </if>
+        ORDER BY ka.create_date DESC
+        limit 60
+    </select>
+
+    <select id="selectArticleAppRecommend" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+        SELECT
+         c.article_id,
+         c.article_title,
+         c.article_image,
+         c.article_description,
+         c.article_type,
+         c.column_id,
+         c.second_column,
+         c.article_description,
+         c.article_from,
+         ( SELECT browse_num FROM kg_article_statistics WHERE article_id = c.article_id ) browse_num,
+         ( SELECT column_name FROM kg_column WHERE column_id = c.column_id ) columnname,
+         ( SELECT column_name FROM kg_column WHERE column_id = c.second_column ) secondcolumn_name,
+         ( SELECT user_name FROM kg_user WHERE user_id = c.create_user ) AS username,
+         c.create_user,
+         c.update_date,
+         c.article_tags,
+         c.article_tagnames,
+         c.display_order,
+         c.article_img_size,,
+         ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = c.article_id ) blockchain_url,
+        IF ( c.display_status = 2, 3, IF ( c.display_status = 3, 2, 1 ) ) AS article_order
+        FROM
+         kg_article c
+        WHERE
+         c.publish_status = 1
+         AND c.display_status IN ( 2, 3, 1 )
+        ORDER BY
+         article_order DESC,
+         c.display_order ASC,
+         c.update_date DESC
+        LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <!--查询原创文章详情-->
+    <select id="getCreateArticle" parameterType="com.kg.platform.model.in.ArticleInModel" resultMap="ArticleResultMap">
+        SELECT
+        <include refid="Base_Article_List"/>
+        FROM kg_article ka WHERE ka.article_from=1 and ka.display_status in (1,2,3) and ka.publish_status=1 and
+        publish_bonus_status!=0
+        and ka.article_id=#{articleId}
+    </select>
+
+
+    <!--检查文章发布是否超过7天并且未冻结-->
+    <select id="checkArticleUnfrezee" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+        SELECT
+        <include refid="Base_Article_List"/>
+        FROM kg_article ka WHERE ka.article_from=1 and ka.display_status in (1,2,3) and ka.publish_status=1 and
+        publish_bonus_status!=0
+        and ka.article_id=#{articleId} and TIMESTAMPADD(day,#{days},ka.audit_date ) &gt;= NOW()
+    </select>
+
+    <select id="selectCountArticleRecomm" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultType="java.lang.Long">
+        SELECT
+            count( c.article_id )
+        FROM
+            kg_article c LEFT JOIN kg_article_extend kae ON c.article_id=kae.article_id
+        WHERE
+            c.publish_status = 1
+            AND c.article_from = 1
+            AND (c.display_status=2 OR c.display_status=3 OR (c.display_status=1 AND kae.if_into_index=1))
+    </select>
+
+    <select id="selectArticleRecomm" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+        SELECT
+            c.article_id,
+            c.article_title,
+            c.article_image,
+            c.article_description,
+            c.article_type,
+            c.column_id,
+            c.second_column,
+            c.article_from,
+            c.publish_kind,
+            c.video_url,
+            video_filename,
+            c.article_mark,
+            ( SELECT browse_num FROM kg_article_statistics WHERE article_id = c.article_id ) browse_num,
+            ( SELECT column_name FROM kg_column WHERE column_id = c.column_id ) columnname,
+            ( SELECT column_name FROM kg_column WHERE column_id = c.second_column ) secondcolumn_name,
+            ( SELECT user_name FROM kg_user WHERE user_id = c.create_user ) AS username,
+            c.create_user,
+            c.update_date,
+            c.article_tags,
+            c.article_tagnames,
+            c.display_order,
+            c.display_status,
+            c.article_img_size,
+            c.audit_date,kae.blockchain_url,
+        IF
+            ( c.display_status = 2, 3, IF ( c.display_status = 3, 2, 1 ) ) AS article_order,
+        IF
+			( c.publish_kind=2,(SELECT count(comment_id) FROM kg_user_comment kc where kc.article_id=c.article_id and kc.display_status=1),0) comments
+        FROM
+            kg_article c LEFT JOIN kg_article_extend kae ON c.article_id=kae.article_id
+        WHERE
+            c.publish_status = 1
+            AND c.article_from = 1
+            AND (c.display_status=2 OR c.display_status=3 OR (c.display_status=1 AND kae.if_into_index=1))
+        ORDER BY
+            article_order ASC,
+            c.display_order DESC,
+            c.audit_date ASC
+            LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectRecommend" parameterType="com.kg.platform.model.in.ArticleInModel"
+            resultMap="ArticleResultMap">
+        select * from (
+        SELECT c.article_id,
+        c.article_title,
+        c.article_image,
+        c.article_description,
+        c.article_type,
+        c.column_id,
+        c.second_column,
+        c.article_from,
+        c.publish_kind,
+        c.video_url,
+        c.video_filename,
+        c.article_mark,
+        ( SELECT browse_num FROM kg_article_statistics WHERE article_id = c.article_id ) browse_num,
+        ( SELECT column_name FROM kg_column WHERE column_id = c.column_id ) columnname,
+        ( SELECT column_name FROM kg_column WHERE column_id = c.second_column ) secondcolumn_name,
+        ( SELECT user_name FROM kg_user WHERE user_id = c.create_user ) AS username,
+        c.create_user,
+        c.update_date,
+        c.article_tags,
+        c.article_tagnames,
+        c.display_order,
+        c.article_img_size,
+        c.display_status,
+        ( SELECT blockchain_url FROM kg_article_extend WHERE article_id = c.article_id ) blockchain_url,
+        c.audit_date FROM kg_article AS c
+        where  column_id=#{columnId} and update_date &lt; #{updateDate} AND display_status != 4 AND publish_status = 1
+        ORDER BY audit_date desc LIMIT 6) art
+        order by rand() limit 3;
+
+    </select>
+
+    <!--百科词条  百科栏目下最新的15篇文章-->
+    <select id="encyclopediaList" resultMap="ArticleResultMap">
+        SELECT article_id,article_description,article_title
+        from kg_article
+        where publish_status=1 and display_status!=4 and column_id=379 ORDER BY audit_date DESC LIMIT 15
+    </select>
+
+    <select id="getMoreArticleInfo" parameterType="java.util.List" resultMap="articleCntResMap">
+        SELECT
+        COUNT(*) AS cnt,create_user
+        FROM kg_article WHERE create_user IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY create_user
+    </select>
+
+    <select id="countColumnArticleCnt" parameterType="java.lang.Integer" resultType="java.lang.Long">
+        select count(article_id) from kg_article where 1=1 AND  (column_id = #{columnId} OR second_column = #{columnId}) AND publish_status = 1 AND display_status !=4
+    </select>
+
+    <select id="getArticleSimHashCode" resultType="java.math.BigInteger">
+        SELECT
+        hash_code
+        FROM
+        kg_article_simhash
+        LIMIT #{start},#{limit}
+    </select>
+
+    <select id="getSimHashTotal" resultType="java.lang.Integer">
+        select count(*) from kg_article_simhash
+    </select>
+
+    <select id="getArticleDetailByApprovedDay" resultType="com.kg.platform.common.easyexcel.ArticleExportExcel">
+        SELECT
+            ka.article_id AS articleId,
+            ka.article_title AS articleTitle,
+            ka.create_user AS authorId,
+            ku.user_name AS authorName,
+            ku.user_mobile AS authorPhone,
+            ka.create_date AS createTime,
+            ka.audit_date AS auditTime,
+            ka.publish_status AS auditState,
+            ka.refuse_reason AS refuseReason,
+            ( SELECT sys_user_name FROM kg_sys_user WHERE sys_user_id = ka.audit_user ) AS auditUser,
+            ( SELECT column_name FROM kg_column WHERE column_id = ka.column_id ) AS columnName,
+            ( SELECT column_name FROM kg_column WHERE column_id = ka.second_column ) AS secondColumnName,
+            0 browseNum,
+            0 collectNum,
+            0 thumbupNum,
+            0 shareNum,
+            ( SELECT count( * ) FROM kg_user_comment WHERE article_id = ka.article_id ) AS commentNum,
+            ka.display_status AS displayStatus,
+            ka.article_type AS articleType,
+            ka.article_mark AS articleMark,
+            ( SELECT count( * ) FROM kg_article_extend WHERE article_id = ka.article_id AND if_into_index = 1 ) AS toIndex,
+            kup.column_level AS columnLevel
+        FROM
+          kg_article ka
+        LEFT JOIN kg_user ku ON ku.user_id = ka.create_user
+         LEFT JOIN kg_user_profile kup ON kup.user_id = ka.create_user
+        WHERE
+          publish_status in (1,2,3)
+          AND ka.create_date >= #{start}
+          AND #{end} >= ka.create_date
+    </select>
+
+    <select id="getArticleDisplayStatus" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select display_status from kg_article where article_id = #{id}
+    </select>
+
+    <select id="commentArticleList" resultType="com.kg.platform.model.response.CommentArticle">
+        SELECT
+            article_id AS articleId,
+            article_image AS articleImage,
+            article_title AS articleTitle,
+            publish_kind AS publishKind
+        FROM
+            kg_article
+        WHERE
+            article_id IN
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    
+</mapper>

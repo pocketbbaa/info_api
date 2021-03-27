@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="mqConsumer" class="com.kg.platform.common.mq.consumer.MQConsumer"/> <!--Listener 配置-->
+    <bean id="awardConsumer" class="com.kg.platform.common.mq.consumer.AwardMQConsumer"/> <!--Listener 配置-->
+    <bean id="autoPublishArticleConsumer" class="com.kg.platform.common.mq.consumer.AutoPublishArticleMQConsumer"/> <!--Listener 配置-->
+    <bean id="countArticleConsumer" class="com.kg.platform.common.mq.consumer.CountArticleNumConsumer"/> <!--Listener 配置-->
+    <bean id="refreshColumnArticleConsumer" class="com.kg.platform.common.mq.consumer.RefreshColumnArticleConsumer"/> <!--Listener 配置-->
+    <bean id="generatorSitemapXmlConsumer" class="com.kg.platform.common.mq.consumer.GeneratorSitemapXmlConsumer"/> <!--Listener 配置-->
+    <bean id="convertFlowMQConsumer" class="com.kg.platform.common.mq.consumer.ConvertFlowMQConsumer"/>
+    <bean id="subTributeConsumer" class="com.kg.platform.common.mq.consumer.SubTributeRecordConsumer"/> <!--Listener 配置-->
+    <bean id="batchAuditRitWithdrawConsumer" class="com.kg.platform.common.mq.consumer.BatchAuditRitWithdrawConsumer"/> <!--Listener 配置-->
+
+
+    <!-- 多 CID 订阅同一个 Topic，可以创建多个 ConsumerBean-->
+    <bean id="consumer" class="com.aliyun.openservices.ons.api.bean.ConsumerBean" init-method="start" destroy-method="shutdown">
+        <property name="properties" > <!--消费者配置信息-->
+            <props>
+                <prop key="ConsumerId">${alimq.consumerId}</prop> <!--请替换 XXX-->
+                <prop key="AccessKey">${alimq.accessKey}</prop>
+                <prop key="SecretKey">${alimq.secretKey}</prop>
+                <prop key="ONSAddr">${alimq.onsaddr}</prop>
+                <!--将消费者线程数固定为50个
+                <prop key="ConsumeThreadNums">50</prop>
+                -->
+            </props>
+        </property>
+        <property name="subscriptionTable">
+            <map>
+                <entry value-ref="mqConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${articlemq.topic}"/>
+                            <property name="expression" value="${articlemq.consumer.tag}"/><!--expression 即 Tag，可以设置成具体的 Tag，如 taga||tagb||tagc，也可设置成*。 *仅代表订阅所有 Tag，不支持通配-->
+                        </bean>
+                    </key>
+                </entry>
+                <!--更多的订阅添加 entry 节点即可，如下所示-->
+                <entry value-ref="awardConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${awardmq.topic}"/> <!--订阅另外一个 Topic -->
+                            <property name="expression" value="${awardmq.consumer.tag}"/> <!-- 订阅多个 Tag -->
+                        </bean>
+                    </key>
+                </entry>
+
+                <entry value-ref="autoPublishArticleConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${autopublisharticlemq.topic}"/> <!--订阅另外一个 Topic -->
+                            <property name="expression" value="${autopublisharticlemq.consumer.tag}"/> <!-- 订阅多个 Tag -->
+                        </bean>
+                    </key>
+                </entry>
+
+                <entry value-ref="countArticleConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${countarticlemq.topic}"/> <!--订阅另外一个 Topic -->
+                            <property name="expression" value="${countarticlemq.consumer.tag}"/> <!-- 订阅多个 Tag -->
+                        </bean>
+                    </key>
+                </entry>
+
+                <entry value-ref="generatorSitemapXmlConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${generatorSitemapXml.topic}"/> <!--订阅另外一个 Topic -->
+                            <property name="expression" value="${generatorSitemapXml.consumer.tag}"/> <!-- 订阅多个 Tag -->
+                        </bean>
+                    </key>
+                </entry>
+
+                <entry value-ref="refreshColumnArticleConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${refreshcolumnarticlemq.topic}"/> <!--订阅另外一个 Topic -->
+                            <property name="expression" value="${refreshcolumnarticlemq.consumer.tag}"/> <!-- 订阅多个 Tag -->
+                        </bean>
+                    </key>
+                </entry>
+
+
+                <entry value-ref="subTributeConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${kgSubTributeRecordMq.topic}"/> <!--订阅另外一个 Topic -->
+                            <property name="expression" value="${kgSubTributeRecordMq.consumer.tag}"/> <!-- 订阅多个 Tag -->
+                        </bean>
+                    </key>
+                </entry>
+
+
+                <entry value-ref="convertFlowMQConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${convertFlowMQConsumer.topic}"/> <!--订阅另外一个 Topic -->
+                            <property name="expression" value="${convertFlowMQConsumer.consumer.tag}"/> <!-- 订阅多个 Tag -->
+                        </bean>
+                    </key>
+                </entry>
+
+                <entry value-ref="batchAuditRitWithdrawConsumer">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${batchAuditRitWithdrawConsumer.topic}"/> <!--订阅另外一个 Topic -->
+                            <property name="expression" value="${batchAuditRitWithdrawConsumer.consumer.tag}"/> <!-- 订阅多个 Tag -->
+                        </bean>
+                    </key>
+                </entry>
+
+            </map>
+        </property>
+    </bean>
+</beans>

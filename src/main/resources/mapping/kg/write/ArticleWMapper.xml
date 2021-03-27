@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.ArticleWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Article">
+    <id column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+    <result column="article_tags" jdbcType="VARCHAR" property="articleTags" />
+    <result column="article_description" jdbcType="VARCHAR" property="articleDescription" />
+    <result column="article_image" jdbcType="VARCHAR" property="articleImage" />
+    <result column="article_type" jdbcType="BIT" property="articleType" />
+    <result column="article_source" jdbcType="VARCHAR" property="articleSource" />
+    <result column="article_link" jdbcType="VARCHAR" property="articleLink" />
+    <result column="column_id" jdbcType="INTEGER" property="columnId" />
+    <result column="second_column" jdbcType="INTEGER" property="secondColumn" />
+    <result column="display_status" jdbcType="BIT" property="displayStatus" />
+    <result column="display_order" jdbcType="INTEGER" property="displayOrder" />
+    <result column="comment_set" jdbcType="BIT" property="commentSet" />
+    <result column="publish_set" jdbcType="BIT" property="publishSet" />
+    <result column="publish_time" jdbcType="TIMESTAMP" property="publishTime" />
+    <result column="publish_status" jdbcType="BIT" property="publishStatus" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="sys_user" jdbcType="INTEGER" property="sysUser" />
+    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+    <result column="audit_user" jdbcType="BIGINT" property="auditUser" />
+    <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="bowse_num" jdbcType="INTEGER" property="bowseNum" />
+    <result column="article_tagnames" property="articleTagnames" jdbcType="VARCHAR" />
+    <result column="bonusStatus" property="bonusStatus" jdbcType="INTEGER" />
+    <result column="article_from" property="articleFrom"/>
+    <result column="article_textnum" property="textnum" jdbcType="INTEGER"/>
+    <result column="update_sys_user" property="updateSysUser" jdbcType="INTEGER"/>
+
+    <result column="publish_kind" property="publishKind" jdbcType="BIT" />
+    <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+    <result column="video_filename" property="videoFilename" jdbcType="VARCHAR" />
+
+      <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate"/>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.kg.platform.dao.entity.Article">
+    <result column="article_text" jdbcType="LONGVARCHAR" property="articleText" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    article_id, article_title, article_tags, article_description, article_image, article_type, 
+    article_source, article_link, column_id, second_column, display_status, display_order, 
+    comment_set, publish_set, publish_time, publish_status, create_user, create_date, update_sys_user
+    update_date, update_user, sys_user, refuse_reason,audit_user,audit_date,bowse_num,article_tagnames,article_textnum,
+    publish_kind,video_url,video_filename,if_push,if_platform_publish_award
+  </sql>
+  <sql id="Blob_Column_List">
+    article_text
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_article
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.Article">
+    insert into kg_article (article_id, article_title, article_tags, 
+      article_description, article_image, article_type, 
+      article_source, article_link, column_id, 
+      second_column, display_status, display_order, 
+      comment_set, publish_set, publish_time, 
+      publish_status, create_user, create_date, 
+      update_date, update_user, sys_user, 
+      refuse_reason, article_text,audit_user,audit_date,bowse_num,article_tagnames)
+    values (#{articleId,jdbcType=BIGINT}, #{articleTitle,jdbcType=VARCHAR}, #{articleTags,jdbcType=VARCHAR}, 
+      #{articleDescription,jdbcType=VARCHAR}, #{articleImage,jdbcType=VARCHAR}, #{articleType,jdbcType=BIT}, 
+      #{articleSource,jdbcType=VARCHAR}, #{articleLink,jdbcType=VARCHAR}, #{columnId,jdbcType=INTEGER}, 
+      #{secondColumn,jdbcType=INTEGER}, #{displayStatus,jdbcType=BIT}, #{displayOrder,jdbcType=INTEGER}, 
+      #{commentSet,jdbcType=BIT}, #{publishSet,jdbcType=BIT}, #{publishTime,jdbcType=TIMESTAMP}, 
+      #{publishStatus,jdbcType=BIT}, #{createUser,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, 
+      now(), #{updateUser,jdbcType=INTEGER}, #{sysUser,jdbcType=INTEGER},
+      #{refuseReason,jdbcType=VARCHAR}, #{articleText,jdbcType=LONGVARCHAR},#{auditUser,jdbcType=BIGINT},#{auditDate,jdbcType=TIMESTAMP},#{bowseNum,jdbcType=INTEGER},#{tagnames,jdbcType=VARCHAR})
+  </insert>
+  <insert id="AddArticle" parameterType="com.kg.platform.model.in.ArticleInModel">
+    insert into kg_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="articleTitle != null">
+        article_title,
+      </if>
+      <if test="articleTags != null">
+        article_tags,
+      </if>
+      <if test="articleDescription != null">
+        article_description,
+      </if>
+      <if test="articleImage != null">
+        article_image,
+      </if>
+      <if test="articleType != null">
+        article_type,
+      </if>
+      <if test="articleSource != null">
+        article_source,
+      </if>
+      <if test="articleLink != null">
+        article_link,
+      </if>
+      <if test="columnId != null">
+        column_id,
+      </if>
+      <if test="secondColumn != null">
+        second_column,
+      </if>
+      <if test="displayStatus != null">
+        display_status,
+      </if>
+      <if test="displayOrder != null">
+        display_order,
+      </if>
+      <if test="commentSet != null">
+        comment_set,
+      </if>
+      <if test="publishSet != null">
+        publish_set,
+      </if>
+      <if test="publishTime != null">
+        publish_time,
+      </if>
+      <if test="publishStatus != null">
+        publish_status,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="sysUser != null">
+        sys_user,
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason,
+      </if>
+      <if test="articleText != null">
+        article_text,
+      </if>
+      <if test="auditUser != null">
+        audit_user,
+      </if>
+      <if test="auditDate != null">
+        audit_date,
+      </if>
+      <if test="bowseNum != null">
+        bowse_num,
+      </if>
+      <if test="articleTagnames != null">
+        article_tagnames,
+      </if>
+      <if test="bonusStatus != null">
+        bonus_status,
+      </if>
+      <if test="textnum != null">
+        article_textnum,
+      </if>
+      <if test="publishKind != null">
+        publish_kind,
+      </if>
+      <if test="videoUrl != null">
+        video_url,
+      </if>
+      <if test="videoFilename != null">
+        video_filename,
+      </if>
+      <if test="ifPlatformPublishAward != null">
+        if_platform_publish_award,
+      </if>
+      <if test="ifPush != null">
+        if_push,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="articleTitle != null">
+        #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleTags != null">
+        #{articleTags,jdbcType=VARCHAR},
+      </if>
+      <if test="articleDescription != null">
+        #{articleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="articleImage != null">
+        #{articleImage,jdbcType=VARCHAR},
+      </if>
+      <if test="articleType != null">
+        #{articleType,jdbcType=BIT},
+      </if>
+      <if test="articleSource != null">
+        #{articleSource,jdbcType=VARCHAR},
+      </if>
+      <if test="articleLink != null">
+        #{articleLink,jdbcType=VARCHAR},
+      </if>
+      <if test="columnId != null">
+        #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="secondColumn != null">
+        #{secondColumn,jdbcType=INTEGER},
+      </if>
+      <if test="displayStatus != null">
+        #{displayStatus,jdbcType=BIT},
+      </if>
+      <if test="displayOrder != null">
+        #{displayOrder,jdbcType=INTEGER},
+      </if>
+      <if test="commentSet != null">
+        #{commentSet,jdbcType=BIT},
+      </if>
+      <if test="publishSet != null">
+        #{publishSet,jdbcType=BIT},
+      </if>
+      <if test="publishTime != null">
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishStatus != null">
+        #{publishStatus,jdbcType=BIT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="sysUser != null">
+        #{sysUser,jdbcType=INTEGER},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="articleText != null">
+        #{articleText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="auditUser != null">
+        #{auditUser,jdbcType=BIGINT},
+      </if>
+      <if test="auditDate != null">
+        #{auditUser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bowseNum != null">
+        #{bowseNum,jdbcType=INTEGER},
+      </if>
+      <if test="articleTagnames != null">
+        #{articleTagnames,jdbcType=VARCHAR},
+      </if>
+      <if test="bonusStatus != null">
+        #{bonusStatus,jdbcType=INTEGER},
+      </if>
+      <if test="textnum != null">
+        #{textnum,jdbcType=INTEGER},
+      </if>
+      <if test="publishKind != null">
+        #{publishKind,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+        #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoFilename != null">
+        #{videoFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="ifPlatformPublishAward != null">
+        #{ifPlatformPublishAward,jdbcType=INTEGER},
+      </if>
+      <if test="ifPush != null">
+        #{ifPush,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.Article">
+    insert into kg_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="articleTitle != null">
+        article_title,
+      </if>
+      <if test="articleTags != null">
+        article_tags,
+      </if>
+      <if test="articleDescription != null">
+        article_description,
+      </if>
+      <if test="articleImage != null">
+        article_image,
+      </if>
+      <if test="articleType != null">
+        article_type,
+      </if>
+      <if test="articleSource != null">
+        article_source,
+      </if>
+      <if test="articleLink != null">
+        article_link,
+      </if>
+      <if test="columnId != null">
+        column_id,
+      </if>
+      <if test="secondColumn != null">
+        second_column,
+      </if>
+      <if test="displayStatus != null">
+        display_status,
+      </if>
+      <if test="displayOrder != null">
+        display_order,
+      </if>
+      <if test="commentSet != null">
+        comment_set,
+      </if>
+      <if test="publishSet != null">
+        publish_set,
+      </if>
+      <if test="publishTime != null">
+        publish_time,
+      </if>
+      <if test="publishStatus != null">
+        publish_status,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="sysUser != null">
+        sys_user,
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason,
+      </if>
+      <if test="articleText != null">
+        article_text,
+      </if>
+      <if test="auditUser != null">
+        audit_user,
+      </if>
+      <if test="auditDate != null">
+        audit_date,
+      </if>
+      <if test="bowseNum != null">
+        bowse_num,
+      </if>
+      <if test="tagnames != null">
+        article_tagnames,
+      </if>
+      <if test="bonusStatus != null">
+        bonus_status,
+      </if>
+      <if test="textnum != null">
+        article_textnum,
+      </if>
+      <if test="updateSysUser != null">
+        update_sys_user,
+      </if>
+      <if test="articleFrom != null">
+        article_from,
+      </if>
+      <if test="publishKind != null">
+        publish_kind,
+      </if>
+      <if test="videoUrl != null">
+        video_url,
+      </if>
+      <if test="videoFilename != null">
+        video_filename,
+      </if>
+      <if test="ifPlatformPublishAward != null">
+        if_platform_publish_award,
+      </if>
+      <if test="ifPush != null">
+        if_push,
+      </if>
+      <if test="articleImgSize != null">
+        article_img_size,
+      </if>
+        <if test="publishDate != null">
+            publish_date,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="articleTitle != null">
+        #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleTags != null">
+        #{articleTags,jdbcType=VARCHAR},
+      </if>
+      <if test="articleDescription != null">
+        #{articleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="articleImage != null">
+        #{articleImage,jdbcType=VARCHAR},
+      </if>
+      <if test="articleType != null">
+        #{articleType,jdbcType=BIT},
+      </if>
+      <if test="articleSource != null">
+        #{articleSource,jdbcType=VARCHAR},
+      </if>
+      <if test="articleLink != null">
+        #{articleLink,jdbcType=VARCHAR},
+      </if>
+      <if test="columnId != null">
+        #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="secondColumn != null">
+        #{secondColumn,jdbcType=INTEGER},
+      </if>
+      <if test="displayStatus != null">
+        #{displayStatus,jdbcType=BIT},
+      </if>
+      <if test="displayOrder != null">
+        #{displayOrder,jdbcType=INTEGER},
+      </if>
+      <if test="commentSet != null">
+        #{commentSet,jdbcType=BIT},
+      </if>
+      <if test="publishSet != null">
+        #{publishSet,jdbcType=BIT},
+      </if>
+      <if test="publishTime != null">
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishStatus != null">
+        #{publishStatus,jdbcType=BIT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="sysUser != null">
+        #{sysUser,jdbcType=INTEGER},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="articleText != null">
+        #{articleText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="auditUser != null">
+        #{auditUser,jdbcType=BIGINT},
+      </if>
+      <if test="auditDate != null">
+        #{auditUser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bowseNum != null">
+        #{bowseNum,jdbcType=INTEGER},
+      </if>
+      <if test="tagnames != null">
+        #{tagnames,jdbcType=VARCHAR},
+      </if>
+      <if test="bonusStatus != null">
+        #{bonusStatus,jdbcType=INTEGER},
+      </if>
+      <if test="textnum != null">
+        #{textnum,jdbcType=INTEGER},
+      </if>
+      <if test="updateSysUser != null">
+        #{updateSysUser,jdbcType=INTEGER},
+      </if>
+      <if test="articleFrom != null">
+        #{articleFrom,jdbcType=INTEGER},
+      </if>
+      <if test="publishKind != null">
+        #{publishKind,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+        #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoFilename != null">
+        #{videoFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="ifPlatformPublishAward != null">
+        #{ifPlatformPublishAward,jdbcType=INTEGER},
+      </if>
+      <if test="ifPush != null">
+        #{ifPush,jdbcType=INTEGER},
+      </if>
+      <if test="articleImgSize != null">
+        #{articleImgSize,jdbcType=INTEGER},
+      </if>
+        <if test="publishDate != null">
+            #{publishDate,jdbcType=TIMESTAMP},
+        </if>
+    </trim>
+  </insert>
+
+
+   <update id="updateBySelective" parameterType="com.kg.platform.model.in.ArticleInModel">
+    update kg_article
+    <set>
+      <if test="articleTitle != null">
+        article_title = #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleTags != null">
+        article_tags = #{articleTags,jdbcType=VARCHAR},
+      </if>
+      <if test="articleDescription != null">
+        article_description = #{articleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="articleImage != null">
+        article_image = #{articleImage,jdbcType=VARCHAR},
+      </if>
+      <if test="articleType != null">
+        article_type = #{articleType,jdbcType=BIT},
+      </if>
+      <if test="articleSource != null">
+        article_source = #{articleSource,jdbcType=VARCHAR},
+      </if>
+      <if test="articleLink != null">
+        article_link = #{articleLink,jdbcType=VARCHAR},
+      </if>
+      <if test="columnId != null">
+        column_id = #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="secondColumn != null">
+        second_column = #{secondColumn,jdbcType=INTEGER},
+      </if>
+      <if test="displayStatus != null">
+        display_status = #{displayStatus,jdbcType=BIT},
+      </if>
+      <if test="displayOrder != null">
+        display_order = #{displayOrder,jdbcType=INTEGER},
+      </if>
+      <if test="commentSet != null">
+        comment_set = #{commentSet,jdbcType=BIT},
+      </if>
+      <if test="publishSet != null">
+        publish_set = #{publishSet,jdbcType=BIT},
+      </if>
+      <if test="publishTime != null">
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishStatus != null">
+        publish_status = #{publishStatus,jdbcType=BIT},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="true">
+        update_date = now(),
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="sysUser != null">
+        sys_user = #{sysUser,jdbcType=INTEGER},
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="articleText != null">
+        article_text = #{articleText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="auditUser != null">
+        audit_user = #{auditUser,jdbcType=BIGINT},
+      </if>
+      <if test="auditDate != null">
+        audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bowseNum != null">
+        bowse_num = #{bowseNum,jdbcType=INTEGER},
+      </if>
+      <if test="articleTagnames != null">
+        article_tagnames = #{articleTagnames,jdbcType=VARCHAR},
+      </if>
+      <if test="bonusStatus != null">
+        bonus_status = #{bonusStatus,jdbcType=INTEGER},
+      </if>
+      <if test="textnum != null">
+        article_textnum = #{textnum,jdbcType=INTEGER},
+      </if>
+      <if test="articleFrom != null">
+         article_from = #{articleFrom,jdbcType=INTEGER},
+      </if>
+     <if test="publishKind != null">
+       publish_kind =  #{publishKind,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+       video_url =   #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoFilename != null">
+       video_filename =   #{videoFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="addedBonusReason != null">
+       added_bonus_reason =   #{addedBonusReason,jdbcType=VARCHAR},
+      </if>
+      <if test="ifPlatformPublishAward != null">
+        if_platform_publish_award =   #{ifPlatformPublishAward,jdbcType=INTEGER},
+      </if>
+      <if test="ifPush != null">
+        if_push =   #{ifPush,jdbcType=INTEGER},
+      </if>
+        <if test="publishDate != null">
+            publish_date = #{publishDate,jdbcType=TIMESTAMP},
+        </if>
+    </set>
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.Article">
+    update kg_article
+    <set>
+      <if test="articleTitle != null">
+        article_title = #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleTags != null">
+        article_tags = #{articleTags,jdbcType=VARCHAR},
+      </if>
+      <if test="articleDescription != null">
+        article_description = #{articleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="articleImage != null">
+        article_image = #{articleImage,jdbcType=VARCHAR},
+      </if>
+      <if test="articleType != null">
+        article_type = #{articleType,jdbcType=BIT},
+      </if>
+      <if test="articleSource != null">
+        article_source = #{articleSource,jdbcType=VARCHAR},
+      </if>
+      <if test="articleLink != null">
+        article_link = #{articleLink,jdbcType=VARCHAR},
+      </if>
+      <if test="columnId != null">
+        column_id = #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="secondColumn != null">
+        second_column = #{secondColumn,jdbcType=INTEGER},
+      </if>
+      <if test="displayStatus != null">
+        display_status = #{displayStatus,jdbcType=BIT},
+      </if>
+      <if test="displayOrder != null">
+        display_order = #{displayOrder,jdbcType=INTEGER},
+      </if>
+      <if test="commentSet != null">
+        comment_set = #{commentSet,jdbcType=BIT},
+      </if>
+      <if test="publishSet != null">
+        publish_set = #{publishSet,jdbcType=BIT},
+      </if>
+      <if test="publishTime != null">
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishStatus != null">
+        publish_status = #{publishStatus,jdbcType=BIT},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        create_date = IFNULL(create_date,NOW()),
+      </if>
+      <if test="true">
+        update_date = now(),
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="sysUser != null">
+        sys_user = #{sysUser,jdbcType=INTEGER},
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="articleText != null">
+        article_text = #{articleText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="auditUser != null">
+        audit_user = #{auditUser,jdbcType=BIGINT},
+      </if>
+      <if test="auditDate != null">
+        audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bowseNum != null">
+        bowse_num = #{bowseNum,jdbcType=INTEGER},
+      </if>
+      <if test="tagnames != null">
+        article_tagnames = #{tagnames,jdbcType=VARCHAR},
+      </if>
+      <if test="textnum != null">
+        article_textnum = #{textnum,jdbcType=INTEGER},
+      </if>
+      <if test="bonusStatus != null">
+        bonus_status = #{bonusStatus,jdbcType=INTEGER},
+      </if>
+      <if test="updateSysUser != null">
+       update_sys_user =  #{updateSysUser,jdbcType=INTEGER},
+      </if>
+      <if test="articleFrom != null">
+         article_from = #{articleFrom,jdbcType=INTEGER},
+      </if>
+     <if test="publishKind != null">
+       publish_kind =  #{publishKind,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+       video_url =   #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoFilename != null">
+       video_filename =   #{videoFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="freezeReason != null">
+       freeze_reason =   #{freezeReason,jdbcType=VARCHAR},
+      </if>
+       <if test="addedBonusReason != null">
+       added_bonus_reason =  #{addedBonusReason,jdbcType=VARCHAR},
+      </if>
+       <if test="operBonusUser != null">
+       oper_bonus_user =  #{operBonusUser,jdbcType=INTEGER},
+      </if>
+       <if test="articleMark != null">
+       article_mark =  #{articleMark,jdbcType=INTEGER},
+      </if>
+       <if test="publishBonusStatus != null">
+       publish_bonus_status =  #{publishBonusStatus,jdbcType=INTEGER},
+      </if>
+       <if test="operFreezeUser != null">
+       oper_freeze_user =  #{operFreezeUser,jdbcType=INTEGER},
+      </if>
+       <if test="operFreezeTime != null">
+       oper_freeze_time =  #{operFreezeTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="addedBonusTime != null">
+       added_bonus_time =  #{addedBonusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ifPlatformPublishAward != null">
+        if_platform_publish_award = #{ifPlatformPublishAward,jdbcType=INTEGER},
+      </if>
+      <if test="ifPush != null">
+        if_push = #{ifPush,jdbcType=INTEGER},
+      </if>
+      <if test="articleImgSize != null">
+        article_img_size = #{articleImgSize,jdbcType=INTEGER},
+      </if>
+        <if test="publishDate != null">
+            publish_date = #{publishDate,jdbcType=TIMESTAMP},
+        </if>
+    </set>
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.kg.platform.dao.entity.Article">
+    update kg_article
+    set article_title = #{articleTitle,jdbcType=VARCHAR},
+      article_tags = #{articleTags,jdbcType=VARCHAR},
+      article_description = #{articleDescription,jdbcType=VARCHAR},
+      article_image = #{articleImage,jdbcType=VARCHAR},
+      article_type = #{articleType,jdbcType=BIT},
+      article_source = #{articleSource,jdbcType=VARCHAR},
+      article_link = #{articleLink,jdbcType=VARCHAR},
+      column_id = #{columnId,jdbcType=INTEGER},
+      second_column = #{secondColumn,jdbcType=INTEGER},
+      display_status = #{displayStatus,jdbcType=BIT},
+      display_order = #{displayOrder,jdbcType=INTEGER},
+      comment_set = #{commentSet,jdbcType=BIT},
+      publish_set = #{publishSet,jdbcType=BIT},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      publish_status = #{publishStatus,jdbcType=BIT},
+      create_user = #{createUser,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = now(),
+      update_user = #{updateUser,jdbcType=INTEGER},
+      sys_user = #{sysUser,jdbcType=INTEGER},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      article_text = #{articleText,jdbcType=LONGVARCHAR},
+      audit_user = #{auditUser,jdbcType=BIGINT},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      bowse_num = #{bowseNum,jdbcType=INTEGER},
+      article_textnum = #{textnum,jdbcType=INTEGER},
+      article_tagnames = #{tagnames,jdbcType=VARCHAR}
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.Article">
+    update kg_article
+    set article_title = #{articleTitle,jdbcType=VARCHAR},
+      article_tags = #{articleTags,jdbcType=VARCHAR},
+      article_description = #{articleDescription,jdbcType=VARCHAR},
+      article_image = #{articleImage,jdbcType=VARCHAR},
+      article_type = #{articleType,jdbcType=BIT},
+      article_source = #{articleSource,jdbcType=VARCHAR},
+      article_link = #{articleLink,jdbcType=VARCHAR},
+      column_id = #{columnId,jdbcType=INTEGER},
+      second_column = #{secondColumn,jdbcType=INTEGER},
+      display_status = #{displayStatus,jdbcType=BIT},
+      display_order = #{displayOrder,jdbcType=INTEGER},
+      comment_set = #{commentSet,jdbcType=BIT},
+      publish_set = #{publishSet,jdbcType=BIT},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      publish_status = #{publishStatus,jdbcType=BIT},
+      create_user = #{createUser,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = now(),
+      update_user = #{updateUser,jdbcType=INTEGER},
+      sys_user = #{sysUser,jdbcType=INTEGER},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      audit_user = #{auditUser,jdbcType=BIGINT},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      bowse_num = #{bowseNum,jdbcType=INTEGER},
+      article_textnum = #{textnum,jdbcType=INTEGER},
+      article_tagnames = #{tagnames,jdbcType=VARCHAR}
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+
+
+  <!-- 逻辑删除文章，改成前台隐藏 -->
+
+   <update id="updateArticle" parameterType="com.kg.platform.model.in.ArticleInModel">
+    update kg_article
+    set 
+      display_status = #{displayStatus},
+      update_date = now()
+    where article_id = #{articleId}
+  </update>
+
+  <update id="disposeReport" parameterType="java.lang.Long">
+    UPDATE kg_article_report
+    SET state = 1,
+    update_time = now()
+    WHERE
+        article_id = #{articleId}
+  </update>
+
+</mapper>

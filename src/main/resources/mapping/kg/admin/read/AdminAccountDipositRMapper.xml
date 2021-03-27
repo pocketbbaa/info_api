@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminAccountDipositRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.AccountDipositQueryResponse">
+    <id column="deposit_flow_id" jdbcType="VARCHAR" property="flowId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="deposit_amount" jdbcType="DECIMAL" property="depositAmount" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="account_time" jdbcType="TIMESTAMP" property="accountTime" />
+    <result column="recharge_time" jdbcType="TIMESTAMP" property="rechargeTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="user_phone" jdbcType="VARCHAR" property="mobile" />
+    <result column="user_role" jdbcType="INTEGER" property="userRole" />
+    <result column="user_level" jdbcType="INTEGER" property="level" />
+  </resultMap>
+  <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.AccountDipositQueryRequest" resultMap="BaseResultMap">
+    select a.deposit_flow_id,a.user_id,a.user_phone,a.deposit_amount,a.account_amount,a.recharge_time,a.account_time,a.remark,u.user_role,u.user_level from kg_account_deposit_flow a left join kg_user u on(a.user_id =  u.user_id) where 1 = 1
+    <if test="userId != null and userId != ''">
+      <bind name="userIdLike" value="'%'+userId+'%'"/>
+      and a.user_id like #{userIdLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.recharge_time >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.recharge_time <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    order by a.recharge_time desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.AccountDipositQueryRequest" resultType="java.lang.Long">
+    select
+    count(a.deposit_flow_id)
+    from kg_account_deposit_flow a where 1 = 1
+    <if test="userId != null and userId != ''">
+      <bind name="userIdLike" value="'%'+userId+'%'"/>
+      and a.user_id like #{userIdLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.recharge_time >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.recharge_time <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+  </select>
+ 
+</mapper>

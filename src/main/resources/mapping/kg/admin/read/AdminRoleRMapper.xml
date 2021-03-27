@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminRoleRMapper">
+
+  <resultMap id="QueryResultMap" type="com.kg.platform.model.response.admin.RoleQueryResponse">
+    <id column="role_id" jdbcType="INTEGER" property="id" />
+    <result column="role_name" jdbcType="VARCHAR" property="name" />
+    <result column="role_status" jdbcType="INTEGER" property="status" />
+    <result column="user_count" jdbcType="BIGINT" property="userCount" />
+    <result column="levels" jdbcType="VARCHAR" property="levels" />
+  </resultMap>
+
+  <select id="selectByCondition" resultMap="QueryResultMap">
+    select r.role_id,r.role_name,r.role_status,(select count(u.user_id) from kg_user u where u.user_role = r.role_id) user_count,(select GROUP_CONCAT(l.level_name) from kg_role_level l where l.role_id = r.role_id) levels from kg_role r
+</select>
+
+
+</mapper>

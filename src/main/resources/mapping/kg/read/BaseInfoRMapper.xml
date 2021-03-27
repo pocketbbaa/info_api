@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.BaseInfoRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.BaseInfoOutModel">
+    <id column="info_id" jdbcType="INTEGER" property="infoId" />
+    <result column="info_type" jdbcType="VARCHAR" property="infoType" />
+    <result column="info_detail" jdbcType="VARCHAR" property="infoDetail" />
+    <result column="info_status" jdbcType="BIT" property="infoStatus" />
+    <result column="info_order" jdbcType="INTEGER" property="infoOrder" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="info_name" jdbcType="VARCHAR" property="infoName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    info_id, info_type, info_detail, info_status, info_order, create_date, create_user, 
+    update_date, update_user,info_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_baseinfo
+    where info_id = #{infoId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="getbaseinfoAll" resultMap="BaseResultMap">
+  
+  SELECT   <include refid="Base_Column_List" /> FROM  kg_baseinfo kb WHERE 
+  
+  kb.info_status=1   ORDER BY kb.info_order
+  
+  
+  </select>
+  
+  <select  id="getbaseinfoType" parameterType="com.kg.platform.model.in.BaseInfoInModel" resultMap="BaseResultMap">
+  
+  	 SELECT  <include refid="Base_Column_List" /> FROM  kg_baseinfo kb WHERE 
+  
+      kb.info_status=1 and info_type LIKE CONCAT('%',#{infoType},'%')  
+  
+  </select>
+
+  <select  id="getbaseinfoName" parameterType="com.kg.platform.model.in.BaseInfoInModel" resultMap="BaseResultMap">
+
+    SELECT <include refid="Base_Column_List" /> FROM  kg_baseinfo kb WHERE
+
+    info_name LIKE CONCAT('%',#{infoName},'%')
+
+  </select>
+ 
+</mapper>

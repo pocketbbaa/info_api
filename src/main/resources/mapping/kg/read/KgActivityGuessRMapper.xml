@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgActivityGuessRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgActivityGuessOutModel">
+    <id column="guess_id" jdbcType="INTEGER" property="guessId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="guess_date" jdbcType="TIMESTAMP" property="guessDate" />
+    <result column="competion_id" jdbcType="INTEGER" property="competionId" />
+    <result column="support_team_id" jdbcType="INTEGER" property="supportTeamId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    guess_id, user_id, guess_date, competion_id, support_team_id, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_activity_guess
+    where guess_id = #{guessId,jdbcType=INTEGER}
+  </select>
+  
+    <select id="checkGuess" parameterType="com.kg.platform.model.in.KgActivityGuessInModel" resultMap="BaseResultMap">
+	    select
+	    <include refid="Base_Column_List" />
+	    from kg_activity_guess
+	    where competion_id=#{competionId} and user_id=#{userId}
+   </select>
+  
+  
+</mapper>

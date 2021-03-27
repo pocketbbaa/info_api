@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kg.platform.dao.read.KgArticleStatisticsRMapper" >
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgArticleStatisticsOutModel" >
+    <id column="article_id" property="articleId" jdbcType="BIGINT" />
+    <result column="browse_num" property="browseNum" jdbcType="INTEGER" />
+    <result column="share_num" property="shareNum" jdbcType="INTEGER" />
+    <result column="thumbup_num" property="thumbupNum" jdbcType="INTEGER" />
+    <result column="collect_num" property="collectNum" jdbcType="INTEGER" />
+    <result column="bonus_num" property="bonusNum" jdbcType="INTEGER" />
+    <result column="bonus_value" property="bonusValue" jdbcType="DECIMAL" />
+    <result column="bonus_total" property="bonusTotal" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+  </resultMap>
+ 
+  
+  <sql id="Base_Column_List" >
+    article_id, browse_num, share_num, thumbup_num, collect_num, bonus_num, bonus_value,bonus_total,
+    create_user
+  </sql>
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from kg_article_statistics
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getThumbupNum" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" resultType="java.lang.Long">
+  
+   SELECT IFNULL(SUM(thumbup_num),0)  FROM kg_article_statistics WHERE  article_id IN (SELECT article_id FROM kg_article WHERE display_status != 4 AND create_user=#{createUser})
+  
+  </select>
+ 
+  
+  
+</mapper>

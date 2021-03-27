@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.AccountFlowRMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.model.out.AccountFlowOutModel">
+        <id column="account_flow_id" jdbcType="BIGINT" property="accountFlowId"/>
+        <result column="relation_flow_id" jdbcType="BIGINT" property="relationFlowId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_phone" jdbcType="VARCHAR" property="userPhone"/>
+        <result column="user_email" jdbcType="VARCHAR" property="userEmail"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="business_type_id" jdbcType="INTEGER" property="businessTypeId"/>
+        <result column="tx_id" jdbcType="VARCHAR" property="txId"/>
+        <result column="tx_address" jdbcType="VARCHAR" property="txAddress"/>
+        <result column="account_amount" jdbcType="DECIMAL" property="accountAmount"/>
+        <result column="freeze_amount" jdbcType="DECIMAL" property="freezeAmount"/>
+        <result column="poundage_amount" jdbcType="DECIMAL" property="poundageAmount"/>
+        <result column="account_date" jdbcType="TIMESTAMP" property="accountDate"/>
+        <result column="article_id" jdbcType="BIGINT" property="articleId"/>
+        <result column="bonus_total_person" jdbcType="INTEGER" property="bonusTotalPerson"/>
+        <result column="flow_status" jdbcType="TINYINT" property="flowStatus"/>
+        <result column="flow_date" jdbcType="TIMESTAMP" property="flowDate"/>
+        <result column="flow_detail" jdbcType="VARCHAR" property="flowDetail"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="typename" property="typename"/>
+        <result column="Income" property="Income" jdbcType="DECIMAL"/>
+        <result column="TodayIncome" property="TodayIncome" jdbcType="DECIMAL"/>
+        <result column="recenflowDate" property="recenflowDate" jdbcType="VARCHAR"/>
+        <result column="awrad" property="awrad" jdbcType="DECIMAL"/>
+        <result column="Reduce" property="Reduce"/>
+        <result column="BeforeIncome" property="BeforeIncome"/>
+        <result column="tUId" property="tUId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    account_flow_id, relation_flow_id, user_id, user_phone, user_email, amount, business_type_id, 
+    tx_id, tx_address, account_amount, poundage_amount, account_date, article_id, bonus_total_person, 
+    flow_status, flow_date, flow_detail, remark
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_account_flow
+        where account_flow_id = #{accountFlowId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByBusinessTypeId" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_account_flow
+        where business_type_id = #{businessTypeId,jdbcType=INTEGER} and article_id = #{articleId,jdbcType=BIGINT}
+    </select>
+
+    <!-- 前台用户查询流水 -->
+    <select id="selectByUserflow" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+        SELECT
+        kaf.account_flow_id,freeze_amount,account_amount,amount,flow_date, flow_detail,tx_address,kab.business_typename AS typename
+        FROM kg_account_flow kaf
+        LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND DATE_FORMAT(kaf.flow_date, '%Y/%m/%d') >= ${"'"+startTime+"'"}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            <![CDATA[ AND DATE_FORMAT(kaf.flow_date, '%Y/%m/%d') <= ${"'"+endTime+"'"}  ]]>
+        </if>
+        <if test="Type==1">
+            AND kaf.business_type_id IN(70,80,90,310,320,330,340,345,350,510,520,540,560,570)
+        </if>
+        <if test="Type==2">
+            AND kaf.business_type_id IN(40,50,640,650)
+        </if>
+        <if test="Type==3">
+            AND kaf.business_type_id IN(530,1530)
+        </if>
+        <if test=" null != businessTypeId and '' != businessTypeId">
+            AND kaf.business_type_id =#{businessTypeId}
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT} ORDER BY kaf.flow_date DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectByUserCount" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+        SELECT
+        count(account_flow_id)
+        FROM kg_account_flow kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND DATE_FORMAT(flow_date, '%Y/%m/%d') >= ${"'"+startTime+"'"}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            <![CDATA[ AND DATE_FORMAT(flow_date, '%Y/%m/%d') <= ${"'"+endTime+"'"}  ]]>
+        </if>
+        <if test="Type==1">
+            AND kaf.business_type_id IN(70,80,90,310,320,330,340,345,350,510,520,540,560,570)
+        </if>
+        <if test="Type==2">
+            AND kaf.business_type_id IN(40,50,640,650)
+        </if>
+        <if test=" null != businessTypeId and '' != businessTypeId">
+            AND kaf.business_type_id =#{businessTypeId}
+        </if>
+        AND user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <!-- 前台用户查询流水 -->
+    <select id="selectUserTxbflow" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        kaf.account_flow_id,amount,flow_date, flow_detail,tx_address,kab.business_typename AS typename
+        FROM kg_account_flow_txb kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND DATE_FORMAT(kaf.flow_date, '%Y/%m/%d') >= ${"'"+startTime+"'"}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            <![CDATA[ AND DATE_FORMAT(kaf.flow_date, '%Y/%m/%d') <= ${"'"+endTime+"'"}  ]]>
+        </if>
+        <if test="Type==1">
+            AND kaf.business_type_id IN(1000,1510,1520,1560,1570)
+        </if>
+        <if test="Type==2">
+            AND kaf.business_type_id IN(1530)
+        </if>
+        <if test=" null != businessTypeId and '' != businessTypeId">
+            AND kaf.business_type_id =#{businessTypeId}
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT} ORDER BY kaf.flow_date DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectUserTxbCount" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+        SELECT
+        count(account_flow_id)
+        FROM kg_account_flow_txb kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND DATE_FORMAT(flow_date, '%Y/%m/%d') >= ${"'"+startTime+"'"}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            <![CDATA[ AND DATE_FORMAT(flow_date, '%Y/%m/%d') <= ${"'"+endTime+"'"}  ]]>
+        </if>
+        <if test="Type==1">
+            AND kaf.business_type_id IN(1000,1510,1520,1560,1570)
+        </if>
+        <if test="Type==2">
+            AND kaf.business_type_id IN(1530)
+        </if>
+        <if test=" null != businessTypeId and '' != businessTypeId">
+            AND kaf.business_type_id =#{businessTypeId}
+        </if>
+        AND user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <!-- 累积所得 -->
+    <select id="cumulativeIncome" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+  	SELECT SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) AS  Income FROM kg_account_flow WHERE user_id=#{userId}
+  	 AND business_type_id not in (10,20,60,350,650)
+  </select>
+
+    <!-- 今日收入，今日消耗 -->
+    <select id="Today" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+  	 <![CDATA[
+
+     SELECT 
+           SUM(CASE WHEN c.amount > 0 THEN c.amount ELSE 0 END) AS  TodayIncome,
+                   SUM(CASE WHEN c.amount < 0 THEN c.amount ELSE 0 END) AS Reduce
+            FROM ( SELECT * FROM kg_account_flow WHERE DATE(flow_date) = CURDATE())c WHERE c.user_id=#{userId} AND business_type_id not in (10,20,60,350,650)
+            
+
+        ]]>
+  </select>
+
+    <!-- 前日所得 -->
+    <select id="BeforeIncome" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+   SELECT  SUM(CASE WHEN a.amount > 0 THEN a.amount ELSE 0 END) AS  BeforeIncome FROM (          
+               SELECT * FROM kg_account_flow WHERE flow_date BETWEEN DATE_SUB(CURDATE(),INTERVAL 1 DAY) AND DATE_SUB(CURDATE(),INTERVAL 0 DAY))a WHERE a.user_id=#{userId} 
+                AND business_type_id not in (10,20,60,350,650)
+  </select>
+
+
+    <select id="cumulativeIncomeTxb" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+     SELECT SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) AS  Income FROM kg_account_flow_txb WHERE user_id=#{userId}
+      AND business_type_id not in (1010,1020)
+  </select>
+
+    <select id="TodayTxb" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+  	 <![CDATA[
+
+     SELECT 
+           SUM(CASE WHEN c.amount > 0 THEN c.amount ELSE 0 END) AS  TodayIncome,
+                   SUM(CASE WHEN c.amount < 0 THEN c.amount ELSE 0 END) AS Reduce
+            FROM ( SELECT * FROM kg_account_flow_txb WHERE DATE(flow_date) = CURDATE())c WHERE c.user_id=#{userId} AND business_type_id not in (1010,1020)
+
+        ]]>
+  </select>
+
+    <select id="BeforeIncomeTxb" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+     SELECT  SUM(CASE WHEN a.amount > 0 THEN a.amount ELSE 0 END) AS  BeforeIncome FROM (          
+               SELECT * FROM kg_account_flow_txb WHERE flow_date BETWEEN DATE_SUB(CURDATE(),INTERVAL 1 DAY) AND DATE_SUB(CURDATE(),INTERVAL 0 DAY))a WHERE a.user_id=#{userId} 
+                AND business_type_id not in (1010,1020)
+  </select>
+
+    <!-- 判断该用户是否有有提现申请 -->
+    <select id="auditAmount" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+   SELECT kaf.flow_date,kaf.tx_address,kaf.amount,kaf.account_amount,kaf.poundage_amount,kaf.flow_status FROM kg_account_flow kaf 
+               LEFT JOIN kg_account_businesstype kab ON  kaf.business_type_id= kab.business_type_id 
+               WHERE kaf.business_type_id=20  
+               AND kaf.flow_status =3  AND kaf.user_id=#{userId}
+  </select>
+
+    <!-- 获取当前提现用户最大提现钛值和最小提现钛值 -->
+    <select id="getMaxMinTimes" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+   SELECT krl.action_times,krl.action_min_times FROM  kg_user ku LEFT JOIN  kg_user_profile kup ON ku.user_id=kup.user_id 
+				LEFT JOIN kg_role_level_auth krl ON ku.user_role=krl.role_id
+         WHERE  ku.user_id=#{userId}  AND krl.auth_action=#{authAction}
+  </select>
+
+    <!-- 统计该文章被人打赏次数 -->
+    <select id="getTipsinCount" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+   SELECT COUNT(account_flow_id) FROM  kg_account_flow  WHERE  business_type_id=#{businessTypeId} AND user_id=#{userId} AND article_id=#{articleId}
+  </select>
+
+    <!-- 统计师父打赏徒弟支出次数-->
+    <select id="getRewardTips" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+  <![CDATA[
+
+	    SELECT count(1) from  kg_account_flow kf
+		LEFT JOIN kg_account_flow kf1 on kf.account_flow_id=kf1.relation_flow_id
+		where kf.user_id=#{rewardUid} and kf1.user_id=#{userId} and
+		kf.business_type_id=640 and kf1.business_type_id=650
+		and ( TO_DAYS( kf.flow_date ) = TO_DAYS(NOW()) )
+
+        ]]>
+  </select>
+
+
+    <!-- 统计分享奖励次数-->
+    <select id="getShareBonusCount" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+  <![CDATA[
+
+	    SELECT count(1) from  kg_account_flow kf
+		where kf.user_id=#{userId} and kf.business_type_id=#{businessTypeId}
+		and ( TO_DAYS( kf.flow_date ) = TO_DAYS(NOW()) )
+
+        ]]>
+  </select>
+
+    <!-- 查询文章奖励领取状态-->
+    <select id="getShareBonusStatusCount" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+  <![CDATA[
+
+	    SELECT count(1) from  kg_account_flow kf
+		where kf.article_id=#{articleId} and kf.business_type_id=#{businessTypeId}
+
+        ]]>
+  </select>
+
+
+    <!-- 统计用户打赏同一作者支出次数-->
+    <select id="getTipsout" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultType="java.lang.Integer">
+  <![CDATA[
+
+     SELECT COUNT(account_flow_id) FROM kg_account_flow WHERE 
+		relation_flow_id IN (SELECT relation_flow_id FROM 
+		kg_account_flow WHERE 
+		business_type_id=50 AND user_id=#{userId}  
+		AND  TO_DAYS(flow_date) = TO_DAYS(NOW())
+		)
+		AND business_type_id=40 AND user_id=(SELECT create_user FROM kg_article WHERE article_id=#{articleId})
+        ]]>
+  </select>
+    <!-- 查询是否领取过对应奖励奖励 -->
+    <select id="selectUserAccount" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM kg_account_flow WHERE business_type_id=#{businessTypeId} AND user_id=#{userId} AND article_id=#{articleId}
+        limit 1
+    </select>
+
+    <!-- 统计各种奖励类型领取人数 -->
+    <select id="getBusinessTypeCount" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+  	SELECT COUNT(account_flow_id) FROM kg_account_flow WHERE business_type_id=#{businessTypeId} AND article_id=#{articleId}
+  	  and flow_date>
+(select update_date from kg_article_bonus where article_id=#{articleId} limit 1);
+  </select>
+
+    <select id="getBusinessTypeValue" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.math.BigDecimal">
+  	SELECT sum(account_amount) FROM kg_account_flow WHERE business_type_id=#{businessTypeId} AND article_id=#{articleId}
+  	  and flow_date>
+(select update_date from kg_article_bonus where article_id=#{articleId} limit 1);
+  </select>
+
+    <select id="selectUserTypeFlow" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM kg_account_flow WHERE business_type_id=#{businessTypeId} AND user_id=#{userId}
+    </select>
+
+
+    <!-- 我的师傅详情  包含查询我的今日进贡  历史进贡  最新进贡时间  以及师傅对我的打赏-->
+    <!--<select id="getMasterInfo" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+  	 <!--<![CDATA[-->
+
+	  <!--SELECT if(ku.user_role!=1,kp.column_avatar,kp.avatar) as avatar, if(ku.user_role!=1,kp.column_name,ku.user_name) as userName,kr.user_id as tUId,-->
+		  <!--(-->
+		     <!--( SELECT  if(sum(kaf.amount) is null,0,sum(kaf.amount) ) from  kg_account_flow  kf-->
+				   <!--LEFT JOIN kg_account_flow_txb kaf on kf.account_flow_id=kaf.relation_flow_id -->
+				   <!--where kf.business_type_id in (540) and kaf.business_type_id =1530 and kr.rel_user_id=kf.user_id-->
+				   <!--and kaf.user_id=kr.user_id-->
+				   <!--and ( TO_DAYS(NOW())=TO_DAYS(kf.flow_date) ) and kaf.amount>0-->
+		     <!--) -->
+		   <!--+-->
+		   <!--(  SELECT  if(sum(kaf.amount) is null,0,sum(kaf.amount) ) from  kg_account_flow_txb  kf-->
+		      <!--LEFT JOIN kg_account_flow_txb kaf on kf.account_flow_id=kaf.relation_flow_id -->
+		      <!--where kf.business_type_id in (1510,1520) and kaf.business_type_id =1530 and kr.rel_user_id=kf.user_id-->
+		      <!--and kaf.user_id=kr.user_id-->
+		      <!--and ( TO_DAYS(NOW())=TO_DAYS(kf.flow_date) ) and kf.amount>0-->
+		   <!--)-->
+		 <!--) as TodayIncome,-->
+		 <!--(-->
+		     <!--( SELECT  if(sum(kaf.amount) is null,0,sum(kaf.amount) ) from  kg_account_flow  kf-->
+				   <!--LEFT JOIN kg_account_flow_txb kaf on kf.account_flow_id=kaf.relation_flow_id -->
+				   <!--where kf.business_type_id in (540) and kaf.business_type_id =1530 and kr.rel_user_id=kf.user_id-->
+				   <!--and kaf.user_id=kr.user_id-->
+				   <!--and kaf.amount>0-->
+		     <!--) -->
+		   <!--+-->
+		   <!--(  SELECT  if(sum(kaf.amount) is null,0,sum(kaf.amount) ) from  kg_account_flow_txb  kf-->
+		      <!--LEFT JOIN kg_account_flow_txb kaf on kf.account_flow_id=kaf.relation_flow_id -->
+		      <!--where kf.business_type_id in (1510,1520) and kaf.business_type_id =1530 and kr.rel_user_id=kf.user_id-->
+		      <!--and kaf.user_id=kr.user_id-->
+		      <!--and kf.amount>0-->
+		   <!--)-->
+		 <!--) as Income,-->
+		<!---->
+		  <!--(   SELECT  if(sum(kf1.amount) is null,0,sum(kf1.amount) ) from kg_account_flow kf1 -->
+					    <!--where kf1.business_type_id=640 and kf1.user_id=kr.rel_user_id and kf1.amount>0-->
+		  <!--) as awrad,-->
+		<!---->
+		  <!--DATE_FORMAT( (  -->
+			    <!--SELECT kf.flow_date from  kg_account_flow_txb  kf-->
+		        <!--LEFT JOIN kg_account_flow_txb kaf on kf.account_flow_id=kaf.relation_flow_id -->
+		        <!--where kf.business_type_id in (1510,1520) and kaf.business_type_id =1530 and kr.rel_user_id=kf.user_id-->
+		        <!--and kaf.user_id=kr.user_id-->
+		        <!--and kf.amount>0 ORDER BY kf.flow_date desc limit 1-->
+		 <!--),'%Y-%m-%d %H:%i:%S') as recenflowDate-->
+		<!--from kg_user ku-->
+		<!--LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id-->
+		<!--LEFT JOIN kg_user_relation kr on ku.user_id=kr.user_id-->
+		<!--where kr.rel_user_id=#{userId}-->
+        <!--]]>-->
+  <!--</select>-->
+
+    <!-- 我的师傅详情  包含查询我的今日进贡  历史进贡  最新进贡时间  以及师傅对我的打赏-->
+    <select id="getMasterInfo" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	 <![CDATA[
+	  SELECT if(ku.user_role!=1,kp.column_avatar,kp.avatar) as avatar, if(ku.user_role!=1,kp.column_name,ku.user_name) as userName,ku.user_id as tUId,
+		  (   SELECT  if(sum(kf1.amount) is null,0,sum(kf1.amount) ) from kg_account_flow kf1
+					    where kf1.business_type_id=640 and kf1.user_id=kr.rel_user_id and kf1.amount>0
+		  ) as awrad
+		from kg_user ku
+		LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+		LEFT JOIN kg_user_relation kr on ku.user_id=kr.user_id
+		where kr.rel_user_id=#{userId}
+        ]]>
+  </select>
+  
+  
+   <!-- 我的徒弟详情  包含查询我的今日进贡  历史进贡  最新进贡时间  -->
+  <select id="getDiscipleInfos" parameterType="com.kg.platform.model.in.DiscipleInModel"  resultType="com.kg.platform.model.response.DiscipleInfoResponse">
+  	  
+		SELECT if(ku.user_role!=1,kp.column_avatar,kp.avatar) as avatar, if(ku.user_role!=1,kp.column_name,ku.user_name) as userName ,kr.rel_user_id as tId,
+		<!-- 今日统计栏目 -->
+		<if test=" columnType==0 ">
+         ( (
+            SELECT SUM(n.amount) from (
+            (SELECT a.user_id,b.amount  from	(
+            (
+            SELECT kf.account_flow_id,kf.user_id from  kg_account_flow kf
+            where kf.business_type_id in (540) and kf.user_id!=-1 and kf.amount>0  and  TO_DAYS(NOW())=TO_DAYS(kf.flow_date)
+            ) a
+            LEFT JOIN
+            (
+            SELECT kaf.relation_flow_id ,kaf.amount from  kg_account_flow_txb kaf
+            where kaf.business_type_id =1530  and kaf.user_id!=-1 and kaf.amount>0  and TO_DAYS(NOW())=TO_DAYS(kaf.flow_date) and kaf.user_id=#{userId}
+            ) b
+            on a.account_flow_id=b.relation_flow_id
+            )  where relation_flow_id is not null )
+            UNION All
+            (SELECT a.user_id,b.amount  from	(
+            (
+            SELECT kf.account_flow_id,kf.user_id from  kg_account_flow_txb kf
+            where kf.business_type_id in (1510,1520) and kf.user_id!=-1 and kf.amount>0  and  TO_DAYS(NOW())=TO_DAYS(kf.flow_date)
+            ) a
+            LEFT JOIN
+            (
+            SELECT kaf.relation_flow_id ,kaf.amount from  kg_account_flow_txb kaf
+            where kaf.business_type_id =1530  and kaf.user_id!=-1 and kaf.amount>0  and TO_DAYS(NOW())=TO_DAYS(kaf.flow_date) and kaf.user_id=#{userId}
+            ) b
+            on a.account_flow_id=b.relation_flow_id
+            )
+            where relation_flow_id is not null ) ) n
+            where  n.user_id = kr.rel_user_id
+            ))  as todayIncome,
+		 DATE_FORMAT( ( 
+                SELECT max(flow_date) from	(
+				  (
+					SELECT kf.account_flow_id,kf.flow_date,kf.user_id from  kg_account_flow_txb kf
+					where kf.business_type_id in (1510,1520) and kf.user_id!=-1 and TO_DAYS(NOW())=TO_DAYS(kf.flow_date)
+					) a
+				LEFT JOIN 
+					(
+					SELECT kaf.relation_flow_id  from  kg_account_flow_txb kaf 
+					where kaf.business_type_id =1530  and kaf.user_id!=-1 and TO_DAYS(NOW())=TO_DAYS(kaf.flow_date) and  kaf.user_id=#{userId}
+					) b
+				 on a.account_flow_id=b.relation_flow_id 
+			   )   where relation_flow_id is not null  and a.user_id=kr.rel_user_id
+		),'%H:%i:%S') as relDate
+		</if>
+		<!-- 累计统计栏目 -->
+		<if test=" columnType==1 ">
+            ( (
+            SELECT SUM(n.amount) from (
+            (SELECT a.user_id,b.amount  from	(
+            (
+            SELECT kf.account_flow_id,kf.user_id from  kg_account_flow kf
+            where kf.business_type_id in (540) and kf.user_id!=-1 and kf.amount>0
+            ) a
+            LEFT JOIN
+            (
+            SELECT kaf.relation_flow_id ,kaf.amount from  kg_account_flow_txb kaf
+            where kaf.business_type_id =1530  and kaf.user_id!=-1 and kaf.amount>0  and kaf.user_id=#{userId}
+            ) b
+            on a.account_flow_id=b.relation_flow_id
+            )  where relation_flow_id is not null )
+            UNION All
+            (SELECT a.user_id,b.amount  from	(
+            (
+            SELECT kf.account_flow_id,kf.user_id from  kg_account_flow_txb kf
+            where kf.business_type_id in (1510,1520) and kf.user_id!=-1 and kf.amount>0
+            ) a
+            LEFT JOIN
+            (
+            SELECT kaf.relation_flow_id ,kaf.amount from  kg_account_flow_txb kaf
+            where kaf.business_type_id =1530  and kaf.user_id!=-1 and kaf.amount>0  and kaf.user_id=#{userId}
+            ) b
+            on a.account_flow_id=b.relation_flow_id
+            )
+            where relation_flow_id is not null ) ) n
+            where  n.user_id = kr.rel_user_id
+            ))  as  income,
+		DATE_FORMAT( (  
+		     SELECT max(flow_date) from	(
+				  (
+					SELECT kf.account_flow_id,kf.flow_date,kf.user_id  from  kg_account_flow_txb kf
+					where kf.business_type_id in (1510,1520) and kf.user_id!=-1
+					) a
+				LEFT JOIN 
+					(
+					SELECT kaf.relation_flow_id  from  kg_account_flow_txb kaf 
+					where kaf.business_type_id =1530  and kaf.user_id!=-1  and  kaf.user_id=#{userId}
+					) b
+				 on a.account_flow_id=b.relation_flow_id 
+			   )   where relation_flow_id is not null  and a.user_id=kr.rel_user_id
+		),'%Y-%m-%d %H:%i:%S') as relDate
+		</if>
+		from kg_user_relation kr
+		LEFT JOIN kg_user ku on ku.user_id=kr.rel_user_id
+		LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+		where kr.user_id=#{userId}
+		<if test=" columnType==0 ">
+		   order by todayIncome desc
+		</if>
+		<if test=" columnType==1 ">
+		   order by income desc
+		</if>
+		limit #{start},#{limit}
+		<!-- 现在默认不开放，待发文奖励 阅读奖励后开放
+		<if test=" columnType==0 ">
+		      <if test=" orderByTime==1 and orderByContribution=0 ">
+		          order by relDate desc
+		     </if>
+		     
+		      <if test=" orderByTime==0 and orderByContribution=1 ">
+		          order by todayIncome desc
+		     </if>
+		</if>
+		
+		<if test=" columnType=='1' ">
+		      <if test=" orderByTime=='1' and orderByContribution=0 ">
+		          order by relDate desc
+		      </if>
+		     
+		      <if test=" orderByTime=='0' and orderByContribution=1 ">
+		          order by income desc
+		      </if>
+		</if> -->
+  </select>
+
+    <!-- 我的徒弟详情 总条数-->
+    <select id="getDiscipleInfosCount" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Long">
+            
+		SELECT count(1) from kg_user_relation where user_id=#{userId}
+  </select>
+
+    <!--我的提醒-->
+    <select id="getContriRemindCount" parameterType="com.kg.platform.model.in.DiscipleInModel"
+            resultType="com.kg.platform.model.response.DiscipleRemindRespose">
+        <!-- SELECT COUNT(1) as discipleReminder,
+           ( SELECT count(1) from  kg_user_relation kr
+               LEFT JOIN kg_account_flow kf on kr.rel_user_id=kf.user_id
+               where kr.user_id=#{userId} and  kf.business_type_id in (540,510)
+               and kf.account_date &gt; #{lastTime}
+           ) as teacherReminder
+        from kg_account_flow kf where kf.account_date &gt; #{lastTime} and kf.business_type_id in (640)
+        and user_id=#{userId} -->
+        SELECT COUNT(1) as discipleReminder
+        from kg_account_flow_txb kf where kf.account_date &gt; #{lastTime} and kf.business_type_id in (1530)
+        and user_id=#{userId}
+    </select>
+
+
+    <!-- APP钛值流水查询 -->
+    <select id="selectByUserflowForApp" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        kaf.account_flow_id,kaf.freeze_amount,amount,flow_date, flow_detail,kab.business_typename AS typename
+        FROM kg_account_flow kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 奖励 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(70,80,90,310,320,330,340,345,350,510,520,540,560,570)
+        </if>
+        <!-- 打赏 -->
+        <if test="Type==2">
+            AND kaf.business_type_id IN(40,50)
+        </if>
+        <!-- 转入 -->
+        <if test="Type==3">
+            AND kaf.business_type_id = 10
+        </if>
+        <!-- 转出 -->
+        <if test="Type==4">
+            AND kaf.business_type_id = 20
+        </if>
+        <!-- 进贡 -->
+        <if test="Type==5">
+            AND kaf.business_type_id = 530
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT} ORDER BY kaf.flow_date DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <!-- 钛值总数 -->
+    <select id="selectByUserflowCountForApp" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+        SELECT
+        count(kaf.account_flow_id)
+        FROM kg_account_flow kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 奖励 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(70,80,90,310,320,330,340,345,350,510,520,540,560,570)
+        </if>
+        <!-- 打赏 -->
+        <if test="Type==2">
+            AND kaf.business_type_id IN(40,50)
+        </if>
+        <!-- 转入 -->
+        <if test="Type==3">
+            AND kaf.business_type_id = 10
+        </if>
+        <!-- 转出 -->
+        <if test="Type==4">
+            AND kaf.business_type_id = 20
+        </if>
+        <!-- 进贡 -->
+        <if test="Type==5">
+            AND kaf.business_type_id = 530
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+
+    <select id="selectUserTxbflowForApp" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        kaf.account_flow_id,amount,flow_date, flow_detail,kab.business_typename AS typename
+        FROM kg_account_flow_txb kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 奖励 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(1000,1510,1520,1560,1570)
+        </if>
+        <!-- 打赏 -->
+        <if test="Type==2">
+            AND kaf.business_type_id = 0
+        </if>
+        <!-- 转入 -->
+        <if test="Type==3">
+            AND kaf.business_type_id = 1010
+        </if>
+        <!-- 转出 -->
+        <if test="Type==4">
+            AND kaf.business_type_id = 1020
+        </if>
+        <!-- 进贡 -->
+        <if test="Type==5">
+            AND kaf.business_type_id = 1530
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT} ORDER BY kaf.flow_date DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectUserTxbflowCountForApp" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+        SELECT
+        count(kaf.account_flow_id)
+        FROM kg_account_flow_txb kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 奖励 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(1000,1510,1520,1560,1570)
+        </if>
+        <!-- 打赏 -->
+        <if test="Type==2">
+            AND kaf.business_type_id = 0
+        </if>
+        <!-- 转入 -->
+        <if test="Type==3">
+            AND kaf.business_type_id = 1010
+        </if>
+        <!-- 转出 -->
+        <if test="Type==4">
+            AND kaf.business_type_id = 1020
+        </if>
+        <!-- 进贡 -->
+        <if test="Type==5">
+            AND kaf.business_type_id = 1530
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getTzDetailBill" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        freeze_amount,account_amount,amount,flow_date, flow_detail,tx_address,kab.business_typename AS typename
+        FROM kg_account_flow kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE
+        kaf.account_flow_id = #{accountFlowId,jdbcType=BIGINT} limit 1
+    </select>
+
+    <select id="getTxbDetailBill" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        amount,flow_date, flow_detail,tx_address,kab.business_typename AS typename
+        FROM kg_account_flow_txb kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE
+        kaf.account_flow_id = #{accountFlowId,jdbcType=BIGINT} limit 1
+    </select>
+
+    <select id="getAmountByUserId" resultType="java.lang.String">
+        SELECT
+            sum( amount )
+        FROM
+            kg_account_flow
+        WHERE
+            business_type_id IN ( 40, 560, 540 )
+            AND user_id = #{userId}
+            AND article_id = #{articleId}
+    </select>
+
+
+    <!-- APP钛值流水查询 -->
+    <select id="selectByUserflowForApp125" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        kaf.account_flow_id,kaf.freeze_amount,amount,flow_date, flow_detail,kab.business_typename AS typename
+        FROM kg_account_flow kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 收入 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(10,40,70,80,90,310,320,330,340,345,350,510,520,540,560,570,40,50,10,530)
+        </if>
+        <!-- 支出 -->
+        <if test="Type==2">
+            AND kaf.business_type_id IN(50,20,660)
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT} ORDER BY kaf.flow_date DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <!-- 钛值总数 -->
+    <select id="selectByUserflowCountForApp125" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+        SELECT
+        count(kaf.account_flow_id)
+        FROM kg_account_flow kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 收入 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(10,70,80,90,310,320,330,340,345,350,510,520,540,560,570,40,50,10,530)
+        </if>
+        <!-- 支出 -->
+        <if test="Type==2">
+            AND kaf.business_type_id IN(40,50,20)
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+
+    <select id="selectUserTxbflowForApp125" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="BaseResultMap">
+        SELECT
+        kaf.account_flow_id,amount,flow_date, flow_detail,kab.business_typename AS typename
+        FROM kg_account_flow_txb kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 收入 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(1000,1510,1520,1560,1570,1010,1530)
+        </if>
+        <!-- 支出 -->
+        <if test="Type==2">
+            AND kaf.business_type_id IN(0,1020)
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT} ORDER BY kaf.flow_date DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectUserTxbflowCountForApp125" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+        SELECT
+        count(kaf.account_flow_id)
+        FROM kg_account_flow_txb kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 收入 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(1000,1510,1520,1560,1570,1010,1530)
+        </if>
+        <!-- 支出 -->
+        <if test="Type==2">
+            AND kaf.business_type_id IN(0,1020)
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+
+</mapper>

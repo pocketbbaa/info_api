@@ -1,0 +1,30 @@
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `kg_account_flow_rit`;
+CREATE TABLE `kg_account_flow_rit` (
+  `account_flow_id` bigint(20) NOT NULL COMMENT '流水ID',
+  `relation_flow_id` bigint(20) DEFAULT NULL COMMENT '关联流水ID（用于关联多笔交易，比如打赏）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `user_phone` varchar(50) DEFAULT NULL COMMENT '用户手机（查询，显示使用）',
+  `user_email` varchar(50) DEFAULT NULL COMMENT '用户邮箱（查询，显示使用）',
+  `amount` decimal(20,8) DEFAULT '0.00000000' COMMENT '发生金额（扣款为负数）',
+  `business_type_id` int(11) NOT NULL COMMENT '业务类型',
+  `tx_id` varchar(500) DEFAULT NULL COMMENT '交易ID（充值提现等站外交易）',
+  `tx_address` varchar(500) DEFAULT NULL COMMENT '交易地址（充值提现等站外交易）',
+  `account_amount` decimal(20,8) DEFAULT '0.00000000' COMMENT '实际到账数量',
+  `poundage_amount` decimal(20,8) DEFAULT '0.00000000' COMMENT '手续费',
+  `account_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '实际到账时间',
+  `article_id` bigint(20) DEFAULT NULL COMMENT '发放奖励关联的文章ID',
+  `bonus_total_person` int(11) DEFAULT NULL COMMENT '发放奖励的总人数',
+  `flow_status` tinyint(4) NOT NULL COMMENT '交易状态 0 未生效 1 已生效（根据业务类型不同，设置不同状态）',
+  `flow_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发生时间',
+  `flow_detail` varchar(500) DEFAULT NULL COMMENT '流水详情',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  `freeze_amount` decimal(20,8) DEFAULT '0.00000000' COMMENT '冻结账户发生金额（扣款为负数）',
+  PRIMARY KEY (`account_flow_id`),
+  KEY `relation_flow_id` (`relation_flow_id`),
+  KEY `article_id` (`article_id`),
+  KEY `flow_date` (`flow_date`),
+  KEY `user_email` (`user_email`),
+  KEY `user_id` (`user_id`),
+  KEY `user_phone` (`user_phone`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户账户RIT流水表';

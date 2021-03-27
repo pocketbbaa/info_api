@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgSeoTdkRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgSeoTdkOutModel">
+    <id column="tdk_id" jdbcType="INTEGER" property="tdkId" />
+    <result column="target_id" jdbcType="BIGINT" property="targetId" />
+    <result column="seo_title" jdbcType="VARCHAR" property="seoTitle" />
+    <result column="seo_desc" jdbcType="VARCHAR" property="seoDesc" />
+    <result column="seo_keywords" jdbcType="VARCHAR" property="seoKeywords" />
+    <result column="target_type" jdbcType="INTEGER" property="targetType" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    tdk_id, target_id, seo_title, seo_desc, seo_keywords, target_type, update_date
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_seo_tdk
+    where tdk_id = #{tdkId,jdbcType=INTEGER}
+  </select>
+
+    <select id="detailTdk" parameterType="com.kg.platform.model.in.KgSeoTdkInModel" resultMap="BaseResultMap">
+        select
+         tdk_id, seo_title, seo_desc, seo_keywords
+        from kg_seo_tdk
+        where target_id = #{targetId,jdbcType=BIGINT} AND target_type = #{targetType,jdbcType=INTEGER}
+    </select>
+
+</mapper>

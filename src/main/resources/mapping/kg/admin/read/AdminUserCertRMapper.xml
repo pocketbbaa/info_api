@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminUserCertRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.UserCertQueryResponse">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="nickname" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="user_email" jdbcType="VARCHAR" property="email" />
+    <result column="idcard_front" jdbcType="VARCHAR" property="idcardFront" />
+    <result column="idcard_back" jdbcType="VARCHAR" property="idcardBack" />
+    <result column="idcard_pic" jdbcType="VARCHAR" property="idcardPic" />
+    <result column="real_name" jdbcType="VARCHAR" property="realname" />
+    <result column="idcard_no" jdbcType="VARCHAR" property="idcardNo" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="certificate_status" jdbcType="INTEGER" property="status" />
+    <result column="audit_user" jdbcType="VARCHAR" property="auditUser" />
+    <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+  </resultMap>
+  <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.UserCertQueryRequest" resultMap="BaseResultMap">
+    select c.user_id,u.user_name,u.user_mobile,u.user_email,c.idcard_front,c.idcard_back,c.idcard_pic,c.real_name,c.idcard_no,c.create_date,c.certificate_status,(select su.user_realname from kg_sys_user su where su.sys_user_id=c.audit_user) audit_user,c.audit_date,p.province,p.city from kg_user_certificated c left join kg_user u on(u.user_id = c.user_id) left join kg_user_profile p on(p.user_id = c.user_id) where 1 = 1
+    <if test="userId != null">
+      <bind name="userIdLike" value="'%'+userId+'%'"/>
+      and c.user_id like #{userIdLike}
+    </if>
+    <if test="email != null">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and u.user_email like #{emailLike}
+    </if>
+    <if test="mobile != null">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and u.user_mobile like #{mobileLike}
+    </if>
+    <if test="status != null">
+      and c.certificate_status = #{status}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and c.create_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and c.create_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    order by c.create_date desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.UserCertQueryRequest" resultType="java.lang.Long">
+    select
+    count(c.user_id)
+    from kg_user_certificated c left join kg_user u on(u.user_id = c.user_id) where 1 = 1
+    <if test="userId != null">
+      <bind name="userIdLike" value="'%'+userId+'%'"/>
+      and c.user_id like #{userIdLike}
+    </if>
+    <if test="email != null">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and u.user_email like #{emailLike}
+    </if>
+    <if test="mobile != null">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and u.user_mobile like #{mobileLike}
+    </if>
+    <if test="status != null">
+      and c.certificate_status = #{status}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and c.create_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and c.create_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+  </select>
+  <select id="auditUserCert" parameterType="com.kg.platform.model.request.admin.UserCertEditRequest">
+    update kg_user_certificated set certificate_status = #{status},audit_user = #{auditUser},audit_date = #{auditDate},refuse_reason=#{refuseReason} where user_id = #{userId}
+  </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgColumnCountRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgColumnCountOutModel">
+    <id column="column_key" jdbcType="VARCHAR" property="columnKey" />
+    <result column="article_num" jdbcType="INTEGER" property="articleNum" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    column_key, article_num
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_column_count
+    where column_key = #{columnKey,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_column_count
+  </select>
+</mapper>

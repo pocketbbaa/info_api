@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminUserRMapper">
+
+    <resultMap id="QueryResultMap" type="com.kg.platform.model.response.admin.UserQueryResponse">
+        <id column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_email" jdbcType="VARCHAR" property="userEmail"/>
+        <result column="column_name" jdbcType="VARCHAR" property="columnName"/>
+        <result column="user_mobile" jdbcType="VARCHAR" property="userMobile"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="user_role" jdbcType="TINYINT" property="userRole"/>
+        <result column="user_level" jdbcType="TINYINT" property="userLevel"/>
+        <result column="lastlogin_time" jdbcType="TIMESTAMP" property="lastActiveTime"/>
+        <result column="article_num" jdbcType="INTEGER" property="articleNum"/>
+        <result column="comment_num" jdbcType="INTEGER" property="commentNum"/>
+        <result column="collect_num" jdbcType="INTEGER" property="collectNum"/>
+        <result column="share_num" jdbcType="INTEGER" property="shareNum"/>
+        <result column="audit_status" jdbcType="TINYINT" property="auditStatus"/>
+        <result column="lock_status" jdbcType="TINYINT" property="lockStatus"/>
+        <result column="hot_user" jdbcType="BIT" property="hotUser"/>
+        <result column="user_order" jdbcType="BIGINT" property="userOrder"/>
+        <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate"/>
+        <result column="auditor" jdbcType="VARCHAR" property="auditor"/>
+        <result column="bowse_num" jdbcType="INTEGER" property="bowseNum"/>
+        <result column="apply_column_time" jdbcType="VARCHAR" property="applyColumnTime"/>
+        <result column="apply_role" jdbcType="INTEGER" property="applyRole"/>
+        <result column="rel_time" jdbcType="VARCHAR" property="relTime"/>
+        <result column="parent_user" jdbcType="VARCHAR" property="parentUser"/>
+        <result column="bonus_status" jdbcType="INTEGER" property="bonusStatus"/>
+        <result column="invite_status" jdbcType="INTEGER" property="inviteStatus"/>
+        <result column="register_origin" jdbcType="INTEGER" property="registerOrigin"/>
+        <result column="column_authed" jdbcType="INTEGER" property="columnAuthed"/>
+        <result column="column_identity" jdbcType="INTEGER" property="columnIdentity"/>
+        <result column="ranking_list" jdbcType="INTEGER" property="rankingList"/>
+        <result column="channel" jdbcType="INTEGER" property="channel"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    u.user_id,u.user_name,u.user_email,u.user_mobile,u.create_date,u.user_role,u.user_level,ua.lastlogin_time,ua.apply_column_time,u.apply_role,u.register_origin,
+    (select count(article_id) from kg_article where create_user = u.user_id) article_num,ua.bonus_status,ua.invite_status,
+    (select count(comment_id) from kg_user_comment where user_id = u.user_id) comment_num,
+    u.audit_status,u.lock_status,u.hot_user,u.user_order,ua.audit_date,
+    (select user_realname from kg_sys_user where sys_user_id=ua.audit_userid) auditor,
+    (select user_name from kg_user where user_id = (select user_id from kg_user_relation where rel_user_id=u.user_id)) parent_user,
+    u.column_authed,
+    (select column_identity from kg_user_profile where user_id = u.user_id) column_identity
+  </sql>
+
+    <sql id="Base_Column_List_1_2">
+        u.user_id,u.user_name,u.user_email,u.user_mobile,u.create_date,u.user_role,u.user_level,ua.lastlogin_time,ua.apply_column_time,u.apply_role,u.register_origin,
+        (select count(article_id) from kg_article where create_user = u.user_id) article_num,ua.bonus_status,ua.invite_status,
+        (select count(comment_id) from kg_user_comment where user_id = u.user_id) comment_num,
+        u.audit_status,u.lock_status,u.hot_user,u.user_order,ua.audit_date,
+        (select user_realname from kg_sys_user where sys_user_id=ua.audit_userid) auditor,
+        (select user_name from kg_user where user_id = (select user_id from kg_user_relation where rel_user_id=u.user_id)) parent_user,
+        u.column_authed,
+        up.column_name,
+        kc.name as channel,
+        (select column_identity from kg_user_profile where user_id = u.user_id) column_identity
+    </sql>
+    <select id="selectUserId" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultMap="QueryResultMap">
+    select user_id,user_name from kg_user where ( user_email = #{userMobile} or user_mobile = #{userMobile} ) and user_role != 1
+  </select>
+
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="QueryResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_user u left join kg_user_active ua on( u.user_id = ua.user_id) where u.user_id = ua.user_id and
+        u.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+
+    <sql id="Invite_Column_List">
+    u.user_id,u.user_name,u.user_email,u.user_mobile,u.create_date,u.user_role,u.user_level,ua.lastlogin_time,ua.apply_column_time,u.apply_role,
+    ua.bonus_status,ua.invite_status,
+    u.audit_status,u.lock_status,u.hot_user,u.user_order,ua.audit_date,
+    (select rel_time from kg_user_relation where rel_user_id = u.user_id) relTime,
+    (select user_name from kg_user where user_id = (select user_id from kg_user_relation where rel_user_id=u.user_id)) parent_user
+  </sql>
+
+    <select id="selectParentUserById" parameterType="java.lang.Long" resultMap="QueryResultMap">
+    select
+      u.user_id,u.user_name,u.user_email,u.user_mobile,u.create_date,u.user_role,u.user_level,ua.lastlogin_time,ua.apply_column_time,u.apply_role,
+    ua.bonus_status,ua.invite_status,
+    u.audit_status,u.lock_status,u.hot_user,u.user_order,ua.audit_date,
+    (select rel_time from kg_user_relation where user_id = u.user_id and rel_user_id=#{userId,jdbcType=BIGINT}) relTime,
+    (select user_name from kg_user where user_id = (select user_id from kg_user_relation where rel_user_id=u.user_id)) parent_user
+    from kg_user u left join kg_user_active ua on( u.user_id = ua.user_id) where  u.user_id = (select user_id from kg_user_relation where rel_user_id=#{userId,jdbcType=BIGINT})
+  </select>
+
+    <select id="selectUserInvite" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultMap="QueryResultMap">
+        select
+        <include refid="Invite_Column_List"/>
+        from kg_user_relation kur left join kg_user u on(kur.rel_user_id = u.user_id) left join kg_user_active ua on(
+        u.user_id = ua.user_id) where kur.user_id = #{inviteUserId,jdbcType=BIGINT}
+        <if test="userId != null and userId != ''">
+            <bind name="userIdLike" value="'%'+userId+'%'"/>
+            and u.user_id like #{userIdLike}
+        </if>
+        <if test="userMobile != null and userMobile != ''">
+            <bind name="userMobileLike" value="'%'+userMobile+'%'"/>
+            and u.user_mobile like #{userMobileLike}
+        </if>
+        <if test="userName != null and userName != ''">
+            <bind name="userNameLike" value="'%'+userName+'%'"/>
+            and u.user_name like #{userNameLike}
+        </if>
+        <if test="userRole != null">
+            and u.user_role = #{userRole,jdbcType=INTEGER}
+        </if>
+        <if test="userLevel != null">
+            and u.user_level = #{userLevel,jdbcType=INTEGER}
+        </if>
+        <if test="relType != null">
+            and kur.rel_type = #{relType,jdbcType=TINYINT}
+        </if>
+        <if test="createDateStart != null">
+            <![CDATA[ and u.create_date >= #{createDateStart,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="createDateEnd != null">
+            <![CDATA[ and u.create_date <= #{createDateEnd,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="relDateStart != null">
+            <![CDATA[ and kur.rel_time >= #{relDateStart,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="relDateEnd != null">
+            <![CDATA[ and kur.rel_time <= #{relDateEnd,jdbcType=TIMESTAMP}]]>
+        </if>
+        order by u.create_date desc
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectCountUserInvite" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultType="java.lang.Long">
+        select
+        count(kur.rel_user_id)
+        from kg_user_relation kur left join kg_user u on(kur.rel_user_id = u.user_id) left join kg_user_active ua on(
+        u.user_id = ua.user_id) where kur.user_id = #{inviteUserId,jdbcType=BIGINT}
+        <if test="userId != null and userId != ''">
+            <bind name="userIdLike" value="'%'+userId+'%'"/>
+            and u.user_id like #{userIdLike}
+        </if>
+        <if test="userMobile != null and userMobile != ''">
+            <bind name="userMobileLike" value="'%'+userMobile+'%'"/>
+            and u.user_mobile like #{userMobileLike}
+        </if>
+        <if test="userName != null and userName != ''">
+            <bind name="userNameLike" value="'%'+userName+'%'"/>
+            and u.user_name like #{userNameLike}
+        </if>
+        <if test="userRole != null">
+            and u.user_role = #{userRole,jdbcType=INTEGER}
+        </if>
+        <if test="userLevel != null">
+            and u.user_level = #{userLevel,jdbcType=INTEGER}
+        </if>
+        <if test="relType != null">
+            and kur.rel_type = #{relType,jdbcType=TINYINT}
+        </if>
+        <if test="createDateStart != null">
+            <![CDATA[ and u.create_date >= #{createDateStart,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="createDateEnd != null">
+            <![CDATA[ and u.create_date <= #{createDateEnd,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="relDateStart != null">
+            <![CDATA[ and kur.rel_time >= #{relDateStart,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="relDateEnd != null">
+            <![CDATA[ and kur.rel_time <= #{relDateEnd,jdbcType=TIMESTAMP}]]>
+        </if>
+    </select>
+
+
+    <resultMap id="RealnameQueryResultMap" type="com.kg.platform.model.response.admin.RealnameQueryResponse">
+        <id column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="user_role" jdbcType="TINYINT" property="userRole"/>
+        <result column="user_level" jdbcType="TINYINT" property="level"/>
+        <result column="account_amount" jdbcType="DECIMAL" property="bonusValue"/>
+        <result column="account_date" jdbcType="VARCHAR" property="bonusDate"/>
+    </resultMap>
+
+    <sql id="realname_Column_List">
+      u.user_id,u.user_name,u.user_email,u.user_mobile,u.create_date,u.user_role,u.user_level,kaf.account_amount,kaf.account_date
+  </sql>
+
+    <select id="selectRealnameByCondition" parameterType="com.kg.platform.model.request.admin.BonusQueryRequest"
+            resultMap="RealnameQueryResultMap">
+        select
+        <include refid="realname_Column_List"/>
+        from kg_user u left join kg_user_active ua on( u.user_id = ua.user_id) left join kg_account_flow kaf
+        on(kaf.user_id = ua.user_id) where kaf.user_id!=-1
+        <if test="userId != null and userId != ''">
+            <bind name="userIdLike" value="'%'+userId+'%'"/>
+            and u.user_id like #{userIdLike}
+        </if>
+        <if test="userName != null and userName != ''">
+            <bind name="userNameLike" value="'%'+userName+'%'"/>
+            and u.user_name like #{userNameLike}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            <bind name="userMobileLike" value="'%'+mobile+'%'"/>
+            and u.user_mobile like #{userMobileLike}
+        </if>
+        <if test="userRole != null">
+            and u.user_role = #{userRole,jdbcType=INTEGER}
+        </if>
+        <if test="businessTypeId != null">
+            and kaf.business_type_id = #{businessTypeId}
+        </if>
+        <if test="userLevel != null">
+            and u.user_level = #{userLevel,jdbcType=INTEGER}
+        </if>
+        order by kaf.account_date desc
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectRealnameCountByCondition" resultType="java.lang.Long">
+        select count(u.user_id) from kg_user u left join kg_user_active ua on( u.user_id = ua.user_id) left join
+        kg_account_flow kaf on(kaf.user_id = ua.user_id)
+        where kaf.user_id!=-1
+        <if test="userId != null and userId != ''">
+            <bind name="userIdLike" value="'%'+userId+'%'"/>
+            and u.user_id like #{userIdLike}
+        </if>
+        <if test="userName != null and userName != ''">
+            <bind name="userNameLike" value="'%'+userName+'%'"/>
+            and u.user_name like #{userNameLike}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            <bind name="userMobileLike" value="'%'+mobile+'%'"/>
+            and u.user_mobile like #{userMobileLike}
+        </if>
+        <if test="businessTypeId != null">
+            and kaf.business_type_id = #{businessTypeId}
+        </if>
+        <if test="userRole != null">
+            and u.user_role = #{userRole,jdbcType=INTEGER}
+        </if>
+        <if test="userLevel != null">
+            and u.user_level = #{userLevel,jdbcType=INTEGER}
+        </if>
+    </select>
+
+
+    <resultMap id="InviteQueryResultMap" type="com.kg.platform.model.response.admin.InviteBonusQueryResponse">
+        <id column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="user_role" jdbcType="TINYINT" property="userRole"/>
+        <result column="user_level" jdbcType="TINYINT" property="level"/>
+        <result column="invite_count" jdbcType="INTEGER" property="inviteCount"/>
+        <result column="bonus_status" jdbcType="INTEGER" property="bonusStatus"/>
+        <result column="invite_status" jdbcType="INTEGER" property="inviteStatus"/>
+        <result column="amount" jdbcType="DECIMAL" property="getAmount"/>
+        <result column="bonus_withdraw_date" jdbcType="VARCHAR" property="bonusWithdrawDate"/>
+        <result column="freeze_amount" jdbcType="DECIMAL" property="freezeAmount"/>
+    </resultMap>
+
+    <sql id="invite_Column_List">
+      u.user_id,u.user_name,u.user_mobile,u.user_role,u.user_level,
+    (SELECT count(rel_id) from kg_user_relation where user_id =u.user_id and rel_type=1) invite_count,
+    (select bonus_status from `kg_user_active`  where user_id=u.user_id) bonus_status,
+     (select invite_status from kg_user_active where user_id=u.user_id)  invite_status,
+    (select sum(freeze_amount) from kg_account_flow where user_id=u.user_id and business_type_id=90 and freeze_amount>0) amount,
+    (select sum(withdraw_amount) from kg_withdraw_bonus_flow where user_id=u.user_id and status=0 ) freeze_amount,
+    (select withdraw_time from kg_withdraw_bonus_flow where user_id=u.user_id order by withdraw_time desc limit 1) bonus_withdraw_date
+  </sql>
+
+    <select id="selectUserInviteByCondition" parameterType="com.kg.platform.model.request.admin.BonusQueryRequest"
+            resultMap="InviteQueryResultMap">
+        select
+        <include refid="invite_Column_List"/>
+        from kg_user u left join kg_user_active ua on( u.user_id = ua.user_id) where u.user_id in (select user_id from
+        kg_user_relation where rel_type=1)
+        <if test="userId != null and userId != ''">
+            <bind name="userIdLike" value="'%'+userId+'%'"/>
+            and u.user_id like #{userIdLike}
+        </if>
+        <if test="userName != null and userName != ''">
+            <bind name="userNameLike" value="'%'+userName+'%'"/>
+            and u.user_name like #{userNameLike}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            <bind name="userMobileLike" value="'%'+mobile+'%'"/>
+            and u.user_mobile like #{userMobileLike}
+        </if>
+        <if test="userRole != null">
+            and u.user_role = #{userRole,jdbcType=INTEGER}
+        </if>
+        <if test="userLevel != null">
+            and u.user_level = #{userLevel,jdbcType=INTEGER}
+        </if>
+        <if test="bonusStatus != null">
+            and ua.bonus_status = #{bonusStatus,jdbcType=INTEGER}
+        </if>
+        <if test="inviteStatus != null">
+            and ua.invite_status = #{inviteStatus,jdbcType=INTEGER}
+        </if>
+        <if test="minValue != null">
+            <![CDATA[ and (SELECT count(rel_id) from kg_user_relation where user_id =u.user_id and rel_type=1) >= #{minValue,jdbcType=INTEGER}]]>
+        </if>
+        <if test="maxValue != null">
+            <![CDATA[ and (SELECT count(rel_id) from kg_user_relation where user_id =u.user_id and rel_type=1) <= #{maxValue,jdbcType=INTEGER}]]>
+        </if>
+        order by invite_status desc ,u.create_date desc
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectUserInviteCountByCondition" resultType="java.lang.Long">
+        select count(u.user_id) from kg_user u left join kg_user_active ua on( u.user_id = ua.user_id) where u.user_id
+        in (select user_id from kg_user_relation where rel_type=1)
+        <if test="userId != null and userId != ''">
+            <bind name="userIdLike" value="'%'+userId+'%'"/>
+            and u.user_id like #{userIdLike}
+        </if>
+        <if test="userName != null and userName != ''">
+            <bind name="userNameLike" value="'%'+userName+'%'"/>
+            and u.user_name like #{userNameLike}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            <bind name="userMobileLike" value="'%'+mobile+'%'"/>
+            and u.user_mobile like #{userMobileLike}
+        </if>
+        <if test="userRole != null">
+            and u.user_role = #{userRole,jdbcType=INTEGER}
+        </if>
+        <if test="userLevel != null">
+            and u.user_level = #{userLevel,jdbcType=INTEGER}
+        </if>
+        <if test="bonusStatus != null">
+            and ua.bonus_status = #{bonusStatus,jdbcType=INTEGER}
+        </if>
+        <if test="inviteStatus != null">
+            and ua.invite_status = #{inviteStatus,jdbcType=INTEGER}
+        </if>
+        <if test="minValue != null">
+            <![CDATA[ and (SELECT count(rel_id) from kg_user_relation where user_id =u.user_id and rel_type=1) >= #{minValue,jdbcType=INTEGER}]]>
+        </if>
+        <if test="maxValue != null">
+            <![CDATA[ and (SELECT count(rel_id) from kg_user_relation where user_id =u.user_id and rel_type=1) <= #{maxValue,jdbcType=INTEGER}]]>
+        </if>
+    </select>
+
+
+    <resultMap id="publishBonusQueryResultMap" type="com.kg.platform.model.response.admin.PublishBonusQueryResponse">
+        <result column="article_id" jdbcType="VARCHAR" property="articleId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="publisher"/>
+        <result column="account_flow_id" jdbcType="VARCHAR" property="flowId"/>
+        <result column="article_title" jdbcType="VARCHAR" property="articleTitle"/>
+        <result column="user_mobile" jdbcType="VARCHAR" property="userMobile"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="publishTime"/>
+        <result column="audit_date" jdbcType="TIMESTAMP" property="auditTime"/>
+        <result column="display_status" jdbcType="INTEGER" property="displayStatus"/>
+        <result column="bowse_num" jdbcType="INTEGER" property="bowseNum"/>
+        <result column="share_num" jdbcType="INTEGER" property="shareNum"/>
+        <result column="publish_bonus_status" jdbcType="INTEGER" property="publishBonusStatus"/>
+        <result column="isMarkArticle" jdbcType="INTEGER" property="isMarkArticle"/>
+        <result column="isAddBonus" jdbcType="INTEGER" property="isAddBonus"/>
+        <result column="column_name" jdbcType="VARCHAR" property="columnName"/>
+        <result column="seconName" jdbcType="VARCHAR" property="secondColumnName"/>
+        <result column="tributeAmount" jdbcType="DECIMAL" property="tributeAmount"/>
+        <result column="txbAmount" jdbcType="DECIMAL" property="txbAmount"/>
+        <result column="tvAmount" jdbcType="DECIMAL" property="tvAmount"/>
+        <result column="checkMan" jdbcType="VARCHAR" property="checkMan"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="publish_kind" jdbcType="INTEGER" property="publishKind"/>
+    </resultMap>
+
+    <sql id="publish_bonus_List">
+        ka.article_id, ka.article_title,ku.user_name,oper.sys_user_name,oper.user_realname as checkMan,
+        ka.create_date,ka.display_status,ku.user_id,ku.user_mobile,
+        kc.column_name,kc1.column_name as seconName,ka.audit_date,
+        if(ka.article_mark=1,ka.article_mark,0) as isMarkArticle,
+        <!-- if(ka.publish_bonus_status=2 or ka.publish_bonus_status=0,1,if(ka.added_bonus_time is not null,1,0)) as isAddBonus, -->
+        if(ka.added_bonus_time is null,if(ka.publish_bonus_status=0,1,0),1) as isAddBonus,
+        if(ka.publish_bonus_status is null,2,ka.publish_bonus_status) as publish_bonus_status,
+        (SELECT kf2.amount from kg_account_flow kf2 where kf2.business_type_id=530 and kf2.article_id=ka.article_id and
+        kf2.amount>0 ) as tributeAmount,
+        (SELECT kf1.amount from kg_account_flow kf1 where kf1.business_type_id=560 and kf1.article_id=ka.article_id and
+        kf1.amount>0 ) as tvAmount,
+        (SELECT kft.amount from kg_account_flow_txb kft where 1=1 and kft.business_type_id=1560 and
+        kft.article_id=ka.article_id and kft.amount>0 ) as txbAmount,
+        (SELECT sum(kf2.amount) from kg_account_flow kf2 where kf2.business_type_id=540 and kf2.article_id=ka.article_id
+        and kf2.amount>0 ) as amount
+    </sql>
+
+    <select id="getPublishBonusList" parameterType="com.kg.platform.model.request.admin.PublishBonusQueryRequest"
+            resultMap="publishBonusQueryResultMap">
+        SELECT
+        <include refid="publish_bonus_List"/>,ka.publish_kind
+        from kg_article ka
+        LEFT JOIN kg_user ku on ka.create_user=ku.user_id
+        LEFT JOIN kg_sys_user oper on oper.sys_user_id=ka.oper_bonus_user
+        LEFT JOIN kg_column kc on kc.column_id=ka.column_id
+        LEFT JOIN kg_column kc1 on kc1.column_id=ka.second_column
+        where ka.article_from = 1 and ka.publish_status = 1 AND ka.display_status !=4
+        <if test="articleId != null and articleId != ''">
+            <bind name="articleId" value="'%'+articleId+'%'"/>
+            and ka.article_id like #{articleId}
+        </if>
+
+        <if test="articleTitle != null and articleTitle != ''">
+            <bind name="articleTitle" value="'%'+articleTitle+'%'"/>
+            and ka.article_title like #{articleTitle}
+        </if>
+
+        <if test="publisher != null and publisher != ''">
+            <bind name="publisher" value="'%'+publisher+'%'"/>
+            and ku.user_name like #{publisher}
+        </if>
+
+        <if test="columnId != null and columnId != ''">
+            and ( kc.column_id = #{columnId} or ka.second_column = #{columnId} )
+        </if>
+
+        <if test="publishStartDate != null">
+            and Date(ka.create_date) &gt;= #{publishStartDate}
+        </if>
+
+        <if test="publishEndDate != null">
+            and Date(ka.create_date) &lt;= #{publishEndDate}
+        </if>
+
+        <if test="auditStartDate != null">
+            and Date(ka.audit_date) &gt;= #{auditStartDate}
+        </if>
+
+        <if test="auditEndDate != null">
+            and Date(ka.audit_date) &lt;= #{auditEndDate}
+        </if>
+
+        <if test="articleMark != null">
+            and ka.article_mark = #{articleMark}
+        </if>
+
+        <if test="adminId != null">
+            and ka.oper_bonus_user = #{adminId}
+        </if>
+
+        <if test="bonusStatus != null">
+            <if test="bonusStatus == 2">
+                and (ka.publish_bonus_status = 1 or ka.publish_bonus_status = 2)
+            </if>
+            <if test="bonusStatus != 2">
+                and ka.publish_bonus_status = #{bonusStatus}
+            </if>
+        </if>
+
+        <if test="addBonusStatus != null">
+            <if test="addBonusStatus == 0 ">
+                and ka.oper_bonus_user is null
+            </if>
+            <if test="addBonusStatus == 1 ">
+                and ka.oper_bonus_user is not null
+            </if>
+        </if>
+
+        order by
+
+        <if test="sortFiledName == 'shareNum' ">
+            share_num
+            <if test="sortRule ==0 ">
+                desc
+            </if>
+        </if>
+
+        <if test="sortFiledName == 'browseNum' ">
+            bowse_num
+            <if test="sortRule ==0 ">
+                desc
+            </if>
+        </if>
+
+        <if test="sortFiledName == null">
+            ka.update_date desc
+        </if>
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectPublishBonusCountByCondition"
+            parameterType="com.kg.platform.model.request.admin.PublishBonusQueryRequest" resultType="java.lang.Long">
+
+        SELECT count(1)
+        from kg_article ka
+        LEFT JOIN kg_user ku on ka.create_user=ku.user_id
+        LEFT JOIN kg_sys_user oper on oper.sys_user_id=ka.oper_bonus_user
+        LEFT JOIN kg_column kc on kc.column_id=ka.column_id
+        LEFT JOIN kg_column kc1 on kc1.column_id=ka.second_column
+        where ka.article_from = 1 and ka.publish_status = 1 AND ka.display_status !=4
+        <if test="articleId != null and articleId != ''">
+            <bind name="articleId" value="'%'+articleId+'%'"/>
+            and ka.article_id like #{articleId}
+        </if>
+
+        <if test="articleTitle != null and articleTitle != ''">
+            <bind name="articleTitle" value="'%'+articleTitle+'%'"/>
+            and ka.article_title like #{articleTitle}
+        </if>
+
+        <if test="publisher != null and publisher != ''">
+            <bind name="publisher" value="'%'+publisher+'%'"/>
+            and ku.user_name like #{publisher}
+        </if>
+
+        <if test="columnId != null and columnId != ''">
+            and ( kc.column_id = #{columnId} or ka.second_column = #{columnId} )
+        </if>
+
+        <if test="publishStartDate != null">
+            and Date(ka.create_date) &gt;= #{publishStartDate}
+        </if>
+
+        <if test="publishEndDate != null">
+            and Date(ka.create_date) &lt;= #{publishEndDate}
+        </if>
+
+        <if test="auditStartDate != null">
+            and Date(ka.audit_date) &gt;= #{auditStartDate}
+        </if>
+
+        <if test="auditEndDate != null">
+            and Date(ka.audit_date) &lt;= #{auditEndDate}
+        </if>
+
+        <if test="articleMark != null">
+            and ka.article_mark = #{articleMark}
+        </if>
+
+        <if test="adminId != null">
+            and ka.oper_bonus_user = #{adminId}
+        </if>
+
+        <if test="bonusStatus != null">
+            <if test="bonusStatus == 2">
+                and (ka.publish_bonus_status = 1 or ka.publish_bonus_status = 2)
+            </if>
+            <if test="bonusStatus != 2">
+                and ka.publish_bonus_status = #{bonusStatus}
+            </if>
+        </if>
+
+        <if test="addBonusStatus != null">
+            <if test="addBonusStatus == 0 ">
+                and ka.oper_bonus_user is null
+            </if>
+            <if test="addBonusStatus == 1 ">
+                and ka.oper_bonus_user is not null
+            </if>
+        </if>
+
+    </select>
+
+    <select id="getTotalPublishBonus" resultMap="publishBonusQueryResultMap">
+      SELECT  
+       (SELECT  if(sum(kaf.amount) is null,0,sum(kaf.amount)) from kg_account_flow_txb kaf where kaf.business_type_id=1560 and kaf.amount>0) as txbAmount,
+        (
+         SELECT  if(sum(kf.amount) is null,0,sum(kf.amount))  from kg_account_flow kf
+         where business_type_id in(540,530,560) AND kf.amount>0
+        ) as tvAmount
+    from  kg_account_businesstype where business_type_id=560
+   </select>
+
+
+    <!--分享奖励-->
+    <resultMap id="shareQueryResultMap" type="com.kg.platform.model.response.admin.ShareQueryResponse">
+        <result column="flowId" jdbcType="VARCHAR" property="flowId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="user_mobile" jdbcType="VARCHAR" property="userPhone"/>
+        <result column="role_name" jdbcType="VARCHAR" property="userRole"/>
+        <result column="level_name" jdbcType="VARCHAR" property="userLevel"/>
+        <result column="stTv" jdbcType="DECIMAL" property="stTv"/>
+        <result column="stKg" jdbcType="DECIMAL" property="stKg"/>
+        <result column="mTv" jdbcType="DECIMAL" property="mTv"/>
+        <result column="mKg" jdbcType="DECIMAL" property="mKg"/>
+        <result column="snTv" jdbcType="DECIMAL" property="snTv"/>
+        <result column="snKg" jdbcType="DECIMAL" property="snKg"/>
+        <result column="mtTv" jdbcType="DECIMAL" property="mtTv"/>
+        <result column="mtKg" jdbcType="DECIMAL" property="mtKg"/>
+    </resultMap>
+
+    <sql id="share_bonus_List">
+         ku.user_id,ku.user_name,ku.user_mobile,kr.role_name,krl.level_name,
+	
+	    (SELECT if(SUM(kf.amount) is null,0,SUM(kf.amount))  from  kg_account_flow  kf where kf.business_type_id=330 and kf.user_id=ku.user_id ) as stTv,
+	   
+	    (SELECT if(SUM(kft.amount) is null,0,SUM(kft.amount)) from  kg_account_flow_txb  kft where business_type_id=1520 and kft.user_id=ku.user_id) as stKg,
+	
+	    (  SELECT if(sum(kf2.amount) is null,0,sum(kf2.amount)) 
+         from  kg_account_flow  kf 
+         LEFT JOIN kg_account_flow kf2 on kf.account_flow_id=kf2.relation_flow_id 
+         where kf.business_type_id=330 and kf2.business_type_id=530 and kf.user_id=ku.user_id ) as mTv,
+			
+	    (SELECT if(sum(kf2.amount) is null,0,sum(kf2.amount))  from  kg_account_flow_txb  kf 
+        LEFT JOIN kg_account_flow_txb kf2 on kf.account_flow_id=kf2.relation_flow_id  
+        where kf.business_type_id=1520 and kf2.business_type_id=1530 and kf.user_id=ku.user_id ) as mKg,
+	
+	    (SELECT if(SUM(kf.amount) is null,0,SUM(kf.amount))  from  kg_account_flow  kf where kf.business_type_id=330 and kf.user_id=ku.user_id and DATE(kf.flow_date) = CURDATE()) as snTv,
+	   
+	    (SELECT if(SUM(kft.amount) is null,0,SUM(kft.amount))    from  kg_account_flow_txb  kft where business_type_id=1520 and kft.user_id=ku.user_id and DATE(kft.flow_date) = CURDATE()) as snKg,
+
+        (SELECT if(sum(kf2.amount) is null,0,sum(kf2.amount))   
+         from  kg_account_flow  kf   LEFT JOIN kg_account_flow kf2 
+         on kf.account_flow_id=kf2.relation_flow_id where kf.business_type_id=330 
+         and kf2.business_type_id=530 and DATE(kf.flow_date) = CURDATE() and kf.user_id=ku.user_id) as mtTv,
+		
+	    (SELECT  if(sum(kf2.amount) is null,0,sum(kf2.amount))   from  kg_account_flow_txb  kf  
+        LEFT JOIN kg_account_flow_txb kf2 on kf.account_flow_id=kf2.relation_flow_id  
+        where kf.business_type_id=1520 and kf2.business_type_id=1530 and DATE(kf.flow_date and kf.user_id=ku.user_id) = CURDATE()) as mtKg
+    
+   </sql>
+
+
+    <select id="getShareBonusList" parameterType="com.kg.platform.model.request.admin.ShareBonusQueryRequest"
+            resultMap="shareQueryResultMap">
+        SELECT
+        <include refid="share_bonus_List"/>
+        from kg_user ku
+        LEFT JOIN kg_user_active ua on( ku.user_id = ua.user_id)
+        LEFT JOIN kg_role kr on ku.user_role=kr.role_id
+        LEFT JOIN kg_role_level krl on ku.user_role=krl.role_id
+        where 1=1 and ku.user_id > 0
+        <if test="userId != null and userId != ''">
+            <bind name="userId" value="'%'+userId+'%'"/>
+            and ku.user_id like #{userId}
+        </if>
+
+        <if test="nickName != null and nickName != ''">
+            <bind name="nickName" value="'%'+nickName+'%'"/>
+            and ku.user_name like #{nickName}
+        </if>
+
+        <if test="userPhone != null and userPhone != ''">
+            <bind name="userPhone" value="'%'+userPhone+'%'"/>
+            and ku.user_mobile like #{userPhone}
+        </if>
+
+        <if test="userRoleId != null and userRoleId != ''">
+            and ku.user_role = #{userRoleId}
+        </if>
+
+        <if test="userLevel != null and userLevel != ''">
+            and ku.user_level = #{userLevel}
+        </if>
+        order by ku.create_date desc
+        limit #{start},#{limit}
+    </select>
+
+    <select id="shareBonusCountByCondition" parameterType="com.kg.platform.model.request.admin.ShareBonusQueryRequest"
+            resultType="java.lang.Long">
+        SELECT count(1) from kg_user ku
+        where ku.user_id>0
+        <if test="userId != null and userId != ''">
+            <bind name="userId" value="'%'+userId+'%'"/>
+            and ku.user_id like #{userId}
+        </if>
+        <if test="nickName != null and nickName != ''">
+            <bind name="nickName" value="'%'+nickName+'%'"/>
+            and ku.user_name like #{nickName}
+        </if>
+
+        <if test="userPhone != null and userPhone != ''">
+            <bind name="userPhone" value="'%'+userPhone+'%'"/>
+            and ku.user_mobile like #{userPhone}
+        </if>
+
+        <if test="userRoleId != null and userRoleId != ''">
+            and ku.user_role = #{userRoleId}
+        </if>
+
+        <if test="userLevel != null and userLevel != ''">
+            and ku.user_level = #{userLevel}
+        </if>
+
+    </select>
+
+
+    <sql id="user_bonus_info">
+    u.user_id,u.user_name,
+    if(kp.column_name is null,u.user_name,kp.column_name) as user_name,
+    u.user_mobile,u.register_origin,u.user_role,
+    u.user_level,u.column_authed,u.lock_status,
+    DATE_FORMAT(u.create_date ,'%Y-%m-%d %H:%i:%S') as  create_date
+   </sql>
+
+    <!-- 检索用户信息查询 -->
+    <select id="getUserListByMobile" parameterType="com.kg.platform.model.request.admin.UserBonusQueryRequest"
+            resultMap="QueryResultMap">
+        SELECT
+        <include refid="user_bonus_info"/>
+        from kg_user u
+        LEFT JOIN kg_user_profile kp on kp.user_id=u.user_id
+        where u.lock_status=1 and u.user_mobile in
+        <foreach collection="userMobiles.split(',')" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 查询所有待发放的用户给 -->
+    <select id="getUserListByUserIds" parameterType="com.kg.platform.model.request.admin.UserBonusQueryRequest"
+            resultMap="QueryResultMap">
+        SELECT
+        <include refid="user_bonus_info"/>
+        from kg_user u
+        LEFT JOIN kg_user_profile kp on kp.user_id=u.user_id
+        where u.user_id in
+        <foreach collection="userIds.split(',')" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+</mapper>

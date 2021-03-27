@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminFeedbackRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.FeedbackQueryResponse">
+    <id column="feedback_id" jdbcType="VARCHAR" property="id" />
+    <result column="feedback_detail" jdbcType="VARCHAR" property="content" />
+    <result column="feedback_email" jdbcType="VARCHAR" property="email" />
+    <result column="feedback_phone" jdbcType="VARCHAR" property="phone" />
+    <result column="feedback_status" jdbcType="BIT" property="status" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="from_url" jdbcType="VARCHAR" property="fromUrl" />
+    <result column="replay_info" jdbcType="VARCHAR" property="replayInfo" />
+
+    <result column="feedback_type" jdbcType="INTEGER" property="feedbackType" />
+    <result column="from_type" jdbcType="INTEGER" property="fromType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    feedback_id, feedback_detail, feedback_email, feedback_phone, from_url, feedback_status, 
+    replay_info, create_date, create_user, update_date, update_user, feedback_type, from_type
+  </sql>
+  <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.FeedbackQueryRequest" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_feedback
+    where 1 = 1
+    <if test="content != null">
+      <bind name="contentLike" value="'%'+content+'%'"/>
+      and feedback_detail like #{contentLike}
+    </if>
+    <if test="status != null">
+      and feedback_status = #{status}
+    </if>
+    <if test="startDate != null">
+      and create_date >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and create_date <= #{endDate}]]>
+    </if>
+    <if test="feedbackType != null">
+      and feedback_type = #{feedbackType}
+    </if>
+    order by create_date desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.FeedbackQueryRequest" resultType="java.lang.Long">
+    select
+    count(feedback_id)
+    from kg_feedback
+    where 1 = 1
+    <if test="content != null">
+      <bind name="contentLike" value="'%'+content+'%'"/>
+      and feedback_detail like #{contentLike}
+    </if>
+    <if test="status != null">
+      and feedback_status = #{status}
+    </if>
+    <if test="startDate != null">
+      and create_date >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and create_date <= #{endDate}]]>
+    </if>
+    <if test="feedbackType != null">
+      and feedback_type = #{feedbackType}
+    </if>
+  </select>
+  
+</mapper>

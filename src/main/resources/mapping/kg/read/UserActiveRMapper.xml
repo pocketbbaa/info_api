@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.UserActiveRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.UserActive">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="lastlogin_ip" jdbcType="VARCHAR" property="lastloginIp" />
+    <result column="lastlogin_time" jdbcType="TIMESTAMP" property="lastloginTime" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_userid" jdbcType="BIGINT" property="updateUserid" />
+    <result column="lock_date" jdbcType="TIMESTAMP" property="lockDate" />
+    <result column="lock_time" jdbcType="TINYINT" property="lockTime" />
+    <result column="lock_unit" jdbcType="INTEGER" property="lockUnit" />
+    <result column="bowse_num" jdbcType="INTEGER" property="bowseNum" />
+    <result column="share_num" jdbcType="INTEGER" property="shareNum" />
+    <result column="apply_column_time" jdbcType="TIMESTAMP" property="applyColumnTime" />
+    <result column="audit_userid" jdbcType="INTEGER" property="auditUserid" />
+    <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+    <result column="invite_status" jdbcType="INTEGER" property="inviteStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, lastlogin_ip, lastlogin_time, update_date, update_userid, lock_date, lock_time, 
+    lock_unit, bowse_num, share_num, apply_column_time, audit_userid, audit_date, refuse_reason,invite_status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_user_active
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  
+   <select id="selectByUserKey" parameterType="com.kg.platform.model.in.UserActiveInModel" resultType="com.kg.platform.model.out.UserActiveOutModel">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_user_active
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectMoreUserIdInfo" parameterType="java.util.List" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM kg_user_active where user_id IN
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                      #{item}
+    </foreach>
+  </select>
+  
+
+ 
+</mapper>

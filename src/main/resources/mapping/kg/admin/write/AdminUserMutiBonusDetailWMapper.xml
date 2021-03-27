@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.admin.AdminUserMutiBonusDetailWMapper">
+
+ <insert id="addUserMutiBonusDetail" parameterType="com.kg.platform.model.in.admin.UserMutiBonusDetailInModel">
+    insert into kg_muti_bonus_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bonusDetailId != null">
+        bonus_detail_id,
+      </if>
+      <if test="extraBonusId != null">
+        extra_bonus_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+       <if test="createTime != null">
+        create_time,
+      </if>
+       <if test="accountFlowId != null">
+         account_flow_id,
+      </if>
+      <if test="coinType != null">
+          coin_type,
+      </if>
+      <if test="amount != null">
+          amount,
+      </if>
+
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bonusDetailId != null">
+        #{bonusDetailId},
+      </if>
+      <if test="extraBonusId != null">
+        #{extraBonusId},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+       <if test="accountFlowId != null">
+        #{accountFlowId},
+      </if>
+       <if test="coinType != null">
+        #{coinType},
+      </if>
+      <if test="amount != null">
+         #{amount},
+      </if>
+
+    </trim>
+  </insert>
+
+ 
+ 
+ 
+</mapper>

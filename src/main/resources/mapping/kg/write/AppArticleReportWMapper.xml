@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.AppArticleReportWMapper">
+
+    <insert id="addReport" parameterType="com.kg.platform.model.in.ArticleReportInModel">
+        insert into kg_article_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">
+                article_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="reportTextId != null">
+                report_id,
+            </if>
+            state,
+            create_time,
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">
+                #{articleId},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="reportTextId != null">
+                #{reportTextId},
+            </if>
+            0,now(),now()
+        </trim>
+    </insert>
+
+</mapper>

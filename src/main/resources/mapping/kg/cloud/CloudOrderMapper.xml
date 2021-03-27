@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.cloud.CloudOrderMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.CloudOrder">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="pay_state" jdbcType="TINYINT" property="payState"/>
+        <result column="package_id" jdbcType="INTEGER" property="packageId"/>
+        <result column="package_name" jdbcType="VARCHAR" property="packageName"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="performance" jdbcType="DOUBLE" property="performance"/>
+        <result column="channel_id" jdbcType="INTEGER" property="channelId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="pay_time" jdbcType="TIMESTAMP" property="payTime"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="sys_user_id" jdbcType="BIGINT" property="sysUserId"/>
+        <result column="payee" jdbcType="VARCHAR" property="payee"/>
+        <result column="total_revenue" jdbcType="DECIMAL" property="totalRevenue"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, user_id, phone, pay_state, package_id, package_name, number, price, performance, 
+    channel_id, create_time, pay_time, state, sys_user_id, payee, total_revenue
+  </sql>
+    <select id="selectByExample" parameterType="com.kg.platform.dao.entity.CloudOrderExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from cloud_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cloud_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByCondition" parameterType="com.kg.platform.dao.entity.CloudOrder" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,(SELECT sys_user_name FROM kg_sys_user WHERE sys_user_id=co.sys_user_id) sysUserName
+        from cloud_order co
+        where 1=1
+
+        <if test="record.id != null">
+            AND id = #{record.id,jdbcType=BIGINT},
+        </if>
+        <if test="record.userId != null">
+            AND user_id = #{record.userId,jdbcType=BIGINT},
+        </if>
+        <if test="record.phone != null">
+            AND phone LIKE %#{record.phone,jdbcType=VARCHAR}%,
+        </if>
+        <if test="record.payState != null">
+            AND pay_state = #{record.payState,jdbcType=TINYINT},
+        </if>
+        <if test="record.packageId != null">
+            AND package_id = #{record.packageId,jdbcType=INTEGER},
+        </if>
+        <if test="record.packageName != null">
+            AND package_name = #{record.packageName,jdbcType=VARCHAR},
+        </if>
+        <if test="record.number != null">
+            AND number = #{record.number,jdbcType=INTEGER},
+        </if>
+        <if test="record.price != null">
+            AND price = #{record.price,jdbcType=DOUBLE},
+        </if>
+        <if test="record.performance != null">
+            AND performance = #{record.performance,jdbcType=DOUBLE},
+        </if>
+        <if test="record.channelId != null">
+            AND channel_id = #{record.channelId,jdbcType=INTEGER},
+        </if>
+        <if test="record.createTime != null">
+            AND create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="record.payTime != null">
+            AND pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="record.state != null">
+            AND state = #{record.state,jdbcType=TINYINT},
+        </if>
+        <if test="record.sysUserId != null">
+            AND sys_user_id = #{record.sysUserId,jdbcType=BIGINT},
+        </if>
+        <if test="record.payee != null">
+            AND payee = #{record.payee,jdbcType=VARCHAR},
+        </if>
+        <if test="record.totalRevenue != null">
+            AND total_revenue = #{record.totalRevenue,jdbcType=DECIMAL},
+        </if>
+        <if test="record.priceMin!=null and record.priceMax!=null">
+            AND price BETWEEN #{priceMin} AND #{priceMax}
+        </if>
+        <if test="record.createTimeFrom!=null and record.createTimeFrom!='' and record.createTimeTo!=null and record.createTimeTo!=''">
+            AND create_time BETWEEN #{createTimeFrom} AND #{createTimeTo}
+        </if>
+        ORDER BY create_time DESC
+        limit #{start},#{limit}
+    </select>
+
+    <select id="selectCountByCondition" parameterType="com.kg.platform.dao.entity.CloudOrder"
+            resultType="java.lang.Long">
+        select
+        COUNT (1)
+        from cloud_order
+        where 1=1
+
+        <if test="record.id != null">
+            AND id = #{record.id,jdbcType=BIGINT},
+        </if>
+        <if test="record.userId != null">
+            AND user_id = #{record.userId,jdbcType=BIGINT},
+        </if>
+        <if test="record.phone != null">
+            AND phone LIKE %#{record.phone,jdbcType=VARCHAR}%,
+        </if>
+        <if test="record.payState != null">
+            AND pay_state = #{record.payState,jdbcType=TINYINT},
+        </if>
+        <if test="record.packageId != null">
+            AND package_id = #{record.packageId,jdbcType=INTEGER},
+        </if>
+        <if test="record.packageName != null">
+            AND package_name = #{record.packageName,jdbcType=VARCHAR},
+        </if>
+        <if test="record.number != null">
+            AND number = #{record.number,jdbcType=INTEGER},
+        </if>
+        <if test="record.price != null">
+            AND price = #{record.price,jdbcType=DOUBLE},
+        </if>
+        <if test="record.performance != null">
+            AND performance = #{record.performance,jdbcType=DOUBLE},
+        </if>
+        <if test="record.channelId != null">
+            AND channel_id = #{record.channelId,jdbcType=INTEGER},
+        </if>
+        <if test="record.createTime != null">
+            AND create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="record.payTime != null">
+            AND pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="record.state != null">
+            AND state = #{record.state,jdbcType=TINYINT},
+        </if>
+        <if test="record.sysUserId != null">
+            AND sys_user_id = #{record.sysUserId,jdbcType=BIGINT},
+        </if>
+        <if test="record.payee != null">
+            AND payee = #{record.payee,jdbcType=VARCHAR},
+        </if>
+        <if test="record.totalRevenue != null">
+            AND total_revenue = #{record.totalRevenue,jdbcType=DECIMAL},
+        </if>
+        <if test="record.priceMin!=null and record.priceMax!=null">
+            AND price BETWEEN #{priceMin} AND #{priceMax}
+        </if>
+        <if test="record.createTimeFrom!=null and record.createTimeFrom!='' and record.createTimeTo!=null and record.createTimeTo!=''">
+            AND create_time BETWEEN #{createTimeFrom} AND #{createTimeTo}
+        </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from cloud_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.kg.platform.dao.entity.CloudOrderExample">
+        delete from cloud_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.kg.platform.dao.entity.CloudOrder">
+    insert into cloud_order (id,user_id, phone, pay_state,
+      package_id, package_name, number, 
+      price, performance, channel_id, 
+      create_time, pay_time, state, 
+      sys_user_id, payee, total_revenue
+      )
+    values (#{id,jdbcType=BIGINT},#{userId,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR}, #{payState,jdbcType=TINYINT},
+      #{packageId,jdbcType=INTEGER}, #{packageName,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+      #{price,jdbcType=DOUBLE}, #{performance,jdbcType=DOUBLE}, #{channelId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{state,jdbcType=TINYINT}, 
+      #{sysUserId,jdbcType=BIGINT}, #{payee,jdbcType=VARCHAR}, #{totalRevenue,jdbcType=DECIMAL}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.CloudOrder">
+        insert into cloud_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="payState != null">
+                pay_state,
+            </if>
+            <if test="packageId != null">
+                package_id,
+            </if>
+            <if test="packageName != null">
+                package_name,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="performance != null">
+                performance,
+            </if>
+            <if test="channelId != null">
+                channel_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="payTime != null">
+                pay_time,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="sysUserId != null">
+                sys_user_id,
+            </if>
+            <if test="payee != null">
+                payee,
+            </if>
+            <if test="totalRevenue != null">
+                total_revenue,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="payState != null">
+                #{payState,jdbcType=TINYINT},
+            </if>
+            <if test="packageId != null">
+                #{packageId,jdbcType=INTEGER},
+            </if>
+            <if test="packageName != null">
+                #{packageName,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="performance != null">
+                #{performance,jdbcType=DOUBLE},
+            </if>
+            <if test="channelId != null">
+                #{channelId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payTime != null">
+                #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=TINYINT},
+            </if>
+            <if test="sysUserId != null">
+                #{sysUserId,jdbcType=BIGINT},
+            </if>
+            <if test="payee != null">
+                #{payee,jdbcType=VARCHAR},
+            </if>
+            <if test="totalRevenue != null">
+                #{totalRevenue,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.kg.platform.dao.entity.CloudOrderExample"
+            resultType="java.lang.Long">
+        select count(*) from cloud_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update cloud_order
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=BIGINT},
+            </if>
+            <if test="record.phone != null">
+                phone = #{record.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.payState != null">
+                pay_state = #{record.payState,jdbcType=TINYINT},
+            </if>
+            <if test="record.packageId != null">
+                package_id = #{record.packageId,jdbcType=INTEGER},
+            </if>
+            <if test="record.packageName != null">
+                package_name = #{record.packageName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.number != null">
+                number = #{record.number,jdbcType=INTEGER},
+            </if>
+            <if test="record.price != null">
+                price = #{record.price,jdbcType=DOUBLE},
+            </if>
+            <if test="record.performance != null">
+                performance = #{record.performance,jdbcType=DOUBLE},
+            </if>
+            <if test="record.channelId != null">
+                channel_id = #{record.channelId,jdbcType=INTEGER},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.payTime != null">
+                pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.state != null">
+                state = #{record.state,jdbcType=TINYINT},
+            </if>
+            <if test="record.sysUserId != null">
+                sys_user_id = #{record.sysUserId,jdbcType=BIGINT},
+            </if>
+            <if test="record.payee != null">
+                payee = #{record.payee,jdbcType=VARCHAR},
+            </if>
+            <if test="record.totalRevenue != null">
+                total_revenue = #{record.totalRevenue,jdbcType=DECIMAL},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update cloud_order
+        set id = #{record.id,jdbcType=BIGINT},
+        user_id = #{record.userId,jdbcType=BIGINT},
+        phone = #{record.phone,jdbcType=VARCHAR},
+        pay_state = #{record.payState,jdbcType=TINYINT},
+        package_id = #{record.packageId,jdbcType=INTEGER},
+        package_name = #{record.packageName,jdbcType=VARCHAR},
+        number = #{record.number,jdbcType=INTEGER},
+        price = #{record.price,jdbcType=DOUBLE},
+        performance = #{record.performance,jdbcType=DOUBLE},
+        channel_id = #{record.channelId,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+        state = #{record.state,jdbcType=TINYINT},
+        sys_user_id = #{record.sysUserId,jdbcType=BIGINT},
+        payee = #{record.payee,jdbcType=VARCHAR},
+        total_revenue = #{record.totalRevenue,jdbcType=DECIMAL}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.CloudOrder">
+        update cloud_order
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="payState != null">
+                pay_state = #{payState,jdbcType=TINYINT},
+            </if>
+            <if test="packageId != null">
+                package_id = #{packageId,jdbcType=INTEGER},
+            </if>
+            <if test="packageName != null">
+                package_name = #{packageName,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="performance != null">
+                performance = #{performance,jdbcType=DOUBLE},
+            </if>
+            <if test="channelId != null">
+                channel_id = #{channelId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payTime != null">
+                pay_time = #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=TINYINT},
+            </if>
+            <if test="sysUserId != null">
+                sys_user_id = #{sysUserId,jdbcType=BIGINT},
+            </if>
+            <if test="payee != null">
+                payee = #{payee,jdbcType=VARCHAR},
+            </if>
+            <if test="totalRevenue != null">
+                total_revenue = #{totalRevenue,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.CloudOrder">
+    update cloud_order
+    set user_id = #{userId,jdbcType=BIGINT},
+      phone = #{phone,jdbcType=VARCHAR},
+      pay_state = #{payState,jdbcType=TINYINT},
+      package_id = #{packageId,jdbcType=INTEGER},
+      package_name = #{packageName,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      performance = #{performance,jdbcType=DOUBLE},
+      channel_id = #{channelId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=TINYINT},
+      sys_user_id = #{sysUserId,jdbcType=BIGINT},
+      payee = #{payee,jdbcType=VARCHAR},
+      total_revenue = #{totalRevenue,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="getPaymentList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cloud_order
+        where pay_state = 1
+        and state = 0
+        AND #{time} > pay_time
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+    <update id="issueBTCEarnings">
+         update cloud_order
+    set
+      total_revenue = total_revenue + #{dailyEarningsBtcToOrder}
+    where id = #{id}
+    </update>
+
+    <select id="getPerformance" resultType="java.lang.Double">
+        SELECT
+            sum( performance )
+        FROM
+            cloud_order
+        WHERE
+            user_id = #{userId}
+            AND #{time} > pay_time
+    </select>
+
+    <select id="getTotalEarnings" resultType="java.lang.Double">
+        SELECT
+            sum( total_revenue )
+        FROM
+            cloud_order
+        WHERE
+            user_id = #{userId}
+            AND #{time} > pay_time
+    </select>
+</mapper>

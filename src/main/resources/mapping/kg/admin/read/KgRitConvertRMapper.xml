@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.KgRitConvertRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.KgRitConvert">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="rit_rate" jdbcType="VARCHAR" property="ritRate" />
+    <result column="day_limit" jdbcType="BIGINT" property="dayLimit" />
+    <result column="next_day_limit" jdbcType="BIGINT" property="nextDayLimit" />
+    <result column="next_day_cnt" jdbcType="INTEGER" property="nextDayCnt" />
+    <result column="day_cnt" jdbcType="INTEGER" property="dayCnt" />
+    <result column="push_time" jdbcType="VARCHAR" property="pushTime" />
+    <result column="next_push_time" jdbcType="VARCHAR" property="nextPushTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_type, rit_rate, day_limit, next_day_limit, next_day_cnt, day_cnt, push_time, 
+    next_push_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_rit_convert
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_rit_convert
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.KgRitConvert">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_rit_convert (user_type, rit_rate, day_limit, 
+      next_day_limit, next_day_cnt, day_cnt, 
+      push_time, next_push_time)
+    values (#{userType,jdbcType=INTEGER}, #{ritRate,jdbcType=VARCHAR}, #{dayLimit,jdbcType=BIGINT}, 
+      #{nextDayLimit,jdbcType=BIGINT}, #{nextDayCnt,jdbcType=INTEGER}, #{dayCnt,jdbcType=INTEGER},
+      #{pushTime,jdbcType=VARCHAR}, #{nextPushTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.KgRitConvert">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_rit_convert
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userType != null">
+        user_type,
+      </if>
+      <if test="ritRate != null">
+        rit_rate,
+      </if>
+      <if test="dayLimit != null">
+        day_limit,
+      </if>
+      <if test="nextDayLimit != null">
+        next_day_limit,
+      </if>
+      <if test="nextDayCnt != null">
+        next_day_cnt,
+      </if>
+      <if test="dayCnt != null">
+        day_cnt,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="nextPushTime != null">
+        next_push_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userType != null">
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="ritRate != null">
+        #{ritRate,jdbcType=VARCHAR},
+      </if>
+      <if test="dayLimit != null">
+        #{dayLimit,jdbcType=BIGINT},
+      </if>
+      <if test="nextDayLimit != null">
+        #{nextDayLimit,jdbcType=BIGINT},
+      </if>
+      <if test="nextDayCnt != null">
+        #{nextDayCnt,jdbcType=INTEGER},
+      </if>
+      <if test="dayCnt != null">
+        #{dayCnt,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=VARCHAR},
+      </if>
+      <if test="nextPushTime != null">
+        #{nextPushTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.KgRitConvert">
+    update kg_rit_convert
+    <set>
+      <if test="userType != null">
+        user_type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="ritRate != null">
+        rit_rate = #{ritRate,jdbcType=VARCHAR},
+      </if>
+      <if test="dayLimit != null">
+        day_limit = #{dayLimit,jdbcType=BIGINT},
+      </if>
+      <if test="nextDayLimit != null">
+        next_day_limit = #{nextDayLimit,jdbcType=BIGINT},
+      </if>
+      <if test="nextDayCnt != null">
+        next_day_cnt = #{nextDayCnt,jdbcType=INTEGER},
+      </if>
+      <if test="dayCnt != null">
+        day_cnt = #{dayCnt,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=VARCHAR},
+      </if>
+      <if test="nextPushTime != null">
+        next_push_time = #{nextPushTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.KgRitConvert">
+    update kg_rit_convert
+    set user_type = #{userType,jdbcType=INTEGER},
+      rit_rate = #{ritRate,jdbcType=VARCHAR},
+      day_limit = #{dayLimit,jdbcType=BIGINT},
+      next_day_limit = #{nextDayLimit,jdbcType=BIGINT},
+      next_day_cnt = #{nextDayCnt,jdbcType=INTEGER},
+      day_cnt = #{dayCnt,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=VARCHAR},
+      next_push_time = #{nextPushTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByUserType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      SELECT * FROM kg_rit_convert WHERE user_type = #{userType,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT * FROM kg_rit_convert;
+  </select>
+</mapper>

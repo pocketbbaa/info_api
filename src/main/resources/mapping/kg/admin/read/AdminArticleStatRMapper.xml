@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminArticleStatRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.ArticleStatQueryResponse">
+    <id column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="bonus_num" jdbcType="INTEGER" property="bonusNum" />
+    <result column="bonus_value" jdbcType="DECIMAL" property="bonusValue" />
+    <result column="bonus_total" jdbcType="DECIMAL" property="bonusTotal" />
+  </resultMap>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.kg.platform.model.request.admin.ArticleEditRequest">
+    select article_id,bonus_num,bonus_value,bonus_total from kg_article_statistics where article_id = #{articleId,jdbcType=BIGINT}
+  </select>
+</mapper>

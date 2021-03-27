@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgMobileImgRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgMobileImgOutModel">
+    <id column="img_id" jdbcType="INTEGER" property="imgId" />
+    <result column="normal_img" jdbcType="VARCHAR" property="normalImg" />
+    <result column="choise_img" jdbcType="VARCHAR" property="choiseImg" />
+    <result column="is_del" jdbcType="INTEGER" property="isDel" />
+    <result column="orderby" jdbcType="INTEGER" property="orderby" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    img_id, normal_img, choise_img, is_del, orderby, remark
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_mobile_img
+    where img_id = #{imgId,jdbcType=INTEGER}
+  </select>
+  <select id="selectTabs"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_mobile_img
+    where is_del=0 ORDER BY orderby ASC
+  </select>
+</mapper>

@@ -1,0 +1,1 @@
+ALTER TABLE kg_feedback modify `feedback_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '反馈意见类型1：功能建议，2：内容建议，3：体验建议  4.投诉'

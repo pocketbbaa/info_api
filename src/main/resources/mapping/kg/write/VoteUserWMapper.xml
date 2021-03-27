@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.VoteUserWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.VoteUser">
+    <id column="vote_user_id" jdbcType="BIGINT" property="voteUserId" />
+    <result column="vote_id" jdbcType="BIGINT" property="voteId" />
+    <result column="voter_id" jdbcType="BIGINT" property="voterId" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="vote_time" jdbcType="TIMESTAMP" property="voteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    vote_user_id, vote_id, voter_id, vote_num, vote_time
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_vote_user
+    where vote_user_id = #{voteUserId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.VoteUser">
+    insert into kg_vote_user (vote_user_id, vote_id, voter_id, 
+      vote_num, vote_time)
+    values (#{voteUserId,jdbcType=BIGINT}, #{voteId,jdbcType=BIGINT}, #{voterId,jdbcType=BIGINT}, 
+      #{voteNum,jdbcType=INTEGER}, #{voteTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.VoteUser">
+    insert into kg_vote_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="voteUserId != null">
+        vote_user_id,
+      </if>
+      <if test="voteId != null">
+        vote_id,
+      </if>
+      <if test="voterId != null">
+        voter_id,
+      </if>
+      <if test="voteNum != null">
+        vote_num,
+      </if>
+      <if test="voteTime != null">
+        vote_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="voteUserId != null">
+        #{voteUserId,jdbcType=BIGINT},
+      </if>
+      <if test="voteId != null">
+        #{voteId,jdbcType=BIGINT},
+      </if>
+      <if test="voterId != null">
+        #{voterId,jdbcType=BIGINT},
+      </if>
+      <if test="voteNum != null">
+        #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="voteTime != null">
+        #{voteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.VoteUser">
+    update kg_vote_user
+    <set>
+      <if test="voteId != null">
+        vote_id = #{voteId,jdbcType=BIGINT},
+      </if>
+      <if test="voterId != null">
+        voter_id = #{voterId,jdbcType=BIGINT},
+      </if>
+      <if test="voteNum != null">
+        vote_num = #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="voteTime != null">
+        vote_time = #{voteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where vote_user_id = #{voteUserId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.VoteUser">
+    update kg_vote_user
+    set vote_id = #{voteId,jdbcType=BIGINT},
+      voter_id = #{voterId,jdbcType=BIGINT},
+      vote_num = #{voteNum,jdbcType=INTEGER},
+      vote_time = #{voteTime,jdbcType=TIMESTAMP}
+    where vote_user_id = #{voteUserId,jdbcType=BIGINT}
+  </update>
+</mapper>

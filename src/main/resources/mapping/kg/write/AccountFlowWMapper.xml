@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.AccountFlowWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.AccountFlow">
+    <id column="account_flow_id" jdbcType="BIGINT" property="accountFlowId" />
+    <result column="relation_flow_id" jdbcType="BIGINT" property="relationFlowId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="business_type_id" jdbcType="INTEGER" property="businessTypeId" />
+    <result column="tx_id" jdbcType="VARCHAR" property="txId" />
+    <result column="tx_address" jdbcType="VARCHAR" property="txAddress" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="poundage_amount" jdbcType="DECIMAL" property="poundageAmount" />
+    <result column="account_date" jdbcType="TIMESTAMP" property="accountDate" />
+    <result column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="bonus_total_person" jdbcType="INTEGER" property="bonusTotalPerson" />
+    <result column="flow_status" jdbcType="TINYINT" property="flowStatus" />
+    <result column="flow_date" jdbcType="TIMESTAMP" property="flowDate" />
+    <result column="flow_detail" jdbcType="VARCHAR" property="flowDetail" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    account_flow_id, relation_flow_id, user_id, user_phone, user_email, amount, business_type_id, 
+    tx_id, tx_address, account_amount, poundage_amount, account_date, article_id, bonus_total_person, 
+    flow_status, flow_date, flow_detail, remark
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_account_flow
+    where account_flow_id = #{accountFlowId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.AccountFlow">
+    insert into kg_account_flow (account_flow_id, relation_flow_id, user_id, 
+      user_phone, user_email, amount, 
+      business_type_id, tx_id, tx_address, 
+      account_amount, poundage_amount, account_date, 
+      article_id, bonus_total_person, flow_status, 
+      flow_date, flow_detail, remark
+      )
+    values (#{accountFlowId,jdbcType=BIGINT}, #{relationFlowId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{userPhone,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{businessTypeId,jdbcType=INTEGER}, #{txId,jdbcType=VARCHAR}, #{txAddress,jdbcType=VARCHAR}, 
+      #{accountAmount,jdbcType=DECIMAL}, #{poundageAmount,jdbcType=DECIMAL}, #{accountDate,jdbcType=TIMESTAMP}, 
+      #{articleId,jdbcType=BIGINT}, #{bonusTotalPerson,jdbcType=INTEGER}, #{flowStatus,jdbcType=TINYINT}, 
+      #{flowDate,jdbcType=TIMESTAMP}, #{flowDetail,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertFlowSelective" parameterType="com.kg.platform.model.in.AccountFlowInModel">
+    insert into kg_account_flow
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountFlowId != null">
+        account_flow_id,
+      </if>
+      <if test="relationFlowId != null">
+        relation_flow_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="userEmail != null">
+        user_email,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="businessTypeId != null">
+        business_type_id,
+      </if>
+      <if test="txId != null">
+        tx_id,
+      </if>
+      <if test="txAddress != null">
+        tx_address,
+      </if>
+      <if test="accountAmount != null">
+        account_amount,
+      </if>
+      <if test="poundageAmount != null">
+        poundage_amount,
+      </if>
+      <if test="accountDate != null">
+        account_date,
+      </if>
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="bonusTotalPerson != null">
+        bonus_total_person,
+      </if>
+      <if test="flowStatus != null">
+        flow_status,
+      </if>
+      <if test="flowDate != null">
+        flow_date,
+      </if>
+      <if test="flowDetail != null">
+        flow_detail,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountFlowId != null">
+        #{accountFlowId,jdbcType=BIGINT},
+      </if>
+      <if test="relationFlowId != null">
+        #{relationFlowId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="businessTypeId != null">
+        #{businessTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="txId != null">
+        #{txId,jdbcType=VARCHAR},
+      </if>
+      <if test="txAddress != null">
+        #{txAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAmount != null">
+        #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="poundageAmount != null">
+        #{poundageAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountDate != null">
+        #{accountDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusTotalPerson != null">
+        #{bonusTotalPerson,jdbcType=INTEGER},
+      </if>
+      <if test="flowStatus != null">
+        #{flowStatus,jdbcType=TINYINT},
+      </if>
+      <if test="flowDate != null">
+        #{flowDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowDetail != null">
+        #{flowDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.AccountFlow">
+    insert into kg_account_flow
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountFlowId != null">
+        account_flow_id,
+      </if>
+      <if test="relationFlowId != null">
+        relation_flow_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="userEmail != null">
+        user_email,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="businessTypeId != null">
+        business_type_id,
+      </if>
+      <if test="txId != null">
+        tx_id,
+      </if>
+      <if test="txAddress != null">
+        tx_address,
+      </if>
+      <if test="accountAmount != null">
+        account_amount,
+      </if>
+      <if test="poundageAmount != null">
+        poundage_amount,
+      </if>
+      <if test="accountDate != null">
+        account_date,
+      </if>
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="bonusTotalPerson != null">
+        bonus_total_person,
+      </if>
+      <if test="flowStatus != null">
+        flow_status,
+      </if>
+      <if test="flowDate != null">
+        flow_date,
+      </if>
+      <if test="flowDetail != null">
+        flow_detail,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="freezeAmount != null">
+        freeze_amount
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountFlowId != null">
+        #{accountFlowId,jdbcType=BIGINT},
+      </if>
+      <if test="relationFlowId != null">
+        #{relationFlowId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="businessTypeId != null">
+        #{businessTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="txId != null">
+        #{txId,jdbcType=VARCHAR},
+      </if>
+      <if test="txAddress != null">
+        #{txAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAmount != null">
+        #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="poundageAmount != null">
+        #{poundageAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountDate != null">
+        #{accountDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusTotalPerson != null">
+        #{bonusTotalPerson,jdbcType=INTEGER},
+      </if>
+      <if test="flowStatus != null">
+        #{flowStatus,jdbcType=TINYINT},
+      </if>
+      <if test="flowDate != null">
+        #{flowDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowDetail != null">
+        #{flowDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="freezeAmount != null">
+        #{freezeAmount,jdbcType=DECIMAL}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.AccountFlow">
+    update kg_account_flow
+    <set>
+      <if test="relationFlowId != null">
+        relation_flow_id = #{relationFlowId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userPhone != null">
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        user_email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="businessTypeId != null">
+        business_type_id = #{businessTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="txId != null">
+        tx_id = #{txId,jdbcType=VARCHAR},
+      </if>
+      <if test="txAddress != null">
+        tx_address = #{txAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAmount != null">
+        account_amount = #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="poundageAmount != null">
+        poundage_amount = #{poundageAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountDate != null">
+        account_date = #{accountDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleId != null">
+        article_id = #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusTotalPerson != null">
+        bonus_total_person = #{bonusTotalPerson,jdbcType=INTEGER},
+      </if>
+      <if test="flowStatus != null">
+        flow_status = #{flowStatus,jdbcType=TINYINT},
+      </if>
+      <if test="flowDate != null">
+        flow_date = #{flowDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowDetail != null">
+        flow_detail = #{flowDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where account_flow_id = #{accountFlowId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.AccountFlow">
+    update kg_account_flow
+    set relation_flow_id = #{relationFlowId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      user_email = #{userEmail,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      business_type_id = #{businessTypeId,jdbcType=INTEGER},
+      tx_id = #{txId,jdbcType=VARCHAR},
+      tx_address = #{txAddress,jdbcType=VARCHAR},
+      account_amount = #{accountAmount,jdbcType=DECIMAL},
+      poundage_amount = #{poundageAmount,jdbcType=DECIMAL},
+      account_date = #{accountDate,jdbcType=TIMESTAMP},
+      article_id = #{articleId,jdbcType=BIGINT},
+      bonus_total_person = #{bonusTotalPerson,jdbcType=INTEGER},
+      flow_status = #{flowStatus,jdbcType=TINYINT},
+      flow_date = #{flowDate,jdbcType=TIMESTAMP},
+      flow_detail = #{flowDetail,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where account_flow_id = #{accountFlowId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminAccountRechargeRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.AccountRechargeQueryResponse">
+    <id column="recharge_flow_id" jdbcType="VARCHAR" property="flowId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_email" jdbcType="VARCHAR" property="email" />
+    <result column="user_phone" jdbcType="VARCHAR" property="mobile" />
+    <result column="recharge_amount" jdbcType="DECIMAL" property="amount" />
+    <result column="recharge_time" jdbcType="TIMESTAMP" property="rechargeTime" />
+    <result column="account_time" jdbcType="TIMESTAMP" property="accountTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="user_role" jdbcType="INTEGER" property="userRole" />
+    <result column="user_level" jdbcType="INTEGER" property="level" />
+    <result column="to_address" jdbcType="VARCHAR" property="toAddress" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    a.recharge_flow_id,a.user_id,a.user_email,a.user_phone,a.recharge_amount,a.recharge_time,a.account_time,a.remark,a.status,u.user_role,u.user_level,a.to_address
+  </sql>
+  <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.AccountRechargeQueryRequest" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_account_recharge_flow a left join kg_user u on (u.user_id = a.user_id) where 1 = 1
+    <if test="userId != null and userId != ''">
+      <bind name="userIdLike" value="'%'+userId+'%'"/>
+      and a.user_id like #{userIdLike}
+    </if>
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and a.user_email like #{emailLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="status != null">
+      and a.status = #{status}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.recharge_time >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.recharge_time <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    order by a.recharge_time desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.AccountRechargeQueryRequest" resultType="java.lang.Long">
+    select
+    count(recharge_flow_id)
+    from kg_account_recharge_flow where 1 = 1
+    <if test="userId != null and userId != ''">
+      <bind name="userIdLike" value="'%'+userId+'%'"/>
+      and user_id like #{userIdLike}
+    </if>
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+        and user_email like #{emailLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and user_phone like #{mobileLike}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and recharge_time >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and recharge_time <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+  </select>
+ 
+</mapper>

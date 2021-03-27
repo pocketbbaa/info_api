@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminKgNewsFlashRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgNewsFlashOutModel">
+    <id column="newsflash_id" jdbcType="BIGINT" property="newsflashId" />
+    <result column="newsflash_title" jdbcType="VARCHAR" property="newsflashTitle" />
+    <result column="newsflash_link" jdbcType="VARCHAR" property="newsflashLink" />
+    <result column="newsflash_type" jdbcType="INTEGER" property="newsflashType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+
+    <result column="newsflash_origin" jdbcType="INTEGER" property="newsflashOrigin" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="ifPush" jdbcType="INTEGER" property="ifPush" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="newsflash_bottom_img" jdbcType="VARCHAR" property="newsflashBottomImg" />
+    <result column="display_status" jdbcType="INTEGER" property="displayStatus" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.kg.platform.model.out.KgNewsFlashOutModel">
+    <result column="newsflash_text" jdbcType="LONGVARCHAR" property="newsflashText" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    newsflash_id, newsflash_title, newsflash_link, newsflash_type, remark, create_date,newsflash_origin,create_user,ifPush,level,newsflash_bottom_img,display_status,update_date,update_user
+  </sql>
+  <sql id="Blob_Column_List">
+    newsflash_text
+  </sql>
+
+  <!-- 根据条件查询()-->
+  <select id="selectByCondition" parameterType="com.kg.platform.model.in.KgNewsFlashInModel" resultType="com.kg.platform.model.out.KgNewsFlashOutModel">
+    select
+    <include refid="Base_Column_List" />,<include refid="Blob_Column_List" />,(SELECT sys_user_name FROM kg_sys_user WHERE sys_user_id=knf.create_user) createUserName,
+    (SELECT sys_user_name FROM kg_sys_user WHERE sys_user_id=knf.update_user) updateUserName
+    from kg_news_flash knf
+    where 1=1
+    <if test="newsflashText != null and newsflashText != ''">
+      <bind name="newsflashTextLike" value="'%'+newsflashText+'%'"/>
+      and knf.newsflash_text like #{newsflashTextLike}
+    </if>
+    <if test="createUserName != null and createUserName != ''">
+      <bind name="createUserNameLike" value="'%'+createUserName+'%'"/>
+      and (SELECT sys_user_name FROM kg_sys_user WHERE sys_user_id=knf.create_user) LIKE #{createUserNameLike}
+    </if>
+    <if test="remark != null and remark != ''">
+      <bind name="remarkLike" value="'%'+remark+'%'"/>
+      and knf.remark like #{remarkLike}
+    </if>
+
+    <if test="level != null">
+      and knf.level = #{level,jdbcType=INTEGER}
+    </if>
+    <if test="newsflashType != null">
+      and knf.newsflash_type = #{newsflashType,jdbcType=INTEGER}
+    </if>
+    <if test="displayStatus != null">
+      and knf.display_status = #{displayStatus,jdbcType=INTEGER}
+    </if>
+    <if test="ifPush != null">
+      and knf.ifPush = #{ifPush,jdbcType=INTEGER}
+    </if>
+    <if test="newsflashOrigin != null">
+      and knf.newsflash_origin = #{newsflashOrigin,jdbcType=INTEGER}
+    </if>
+    ORDER BY update_date DESC,create_date DESC limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <!-- 条件查询总条数-->
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.in.KgNewsFlashInModel" resultType="java.lang.Long">
+    select count(newsflash_id)
+    from kg_news_flash knf
+    where 1=1
+    <if test="newsflashText != null and newsflashText != ''">
+      <bind name="newsflashTextLike" value="'%'+newsflashText+'%'"/>
+      and knf.newsflash_text like #{newsflashTextLike}
+    </if>
+    <if test="createUserName != null and createUserName != ''">
+      <bind name="createUserNameLike" value="'%'+createUserName+'%'"/>
+      and (SELECT sys_user_name FROM kg_sys_user WHERE sys_user_id=knf.create_user) LIKE #{createUserNameLike}
+    </if>
+    <if test="remark != null and remark != ''">
+      <bind name="remarkLike" value="'%'+remark+'%'"/>
+      and knf.remark like #{remarkLike}
+    </if>
+
+    <if test="level != null">
+      and knf.level = #{level,jdbcType=INTEGER}
+    </if>
+    <if test="newsflashType != null">
+      and knf.newsflash_type = #{newsflashType,jdbcType=INTEGER}
+    </if>
+    <if test="displayStatus != null">
+      and knf.display_status = #{displayStatus,jdbcType=INTEGER}
+    </if>
+    <if test="ifPush != null">
+      and knf.ifPush = #{ifPush,jdbcType=INTEGER}
+    </if>
+    <if test="newsflashOrigin != null">
+      and knf.newsflash_origin = #{newsflashOrigin,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <!-- 查询文章详情()-->
+  <select id="detailNewsFlash" parameterType="java.lang.Long" resultType="com.kg.platform.model.out.KgNewsFlashOutModel">
+    select <include refid="Base_Column_List" />,<include refid="Blob_Column_List" />
+    from kg_news_flash
+    where newsflash_id=#{newsflashId,jdbcType=BIGINT}
+  </select>
+
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AppVersionManageRMapper">
+
+    <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.AppVersionManage">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="version_num" jdbcType="VARCHAR" property="versionNum"/>
+        <result column="prompt" jdbcType="VARCHAR" property="prompt"/>
+        <result column="forced" jdbcType="INTEGER" property="forced"/>
+        <result column="system_type" jdbcType="INTEGER" property="systemType"/>
+        <result column="download_url" jdbcType="VARCHAR" property="downloadUrl"/>
+        <result column="download_url_apk" jdbcType="VARCHAR" property="downloadUrlApk"/>
+        <result column="channel" jdbcType="VARCHAR" property="channel"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="QueryResultMap" type="com.kg.platform.model.response.admin.AppVersionManageResponse">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="version_num" jdbcType="VARCHAR" property="versionNum"/>
+        <result column="prompt" jdbcType="VARCHAR" property="prompt"/>
+        <result column="forced" jdbcType="INTEGER" property="forced"/>
+        <result column="system_type" jdbcType="INTEGER" property="systemType"/>
+        <result column="download_url" jdbcType="VARCHAR" property="downloadUrl"/>
+        <result column="download_url_apk" jdbcType="VARCHAR" property="downloadUrlApk"/>
+        <result column="channel" jdbcType="VARCHAR" property="channel"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="app_version_table_name"> kg_app_version_manage </sql>
+    <sql id="base_column">
+        version_num,prompt,forced,system_type,download_url,download_url_apk,channel,create_time,update_time
+    </sql>
+
+
+    <select id="getById" parameterType="java.lang.Long"
+            resultMap="BaseResultMap">
+        select id,
+        <include refid="base_column"/>
+        from
+        <include refid="app_version_table_name"/>
+        where id = #{id} limit 1
+    </select>
+
+    <select id="getList" parameterType="com.kg.platform.model.request.admin.AppVersionManageRequest"
+            resultMap="QueryResultMap">
+        select id,
+        <include refid="base_column"/>
+        from
+        <include refid="app_version_table_name"/>
+        order by update_time DESC
+        limit #{start},#{limit}
+    </select>
+
+    <select id="getTotalCount" resultType="java.lang.Long">
+        select count(id) from
+        <include refid="app_version_table_name"/>
+    </select>
+
+    <select id="getLastVersion" parameterType="com.kg.platform.model.request.admin.AppVersionManageRequest"
+            resultMap="BaseResultMap">
+        select id,
+        <include refid="base_column"/>
+        from
+        <include refid="app_version_table_name"/>
+        where system_type = #{systemType}
+        order by update_time DESC
+        limit 1
+    </select>
+
+    <select id="getLastVersionWithChannel" parameterType="com.kg.platform.model.request.admin.AppVersionManageRequest"
+            resultMap="BaseResultMap">
+        select id,
+        <include refid="base_column"/>
+        from
+        <include refid="app_version_table_name"/>
+        where system_type = #{systemType} AND channel = #{channel}
+        order by update_time DESC
+        limit 1
+    </select>
+
+    <select id="getVersion" parameterType="com.kg.platform.model.request.admin.AppVersionManageRequest"
+            resultMap="BaseResultMap">
+        select id,
+        <include refid="base_column"/>
+        from
+        <include refid="app_version_table_name"/>
+        where system_type = #{systemType} AND version_num = #{versionNum}
+        <if test="channel != null">
+            AND channel = #{channel}
+        </if>
+        order by update_time DESC
+        limit 1
+    </select>
+
+    <select id="getForcedVersion" resultType="java.lang.Integer">
+        SELECT count(id) FROM
+        <include refid="app_version_table_name"/>
+        WHERE
+        id > #{idUser} AND id &lt; #{idNew}
+        AND forced = 1 AND system_type = #{systemType}
+        <if test="channel != null">
+            AND channel = #{channel}
+        </if>
+    </select>
+
+    <select id="getByVersionAndSysType" resultMap="BaseResultMap">
+        select id,
+        <include refid="base_column"/>
+        from
+        <include refid="app_version_table_name"/>
+        where version_num = #{versionNum} and system_type = #{systemType}
+        <if test="channel != null">
+            AND channel = #{channel}
+        </if>
+        limit 1
+    </select>
+
+</mapper>

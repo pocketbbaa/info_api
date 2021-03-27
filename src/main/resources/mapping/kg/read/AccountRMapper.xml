@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.AccountRMapper">
+
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Account">
+    <id column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="balance" jdbcType="DECIMAL" property="balance" />
+    <result column="frozen_balance" jdbcType="DECIMAL" property="frozenBalance" />
+    <result column="txb_balance" jdbcType="DECIMAL" property="txbBalance" />
+    <result column="txb_frozen_balance" jdbcType="DECIMAL" property="txbFrozenBalance" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="tx_address" jdbcType="VARCHAR" property="txAddress" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="tx_password" jdbcType="VARCHAR" property="txPassword" />
+    <result column="rit_balance" jdbcType="DECIMAL" property="ritBalance" />
+    <result column="rit_frozen_balance" jdbcType="DECIMAL" property="ritFrozenBalance" />
+  </resultMap>
+
+   <sql id="Base_Column_List">
+      account_id, user_id, balance, frozen_balance, status, tx_address, create_date, tx_password, txb_balance, txb_frozen_balance,rit_balance,rit_frozen_balance
+   </sql>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </select>
+
+   <select id="selectByUserbalance" parameterType="com.kg.platform.model.in.AccountInModel" resultType="com.kg.platform.model.out.AccountOutModel">
+    select
+    <include refid="Base_Column_List" />
+    from kg_account
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+   <select id="selectByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_account
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectOutUserId" parameterType="com.kg.platform.model.in.AccountInModel" resultType="com.kg.platform.model.out.AccountOutModel">
+    select
+    <include refid="Base_Column_List" />
+    from kg_account
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <!-- 确认交易密码 -->
+  <select id="validationPwd" parameterType="com.kg.platform.model.in.AccountInModel" resultType="com.kg.platform.model.out.AccountOutModel">
+       select
+        <include refid="Base_Column_List" />
+        from kg_account
+        where user_id = #{userId,jdbcType=BIGINT} and tx_password=#{txPassword} and status=1
+  </select>
+
+  <select id="validatePlatformBanlace" parameterType="com.kg.platform.model.in.AccountInModel" resultType="java.lang.Integer">
+     select count(kg.account_id) from kg_account kg where kg.balance> 0  and kg.balance &gt;= #{balance} and kg.user_id=#{userId}
+   </select>
+
+  <select id="validatePlatformRitBanlace" parameterType="com.kg.platform.model.in.AccountInModel" resultType="java.lang.Integer">
+     select count(kg.account_id) from kg_account kg where kg.rit_balance> 0  and kg.rit_balance &gt;= #{balance} and kg.user_id=#{userId}
+  </select>
+
+    <select id="getBtcBalance" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+        select btc_balance from kg_account where user_id = #{userId} limit 1
+    </select>
+
+</mapper>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.AccountDepositFlowWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.UserConcern">
+    <id column="deposit_flow_id" jdbcType="BIGINT" property="depositFlowId" />
+    <result column="account_flow_id" jdbcType="BIGINT" property="accountFlowId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="deposit_amount" jdbcType="DECIMAL" property="depositAmount" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="recharge_time" jdbcType="TIMESTAMP" property="rechargeTime" />
+    <result column="account_time" jdbcType="TIMESTAMP" property="accountTime" />
+    <result column="from_address" jdbcType="VARCHAR" property="fromAddress" />
+    <result column="to_address" jdbcType="VARCHAR" property="toAddress" />
+    <result column="tx_id" jdbcType="VARCHAR" property="txId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    deposit_flow_id, account_flow_id, user_id, user_phone, deposit_amount, account_amount, recharge_time, 
+    account_time, from_address, to_address, tx_id, remark
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_account_deposit_flow
+    where deposit_flow_id = #{depositFlowId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.AccountDepositFlow">
+    insert into kg_account_deposit_flow (deposit_flow_id, user_id, user_phone, 
+      deposit_amount, account_amount, recharge_time, 
+      account_time, from_address, to_address, 
+      tx_id, remark)
+    values (#{depositFlowId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userPhone,jdbcType=VARCHAR}, 
+      #{depositAmount,jdbcType=DECIMAL}, #{accountAmount,jdbcType=DECIMAL}, #{rechargeTime,jdbcType=TIMESTAMP}, 
+      #{accountTime,jdbcType=TIMESTAMP}, #{fromAddress,jdbcType=VARCHAR}, #{toAddress,jdbcType=VARCHAR}, 
+      #{txId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.AccountDepositFlow">
+    insert into kg_account_deposit_flow
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="depositFlowId != null">
+        deposit_flow_id,
+      </if>
+      <if test="accountFlowId != null">
+        account_flow_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="depositAmount != null">
+        deposit_amount,
+      </if>
+      <if test="accountAmount != null">
+        account_amount,
+      </if>
+      <if test="rechargeTime != null">
+        recharge_time,
+      </if>
+      <if test="accountTime != null">
+        account_time,
+      </if>
+      <if test="fromAddress != null">
+        from_address,
+      </if>
+      <if test="toAddress != null">
+        to_address,
+      </if>
+      <if test="txId != null">
+        tx_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="depositFlowId != null">
+        #{depositFlowId,jdbcType=BIGINT},
+      </if>
+       <if test="accountFlowId != null">
+        #{accountFlowId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="depositAmount != null">
+        #{depositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountAmount != null">
+        #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeTime != null">
+        #{rechargeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountTime != null">
+        #{accountTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fromAddress != null">
+        #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null">
+        #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="txId != null">
+        #{txId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.AccountDepositFlow">
+    update kg_account_deposit_flow
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userPhone != null">
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="depositAmount != null">
+        deposit_amount = #{depositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountAmount != null">
+        account_amount = #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeTime != null">
+        recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountTime != null">
+        account_time = #{accountTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fromAddress != null">
+        from_address = #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null">
+        to_address = #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="txId != null">
+        tx_id = #{txId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where deposit_flow_id = #{depositFlowId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.AccountDepositFlow">
+    update kg_account_deposit_flow
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      deposit_amount = #{depositAmount,jdbcType=DECIMAL},
+      account_amount = #{accountAmount,jdbcType=DECIMAL},
+      recharge_time = #{rechargeTime,jdbcType=TIMESTAMP},
+      account_time = #{accountTime,jdbcType=TIMESTAMP},
+      from_address = #{fromAddress,jdbcType=VARCHAR},
+      to_address = #{toAddress,jdbcType=VARCHAR},
+      tx_id = #{txId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where deposit_flow_id = #{depositFlowId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

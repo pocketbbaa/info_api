@@ -1,0 +1,1 @@
+UPDATE `kgweb`.`kg_common_setting` SET  `setting_value`='{\"hotAuthorLocation\": 5}' WHERE (`setting_id`='4');

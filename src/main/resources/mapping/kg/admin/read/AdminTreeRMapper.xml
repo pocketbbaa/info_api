@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminTreeRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.TreeQueryResponse">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="column_level" jdbcType="INTEGER" property="columnLevel" />
+    <result column="navigator_display" jdbcType="INTEGER" property="navigatorDisplay" />
+    <result column="article_count" jdbcType="BIGINT" property="articleCount" />
+    <result column="column_order" jdbcType="BIGINT" property="columnOrder" />
+    <result column="display_mode" jdbcType="INTEGER" property="displayMode" />
+    <result column="seo_title" jdbcType="VARCHAR" property="title" />
+    <result column="seo_keyword" jdbcType="VARCHAR" property="keyword" />
+    <result column="seo_description" jdbcType="VARCHAR" property="description" />
+    <result column="second_article_count" jdbcType="BIGINT" property="secondArticleCount" />
+    <result column="column_urlname" jdbcType="VARCHAR" property="columnUrlname" />
+    <result column="display_status" jdbcType="BIT" property="displayStatus" />
+  </resultMap>
+
+ <select id="selectColumn" resultMap="BaseResultMap">
+  SELECT
+	c.seo_title,
+	c.seo_keyword,
+	c.seo_description,
+	c.display_mode,
+	c.column_order,
+	c.column_id id,
+	c.column_name NAME,
+	c.prev_column parent_id,
+	c.create_date,
+	c.column_level,
+	c.navigator_display,
+	c.column_urlname,
+	c.display_status,
+    if(c.prev_column=0,if(kc.article_num is null,0,kc.article_num),0) article_count,
+    if(c.prev_column=0,0,if(kc.article_num is null,0,kc.article_num)) second_article_count,
+	(
+		SELECT
+			u.user_realname
+		FROM
+			kg_sys_user u
+		WHERE
+			u.sys_user_id = c.update_user
+	) USER
+    FROM
+	kg_column c left JOIN kg_column_count kc ON c.column_id=kc.column_key
+ </select>
+
+    <select id="selectAuth" resultMap="BaseResultMap">
+        select sys_auth_id id,sys_auth_name name,prv_auth_id parent_id from kg_sys_auth
+        where menu_id in (
+			select menu_id from kg_sys_menu where menu_status=1
+			)
+    </select>
+</mapper>

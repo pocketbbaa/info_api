@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.BalanceDeductedRMapper">
+
+    <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.BalanceDeducted">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_id, type, state, create_time, amount
+    </sql>
+
+
+    <select id="getBalanceByTime" resultMap="BaseResultMap">
+       SELECT
+	        sum(amount) as amount,
+            user_id
+        FROM
+            kg_balance_deducted
+        WHERE
+            state = 0
+            AND create_time >= #{start}
+            AND #{end} >= create_time
+        GROUP BY
+            user_id
+    </select>
+
+</mapper>

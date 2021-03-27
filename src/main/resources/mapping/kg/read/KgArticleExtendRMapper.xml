@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgArticleExtendRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgArticleExtendOutModel">
+    <id column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="if_into_index" jdbcType="INTEGER" property="ifIntoIndex" />
+    <result column="title_modify" jdbcType="INTEGER" property="titleModify" />
+    <result column="blockchain_url" jdbcType="VARCHAR" property="blockchainUrl" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    article_id, if_into_index, title_modify, blockchain_url
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_article_extend
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </select>
+</mapper>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminCommentRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.CommentQueryResponse">
+    <id column="comment_id" jdbcType="VARCHAR" property="commentId" />
+    <result column="comment_desc" jdbcType="VARCHAR" property="content" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="comment_date" jdbcType="TIMESTAMP" property="commentDate" />
+    <result column="comment_status" jdbcType="INTEGER" property="status" />
+    <result column="display_status" jdbcType="BIT" property="displayStatus" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+  </resultMap>
+
+
+  <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.CommentQueryRequest" resultType="com.kg.platform.model.response.admin.CommentQueryResponse">
+    select
+      c.comment_id as commentId,
+      c.comment_desc content,
+      (select user_mobile from kg_user where user_id = c.user_id) userMobile,
+      (select user_name from kg_user where user_id = c.user_id) userName,
+      c.comment_date createDate,
+      c.comment_status status,
+      c.display_status as displayStatus,
+      (select article_title from kg_article where article_id = c.article_id) articleTitle,
+      '' as replyUser,
+      1 as floorState
+    from kg_user_comment c
+    where 1=1
+      <if test="content != null">
+        <bind name="contentLike" value="'%'+content+'%'"/>
+        and c.comment_desc like #{contentLike}
+      </if>
+      <if test="articleTitle != null">
+        <bind name="articleTitleLike" value="'%'+articleTitle+'%'"/>
+        and  (select article_title from kg_article where article_id = c.article_id) like #{articleTitleLike}
+      </if>
+      <if test="commentUser != null">
+        <bind name="commentUserLike" value="'%'+commentUser+'%'"/>
+        and  (select user_name from kg_user where user_id = c.user_id) like #{commentUserLike}
+      </if>
+      <if test="userMobile != null">
+        <bind name="userMobileLike" value="'%'+userMobile+'%'"/>
+        and  (select user_mobile from kg_user where user_id = c.user_id) like #{userMobileLike}
+      </if>
+      <if test="status != null">
+        and c.comment_status = #{status}
+      </if>
+      <if test="displayStatus != null">
+        and c.display_status = #{displayStatus}
+      </if>
+      <if test="startDate != null">
+        and c.comment_date >= #{startDate}
+      </if>
+      <if test="endDate != null">
+        <![CDATA[ and c.comment_date <= #{endDate}]]>
+      </if>
+    UNION ALL
+    select
+      r.comment_id as commentId,
+      r.comment_desc content,
+      (select user_mobile from kg_user where user_id = r.user_id) userMobile,
+      (select user_name from kg_user where user_id = r.user_id) userName,
+      r.comment_date createDate,
+      r.comment_status status,
+      r.display_status as displayStatus,
+      (select article_title from kg_article where article_id = r.article_id) articleTitle,
+      (select user_name from kg_user where user_id = r.to_user_id) replyUser,
+      2 as floorState
+    from kg_user_comment_reply r
+    where 1=1
+      <if test="content != null">
+        <bind name="contentLike" value="'%'+content+'%'"/>
+        and r.comment_desc like #{contentLike}
+      </if>
+      <if test="articleTitle != null">
+        <bind name="articleTitleLike" value="'%'+articleTitle+'%'"/>
+        and  (select article_title from kg_article where article_id = r.article_id) like #{articleTitleLike}
+      </if>
+      <if test="commentUser != null">
+        <bind name="commentUserLike" value="'%'+commentUser+'%'"/>
+        and  (select user_name from kg_user where user_id = r.user_id) like #{commentUserLike}
+      </if>
+      <if test="userMobile != null">
+        <bind name="userMobileLike" value="'%'+userMobile+'%'"/>
+        and  (select user_mobile from kg_user where user_id = r.user_id) like #{userMobileLike}
+      </if>
+      <if test="status != null">
+        and r.comment_status = #{status}
+      </if>
+      <if test="displayStatus != null">
+        and r.display_status = #{displayStatus}
+      </if>
+      <if test="startDate != null">
+        and r.comment_date >= #{startDate}
+      </if>
+      <if test="endDate != null">
+        <![CDATA[ and r.comment_date <= #{endDate}]]>
+      </if>
+    order by createDate desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+
+
+
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.CommentQueryRequest" resultType="java.lang.Long">
+    select sum(total) from (
+    select
+    count(*) as total
+    from kg_user_comment
+    where 1=1
+    <if test="content != null">
+      <bind name="contentLike" value="'%'+content+'%'"/>
+      and comment_desc like #{contentLike}
+    </if>
+    <if test="articleTitle != null">
+      <bind name="articleTitleLike" value="'%'+articleTitle+'%'"/>
+      and (select article_title from kg_article where article_id = article_id limit 1) like #{articleTitleLike}
+    </if>
+    <if test="commentUser != null">
+      <bind name="commentUserLike" value="'%'+commentUser+'%'"/>
+      and (select user_name from kg_user where user_id = user_id limit 1) like #{commentUserLike}
+    </if>
+    <if test="userMobile != null">
+      <bind name="userMobileLike" value="'%'+userMobile+'%'"/>
+      and (select user_mobile from kg_user where user_id = user_id limit 1) like #{userMobileLike}
+    </if>
+    <if test="status != null">
+      and comment_status = #{status}
+    </if>
+    <if test="displayStatus != null">
+      and display_status = #{displayStatus}
+    </if>
+    <if test="startDate != null">
+      and comment_date >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and comment_date <= #{endDate}]]>
+    </if>
+    UNION ALL
+    select
+    count(*) as total
+    from kg_user_comment_reply
+    where 1=1
+    <if test="content != null">
+      <bind name="contentLike" value="'%'+content+'%'"/>
+      and comment_desc like #{contentLike}
+    </if>
+    <if test="articleTitle != null">
+      <bind name="articleTitleLike" value="'%'+articleTitle+'%'"/>
+      and (select article_title from kg_article where article_id = article_id limit 1) like #{articleTitleLike}
+    </if>
+    <if test="commentUser != null">
+      <bind name="commentUserLike" value="'%'+commentUser+'%'"/>
+      and (select user_name from kg_user where user_id = user_id limit 1) like #{commentUserLike}
+    </if>
+    <if test="userMobile != null">
+      <bind name="userMobileLike" value="'%'+userMobile+'%'"/>
+      and (select user_mobile from kg_user where user_id = user_id limit 1) like #{userMobileLike}
+    </if>
+    <if test="status != null">
+      and comment_status = #{status}
+    </if>
+    <if test="displayStatus != null">
+      and display_status = #{displayStatus}
+    </if>
+    <if test="startDate != null">
+      and comment_date >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and comment_date <= #{endDate}]]>
+    </if>
+    ) t
+  </select>
+
+  <select id="selectCommentInfo" parameterType="com.kg.platform.model.request.admin.CommentQueryRequest" resultMap="BaseResultMap">
+    select c.comment_id,c.comment_desc content,c.user_id,
+	 (SELECT create_user from kg_article WHERE article_id=c.article_id) publishUserId ,
+	 (SELECT user_name from kg_user WHERE user_id=c.user_id) commentUserName,
+	 (SELECT avatar from kg_user_profile WHERE user_id=c.user_id) commentUserAvatar,
+	 (select article_title from kg_article where article_id = c.article_id) article_title from kg_user_comment c
+      where comment_id= #{commentId}
+  </select>
+ 
+</mapper>

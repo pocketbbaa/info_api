@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.UserRelationWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.UserRelation">
+    <id column="rel_id" jdbcType="BIGINT" property="relId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="rel_user_id" jdbcType="BIGINT" property="relUserId" />
+    <result column="bonus_status" jdbcType="TINYINT" property="bonusStatus" />
+    <result column="rel_type" jdbcType="TINYINT" property="relType" />
+    <result column="rel_time" jdbcType="TIMESTAMP" property="relTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rel_id, user_id, rel_user_id, bonus_status, rel_type, rel_time
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_user_relation
+    where rel_id = #{relId,jdbcType=BIGINT}
+  </delete>
+    
+  <delete id="deleteByUserAndRelUser" parameterType="com.kg.platform.dao.entity.UserRelation">
+    delete from kg_user_relation
+    where user_id = #{userId,jdbcType=BIGINT} and rel_user_id = #{relUserId,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.UserRelation">
+    insert into kg_user_relation (rel_id, user_id, rel_user_id, rel_type, 
+      bonus_status)
+    values (#{relId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{relUserId,jdbcType=BIGINT},#{relType,jdbcType=TINYINT}, 
+      #{bonusStatus,jdbcType=TINYINT})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.UserRelation">
+    insert IGNORE into kg_user_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="relId != null">
+        rel_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="relUserId != null">
+        rel_user_id,
+      </if>
+      <if test="bonusStatus != null">
+        bonus_status,
+      </if>
+      <if test="relType != null">
+        rel_type,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="relId != null">
+        #{relId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="relUserId != null">
+        #{relUserId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusStatus != null">
+        #{bonusStatus,jdbcType=TINYINT},
+      </if>
+      <if test="relType != null">
+        #{relType,jdbcType=TINYINT},
+      </if>
+      <if test="activityId != null">
+         #{activityId,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.UserRelation">
+    update kg_user_relation
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="relUserId != null">
+        rel_user_id = #{relUserId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusStatus != null">
+        bonus_status = #{bonusStatus,jdbcType=TINYINT},
+      </if>
+      <if test="relType != null">
+        rel_type = #{relType,jdbcType=TINYINT},
+      </if>
+    </set>
+    where rel_id = #{relId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.UserRelation">
+    update kg_user_relation
+    set user_id = #{userId,jdbcType=BIGINT},
+      rel_user_id = #{relUserId,jdbcType=BIGINT},
+      bonus_status = #{bonusStatus,jdbcType=TINYINT}
+    where rel_id = #{relId,jdbcType=BIGINT}
+  </update>
+  
+  <!--更新到奖励领取状态-->
+  <update id="updateBonusStatus" parameterType="com.kg.platform.dao.entity.UserRelation">
+    update kg_user_relation
+    set  bonus_status = #{bonusStatus,jdbcType=TINYINT}
+    where rel_id in 
+    ( SELECT s.rel_id from (
+         SELECT rel_id from kg_user_relation kr
+         where  kr.bonus_status != #{bonusStatus,jdbcType=TINYINT}  and kr.rel_type = #{relType} and kr.user_id=#{userId}
+         ORDER  BY kr.rel_time LIMIT #{targrtCount}
+       ) as s
+     )
+  </update>
+  
+  
+</mapper>

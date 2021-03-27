@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminArticleRMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.ArticleQueryResponse">
+        <id column="article_id" jdbcType="VARCHAR" property="articleId"/>
+        <result column="article_title" jdbcType="VARCHAR" property="articleTitle"/>
+        <result column="column_name" jdbcType="VARCHAR" property="columnName"/>
+        <result column="second_column_name" jdbcType="VARCHAR" property="secondColumnName"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="create_date" jdbcType="VARCHAR" property="createDate"/>
+        <result column="publish_status" jdbcType="INTEGER" property="publishStatus"/>
+        <result column="article_type" jdbcType="INTEGER" property="articleType"/>
+        <result column="audit_user" jdbcType="VARCHAR" property="auditUser"/>
+        <result column="audit_date" jdbcType="VARCHAR" property="auditDate"/>
+        <result column="display_status" jdbcType="INTEGER" property="displayStatus"/>
+        <result column="bowse_num" jdbcType="INTEGER" property="bowseNum"/>
+        <result column="display_order" jdbcType="INTEGER" property="displayOrder"/>
+        <result column="sys_user" jdbcType="VARCHAR" property="sysUser"/>
+        <result column="update_sys_user" jdbcType="VARCHAR" property="updateSysUser"/>
+        <result column="publish_time" jdbcType="TIMESTAMP" property="publishTime"/>
+        <result column="bonus_status" jdbcType="INTEGER" property="bonusStatus"/>
+        <result column="user_name" jdbcType="VARCHAR" property="username"/>
+        <result column="article_mark" jdbcType="INTEGER" property="bonusStatus"/>
+
+        <result column="publish_kind" property="publishKind" jdbcType="BIT"/>
+        <result column="video_url" property="videoUrl" jdbcType="VARCHAR"/>
+        <result column="video_filename" property="videoFilename" jdbcType="VARCHAR"/>
+        <result column="column_id" jdbcType="INTEGER" property="columnId"/>
+
+        <result column="second_column" jdbcType="INTEGER" property="secondColumn"/>
+
+        <result column="if_push" jdbcType="INTEGER" property="ifPush"/>
+        <result column="if_platform_publish_award" jdbcType="INTEGER" property="ifPlatformPublishAward"/>
+        <result column="article_img_size" property="articleImgSize" jdbcType="INTEGER"/>
+        <result column="if_into_index" jdbcType="INTEGER" property="ifIntoIndex"/>
+
+        <result column="blockchain_url" jdbcType="VARCHAR" property="blockchainUrl" />
+
+        <result column="publish_date" jdbcType="VARCHAR" property="publishDate"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.kg.platform.dao.entity.Article">
+        <result column="article_text" jdbcType="LONGVARCHAR" property="articleText"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    a.sys_user,a.article_id,a.article_title,a.create_date,a.update_date,a.publish_status,a.audit_date,a.display_status,a.display_order,a.if_push,a.if_platform_publish_award,
+    a.publish_kind,a.video_url,video_filename,a.article_img_size,publish_date,
+    (select column_name from kg_column where column_id = a.column_id) column_name,
+    (select column_name from kg_column where column_id = a.second_column) second_column_name,
+    (select column_name from kg_user_profile where user_id = a.create_user) create_user,
+    (select column_name from kg_user_profile where user_id = a.update_user) update_user,
+    (select user_realname from kg_sys_user where sys_user_id = a.audit_user) audit_user,
+    (select user_realname from kg_sys_user where sys_user_id = a.sys_user) sys_user,
+    (select user_realname from kg_sys_user where sys_user_id = a.update_sys_user) update_sys_user,
+    (select browse_num from kg_article_statistics s where s.article_id = a.article_id) bowse_num,bonus_status,
+    (select blockchain_url from kg_article_extend e where e.article_id=a.article_id) blockchain_url
+  </sql>
+
+    <select id="selectAutoPublishArticle" resultMap="BaseResultMap">
+    select * from kg_article a where publish_set = 1 and publish_status = 0
+  </select>
+
+    <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.ArticleQueryRequest"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_article a where 1 = 1 and a.publish_status !=4
+        <if test="articleId != null and articleId != ''">
+            <bind name="articleIdLike" value="'%'+articleId+'%'"/>
+            and a.article_id like #{articleIdLike}
+        </if>
+        <if test="articleTitle != null and articleTitle != ''">
+            <bind name="articleTitleLike" value="'%'+articleTitle+'%'"/>
+            and a.article_title like #{articleTitleLike}
+        </if>
+        <if test="articleTag != null and articleTag != ''">
+            <bind name="articleTagLike" value="'%'+articleTag+'%'"/>
+            and a.article_tags like #{articleTagLike}
+        </if>
+        <if test="createUser != null and createUser != ''">
+            <bind name="createUserLike" value="'%'+createUser+'%'"/>
+            and (select column_name from kg_user_profile where user_id = a.create_user) like #{createUserLike}
+        </if>
+        <if test="auditUser != null and auditUser != ''">
+            <bind name="auditUserLike" value="'%'+auditUser+'%'"/>
+              and (select user_realname from kg_sys_user where sys_user_id = a.audit_user) LIKE  #{auditUserLike}
+        </if>
+        <if test="columnId != null">
+            and a.column_id = #{columnId,jdbcType=INTEGER}
+        </if>
+        <if test="secondColumn != null">
+            and a.second_column = #{secondColumn,jdbcType=INTEGER}
+        </if>
+        <if test="publishStatus != null">
+            and a.publish_status = #{publishStatus,jdbcType=INTEGER}
+        </if>
+        <if test="publishKind != null">
+            and a.publish_kind = #{publishKind,jdbcType=INTEGER}
+        </if>
+        <if test="displayStatus != null">
+            and a.display_status = #{displayStatus,jdbcType=INTEGER}
+        </if>
+        <if test="ifPlatformPublishAward != null">
+            and a.if_platform_publish_award = #{ifPlatformPublishAward,jdbcType=INTEGER}
+        </if>
+        <if test="articleFrom == null ">
+            and a.article_from = 1
+        </if>
+        <if test="articleFrom != null and articleFrom == 1">
+            and a.article_from = #{articleFrom,jdbcType=INTEGER}
+        </if>
+        <if test="articleFrom != null and articleFrom == 2">
+            and a.article_from != 1
+        </if>
+        <if test="blockchainUrl != null and blockchainUrl == 1">
+            and a.article_id IN (select article_id from kg_article_extend WHERE blockchain_url is not null and blockchain_url != '')
+        </if>
+        <if test="blockchainUrl != null and blockchainUrl == 0">
+            and a.article_id IN (select article_id from kg_article_extend WHERE (blockchain_url is null or blockchain_url = ''))
+        </if>
+        <if test="startDay != null and startDay != '' and endDay != null and endDay != ''">
+            and a.audit_date >= #{startDay} and #{endDay} >= a.audit_date
+        </if>
+        <if test="ifIntoIndex != null">
+            and a.article_id IN (select article_id from kg_article_extend WHERE if_into_index = #{ifIntoIndex,jdbcType=INTEGER})
+        </if>
+        <if test="articleType != null">
+            and a.article_type = #{articleType,jdbcType=INTEGER}
+        </if>
+        <if test="articleMark != null">
+            and a.article_mark = #{articleMark,jdbcType=INTEGER}
+        </if>
+        <if test="ifPush != null">
+            and a.if_push = #{ifPush,jdbcType=INTEGER}
+        </if>
+        <if test="orderByClause == null">
+            order by a.create_date desc
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause} DESC
+        </if>
+
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+    <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.ArticleQueryRequest"
+            resultType="java.lang.Long">
+        select
+        count(a.article_id)
+        from kg_article a where 1 = 1 and a.publish_status !=4
+        <if test="articleId != null and articleId != ''">
+            <bind name="articleIdLike" value="'%'+articleId+'%'"/>
+            and a.article_id like #{articleIdLike}
+        </if>
+        <if test="articleTitle != null and articleTitle != ''">
+            <bind name="articleTitleLike" value="'%'+articleTitle+'%'"/>
+            and a.article_title like #{articleTitleLike}
+        </if>
+        <if test="articleTag != null and articleTag != ''">
+            <bind name="articleTagLike" value="'%'+articleTag+'%'"/>
+            and a.article_tags like #{articleTagLike}
+        </if>
+        <if test="createUser != null and createUser != ''">
+            <bind name="createUserLike" value="'%'+createUser+'%'"/>
+            and (select column_name from kg_user_profile where user_id = a.create_user) like #{createUserLike}
+        </if>
+        <if test="auditUser != null and auditUser != ''">
+            <bind name="auditUserLike" value="'%'+auditUser+'%'"/>
+              and (select user_realname from kg_sys_user where sys_user_id = a.audit_user) LIKE  #{auditUserLike}
+        </if>
+        <if test="columnId != null">
+            and a.column_id = #{columnId,jdbcType=INTEGER}
+        </if>
+        <if test="secondColumn != null">
+            and a.second_column = #{secondColumn,jdbcType=INTEGER}
+        </if>
+        <if test="publishStatus != null">
+            and a.publish_status = #{publishStatus,jdbcType=INTEGER}
+        </if>
+        <if test="publishKind != null">
+            and a.publish_kind = #{publishKind,jdbcType=INTEGER}
+        </if>
+        <if test="displayStatus != null">
+            and a.display_status = #{displayStatus,jdbcType=INTEGER}
+        </if>
+        <if test="ifPlatformPublishAward != null">
+            and a.if_platform_publish_award = #{ifPlatformPublishAward,jdbcType=INTEGER}
+        </if>
+        <if test="articleFrom == null ">
+            and a.article_from = 1
+        </if>
+        <if test="articleFrom != null and articleFrom == 1">
+            and a.article_from = #{articleFrom,jdbcType=INTEGER}
+        </if>
+        <if test="articleFrom != null and articleFrom == 2">
+            and a.article_from != 1
+        </if>
+        <if test="blockchainUrl != null and blockchainUrl == 1">
+            and a.article_id IN (select article_id from kg_article_extend WHERE blockchain_url is not null and blockchain_url != '')
+        </if>
+        <if test="blockchainUrl != null and blockchainUrl == 0">
+            and a.article_id IN (select article_id from kg_article_extend WHERE (blockchain_url is null or blockchain_url = ''))
+        </if>
+        <if test="startDay != null and startDay != '' and endDay != null and endDay != ''">
+            and a.audit_date >= #{startDay} and #{endDay} >= a.audit_date
+        </if>
+        <if test="ifIntoIndex != null">
+            and a.article_id IN (select article_id from kg_article_extend WHERE if_into_index = #{ifIntoIndex,jdbcType=INTEGER})
+        </if>
+        <if test="articleType != null">
+            and a.article_type = #{articleType,jdbcType=INTEGER}
+        </if>
+        <if test="articleMark != null">
+            and a.article_mark = #{articleMark,jdbcType=INTEGER}
+        </if>
+        <if test="ifPush != null">
+            and a.if_push = #{ifPush,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="selectBonusValue" parameterType="java.lang.Long" resultType="java.lang.Double">
+    select sum(bonus_value) from kg_article_bonus where article_id = #{articleId}
+  </select>
+
+    <select id="getArticleAddedTvBonus" parameterType="java.lang.Long" resultType="java.lang.Integer">
+     SELECT count(1) from kg_account_flow where article_id=#{articleId} and business_type_id=560
+  </select>
+
+    <select id="getArticleAddedTxbBonus" parameterType="java.lang.Long" resultType="java.lang.Integer">
+     SELECT count(1) from kg_account_flow_txb where article_id=#{articleId} and business_type_id=1560
+  </select>
+
+    <select id="getArticle" parameterType="com.kg.platform.model.request.admin.ArticleQueryRequest"
+            resultMap="BaseResultMap">
+    select article_id,create_user,article_title,create_date,publish_status,audit_user
+    audit_date,display_status,bowse_num,display_order,sys_user,update_sys_user,publish_time,publish_time,bonus_status,article_mark,article_img_size
+    from kg_article a where a.article_id =#{articleId}
+   </select>
+
+
+    <select id="getAllArticles" parameterType="com.kg.platform.model.request.admin.ArticleQueryRequest"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_article a where 1 = 1 and a.publish_status !=4
+        <if test="articleTitle != null and articleTitle != ''">
+            <bind name="articleTitleLike" value="'%'+articleTitle+'%'"/>
+            and a.article_title like #{articleTitleLike}
+        </if>
+    </select>
+
+    <select id="toAuditList" resultType="com.kg.platform.model.response.admin.AdminArticleReportResponse">
+    SELECT
+        kar.article_id AS articleId,
+        ka.article_title AS articleTitle,
+        ku.user_name AS authorName,
+        count( kar.id ) AS reportCount
+    FROM
+        kg_article_report kar
+        LEFT JOIN kg_article ka ON ka.article_id = kar.article_id
+        LEFT JOIN kg_user ku ON ku.user_id = ka.create_user
+    WHERE
+        state = 0
+    GROUP BY
+        kar.article_id
+    ORDER BY
+        reportCount DESC
+        LIMIT #{pageIndex},#{pageSize}
+  </select>
+
+    <select id="toAuditListCount" resultType="java.lang.Integer">
+        SELECT
+            count(DISTINCT(article_id))
+        FROM
+            kg_article_report
+        WHERE
+            state = 0
+    </select>
+
+    <select id="toAuditListByArticleId" resultType="com.kg.platform.model.response.admin.AdminArticleReportByArticleIdResponse">
+        SELECT
+            ku.user_name AS userName,
+            ku.user_mobile AS userPhone,
+            kar.create_time AS createTime,
+            kart.text AS report
+        FROM
+            kg_article_report kar
+            LEFT JOIN kg_user ku ON ku.user_id = kar.user_id
+            LEFT JOIN kg_article_report_text kart ON kart.id = kar.report_id
+        WHERE
+            state = 0
+            AND kar.article_id = #{articleId}
+            LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <select id="toAuditListByArticleIdCount" resultType="java.lang.Integer">
+        SELECT
+            count( * )
+        FROM
+            kg_article_report
+        WHERE
+            state = 0
+            AND article_id = #{articleId}
+    </select>
+
+</mapper>

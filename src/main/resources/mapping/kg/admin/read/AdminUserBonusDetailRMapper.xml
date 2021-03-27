@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminUserBonusDetailRMapper">
+
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.UserBonusDetailQueryResponse">
+    <result column="bonus_detail_id" jdbcType="VARCHAR" property="bonusDetailId" />
+    <result column="extra_bonus_id" jdbcType="VARCHAR" property="extraBonusId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="tv_amount" jdbcType="DECIMAL" property="tvAmount" />
+    <result column="kg_amount" jdbcType="DECIMAL" property="kgAmount" />
+    <result column="tv_account_flow_id" jdbcType="BIGINT" property="tvAccountFlowId" />
+    <result column="kg_account_flow_id" jdbcType="BIGINT" property="kgAccountFlowId" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_role" jdbcType="TINYINT" property="userRole" />
+    <result column="column_authed" jdbcType="TINYINT" property="columnAuthed" />
+    <result column="user_level" jdbcType="TINYINT" property="userLevel" />
+  </resultMap>
+  
+  <sql id="user_bonus_detail_list">
+    kb.bonus_detail_id,kb.extra_bonus_id,kb.user_id,
+    ROUND(kb.tv_amount, 3) as tv_amount,ROUND(kb.kg_amount, 3) as kg_amount,u.user_mobile,u.user_name,u.user_role,u.column_authed,u.user_level,
+    DATE_FORMAT(kb.create_time ,'%Y-%m-%d %H:%i:%S') as create_time
+ </sql>
+
+ <!-- 用户奖励列表 -->
+ <select id="getUserBonusDetailList" parameterType="com.kg.platform.model.request.admin.UserBonusQueryRequest" resultMap="BaseResultMap">
+     SELECT  <include refid="user_bonus_detail_list"/>  
+     from  kg_extra_bonus_detail kb
+
+     LEFT JOIN kg_user u on kb.user_id=u.user_id  
+     where 1=1  and kb.extra_bonus_id=#{extraBonusId}
+    <if test="userId != null">
+      <bind name="userId" value="'%'+userId+'%'"/>
+      and u.user_id like #{userId}
+    </if>
+     <if test="userMobile != null">
+      <bind name="userMobile" value="'%'+userMobile+'%'"/>
+      and u.user_mobile like #{userMobile}
+    </if>
+    <if test="nickName != null">
+      <bind name="nickName" value="'%'+nickName+'%'"/>
+      and u.user_name like #{nickName}
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ and kb.create_time >= #{startTime}]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ and kb.create_time <= #{endTime}]]>
+    </if>
+    
+    <if test="startTvBonus != null">
+      <![CDATA[ and kb.tv_amount >= #{startTvBonus}]]>
+    </if>
+    <if test="endTvBonus != null">
+      <![CDATA[ and kb.tv_amount <= #{endTvBonus}]]>
+    </if>
+    
+    <if test="startKgBonus != null">
+      <![CDATA[ and kb.kg_amount >= #{startKgBonus}]]>
+    </if>
+    <if test="endKgBonus != null">
+      <![CDATA[ and kb.kg_amount <= #{endKgBonus}]]>
+    </if>
+    order by kb.create_time desc
+    limit #{start},#{limit}
+  </select>
+  
+   <select id="getUserBonusDetailCount" parameterType="com.kg.platform.model.request.admin.UserBonusQueryRequest" resultType="java.lang.Long">
+     SELECT  count(1)
+     from  kg_extra_bonus_detail kb
+     LEFT JOIN kg_user u on kb.user_id=u.user_id  
+     where 1=1 and kb.extra_bonus_id=#{extraBonusId}
+    <if test="userId != null">
+      <bind name="userId" value="'%'+userId+'%'"/>
+      and u.user_id like #{userId}
+    </if>
+     <if test="userMobile != null">
+      <bind name="userMobile" value="'%'+userMobile+'%'"/>
+      and u.user_mobile like #{userMobile}
+    </if>
+    <if test="nickName != null">
+      <bind name="nickName" value="'%'+nickName+'%'"/>
+      and u.user_name like #{nickName}
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ and kb.create_time >= #{startTime}]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ and kb.create_time <= #{endTime}]]>
+    </if>
+    
+    <if test="startTvBonus != null">
+      <![CDATA[ and kb.tv_amount >= #{startTvBonus}]]>
+    </if>
+    <if test="endTvBonus != null">
+      <![CDATA[ and kb.tv_amount <= #{endTvBonus}]]>
+    </if>
+    
+    <if test="startKgBonus != null">
+      <![CDATA[ and kb.kg_amount >= #{startKgBonus}]]>
+    </if>
+    <if test="endKgBonus != null">
+      <![CDATA[ and kb.kg_amount <= #{endKgBonus}]]>
+    </if>
+  </select>
+  
+  
+  
+  
+  
+
+  
+</mapper>

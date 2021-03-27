@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminArticleRMapper1">
+  <resultMap id="ArticleResultMap" type="com.kg.platform.dao.entity.Article">
+    <id column="article_id" property="articleId" jdbcType="VARCHAR" />
+    <result column="article_title" property="articleTitle" jdbcType="VARCHAR" />
+     <result column="article_text" property="articleText"/>
+    <result column="article_tags" property="articleTags" jdbcType="VARCHAR" />
+    <result column="article_description" property="articleDescription" jdbcType="VARCHAR" />
+    <result column="article_image" property="articleImage" jdbcType="VARCHAR" />
+    <result column="article_type" property="articleType" jdbcType="BIT" />
+    <result column="article_source" property="articleSource" jdbcType="VARCHAR" />
+    <result column="article_link" property="articleLink" jdbcType="VARCHAR" />
+    <result column="column_id" property="columnId" jdbcType="INTEGER" />
+    <result column="second_column" property="secondColumn" jdbcType="INTEGER" />
+    <result column="display_status" property="displayStatus" jdbcType="BIT" />
+    <result column="display_order" property="displayOrder" jdbcType="INTEGER" />
+    <result column="comment_set" property="commentSet" jdbcType="BIT" />
+    <result column="publish_set" property="publishSet" jdbcType="BIT" />
+    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="publish_status" property="publishStatus" jdbcType="INTEGER" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+    <result column="audit_user" property="auditUser" jdbcType="INTEGER" />
+    <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP" />
+    <result column="sys_user" property="sysUser" jdbcType="INTEGER" />
+    <result column="refuse_reason" property="refuseReason" jdbcType="VARCHAR" />
+    <result column="bowse_num" property="bowseNum" jdbcType="INTEGER" />
+    <result column="bonus_status" property="bonusStatus" jdbcType="INTEGER" />
+    <result column="article_tagnames" property="tagnames" jdbcType="VARCHAR" />
+    <result column="article_textnum" jdbcType="INTEGER" property="textnum" />
+ 
+    <result column="publish_kind" property="publishKind" jdbcType="BIT" />
+    <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+    <result column="video_filename" property="videoFilename" jdbcType="VARCHAR" />
+    <result column="if_platform_publish_award" jdbcType="INTEGER" property="ifPlatformPublishAward" />
+    <result column="if_push" jdbcType="INTEGER" property="ifPush" />
+
+    <result column="article_from" property="articleFrom" jdbcType="INTEGER" />
+
+    <result column="article_img_size" property="articleImgSize" jdbcType="INTEGER"/>
+    <result column="title_modify" property="titleModify" jdbcType="BIT"/>
+
+      <result column="publish_date" jdbcType="VARCHAR" property="publishDate"/>
+  </resultMap>
+
+  <sql id="Base_Article_List">
+    article_id, 
+    article_title, 
+    article_text,
+    article_tags, 
+    article_description, 
+    article_image, 
+    article_type, 
+    article_source, 
+    article_link, 
+    column_id, 
+    second_column,
+    display_status, 
+    display_order, 
+    comment_set,
+     publish_set, 
+     publish_time, 
+     publish_status, 
+     create_user, 
+     create_date, 
+    update_date, 
+    update_user, 
+    sys_user, 
+    refuse_reason,
+    bowse_num,
+    bonus_status,
+    article_textnum,
+    article_tagnames,
+    audit_date,
+
+    article_from,
+    publish_kind,video_url,video_filename,if_platform_publish_award,if_push,article_img_size,publish_date
+
+  </sql>
+  <sql id="Base_articleList">
+    article_text
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ArticleResultMap">
+    select 
+    <include refid="Base_Article_List" />
+    ,
+    <include refid="Base_articleList" />,
+    (select if_into_index from kg_article_extend WHERE article_id=a.article_id) ifIntoIndex,
+    (select title_modify from kg_article_extend where article_id = a.article_id) as title_modify
+    from kg_article a
+    where a.article_id = #{articleId,jdbcType=BIGINT}
+  </select>
+
+    <select id="selectPushInfo" parameterType="java.lang.Long" resultMap="ArticleResultMap">
+    SELECT  article_id,
+    article_title, article_description,
+    article_image,article_img_size FROM kg_article
+    where article_id = #{articleId,jdbcType=BIGINT}
+    </select>
+
+  <select id="selectColumnId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    SELECT column_id  FROM kg_article
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </select>
+</mapper>

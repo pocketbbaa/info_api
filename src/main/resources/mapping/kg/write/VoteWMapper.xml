@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.VoteWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Vote">
+    <id column="vote_id" jdbcType="BIGINT" property="voteId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_logo" jdbcType="VARCHAR" property="companyLogo" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    vote_id, user_id, company_name, company_logo, vote_num, activity_id, create_user, 
+    create_date
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_vote
+    where vote_id = #{voteId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.Vote">
+    insert into kg_vote (vote_id, user_id, company_name, 
+      company_logo, vote_num, activity_id, 
+      create_user, create_date)
+    values (#{voteId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{companyName,jdbcType=VARCHAR}, 
+      #{companyLogo,jdbcType=VARCHAR}, #{voteNum,jdbcType=INTEGER}, #{activityId,jdbcType=INTEGER}, 
+      #{createUser,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.Vote">
+    insert into kg_vote
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="voteId != null">
+        vote_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="companyLogo != null">
+        company_logo,
+      </if>
+      <if test="voteNum != null">
+        vote_num,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="voteId != null">
+        #{voteId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyLogo != null">
+        #{companyLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="voteNum != null">
+        #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.Vote">
+    update kg_vote
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyLogo != null">
+        company_logo = #{companyLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="voteNum != null">
+        vote_num = #{voteNum,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where vote_id = #{voteId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.Vote">
+    update kg_vote
+    set user_id = #{userId,jdbcType=BIGINT},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_logo = #{companyLogo,jdbcType=VARCHAR},
+      vote_num = #{voteNum,jdbcType=INTEGER},
+      activity_id = #{activityId,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where vote_id = #{voteId,jdbcType=BIGINT}
+  </update>
+  
+   <update id="addVoteNum" parameterType="com.kg.platform.model.in.VoteInModel">
+    update kg_vote
+    set vote_num = vote_num + #{voteNum}
+    where vote_id = #{voteId}
+  </update>
+  
+  
+</mapper>

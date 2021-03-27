@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgInfoSwitchWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgInfoSwitchOutModel">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="system_info_switch" jdbcType="TINYINT" property="systemInfoSwitch" />
+    <result column="dynamic_message_switch" jdbcType="TINYINT" property="dynamicMessageSwitch" />
+    <result column="hot_news_switch" jdbcType="TINYINT" property="hotNewsSwitch" />
+    <result column="newsflash_switch" jdbcType="TINYINT" property="newsflashSwitch" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, system_info_switch, comment_reply_switch, hot_news_switch, newsflash_switch
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_info_switch
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgInfoSwitchInModel">
+    insert into kg_info_switch (user_id,system_info_switch, dynamic_message_switch,bonus_switch,
+      hot_news_switch, newsflash_switch)
+    values (#{userId,jdbcType=BIGINT},#{systemInfoSwitch,jdbcType=TINYINT}, #{commentReplySwitch,jdbcType=TINYINT},
+      #{hotNewsSwitch,jdbcType=TINYINT}, #{newsflashSwitch,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgInfoSwitchInModel">
+    insert into kg_info_switch
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="systemInfoSwitch != null">
+        system_info_switch,
+      </if>
+      <if test="dynamicMessageSwitch != null">
+        dynamic_message_switch,
+      </if>
+      <if test="hotNewsSwitch != null">
+        hot_news_switch,
+      </if>
+      <if test="newsflashSwitch != null">
+        newsflash_switch,
+      </if>
+      <if test="bonusSwitch != null">
+        bonus_switch
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="systemInfoSwitch != null">
+        #{systemInfoSwitch,jdbcType=TINYINT},
+      </if>
+      <if test="dynamicMessageSwitch != null">
+        #{dynamicMessageSwitch,jdbcType=TINYINT},
+      </if>
+      <if test="hotNewsSwitch != null">
+        #{hotNewsSwitch,jdbcType=TINYINT},
+      </if>
+      <if test="newsflashSwitch != null">
+        #{newsflashSwitch,jdbcType=TINYINT},
+      </if>
+      <if test="bonusSwitch != null">
+        #{bonusSwitch,jdbcType=TINYINT}
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgInfoSwitchInModel">
+    update kg_info_switch
+    <set>
+      <if test="systemInfoSwitch != null">
+        system_info_switch = #{systemInfoSwitch,jdbcType=TINYINT},
+      </if>
+      <if test="dynamicMessageSwitch != null">
+        dynamic_message_switch = #{dynamicMessageSwitch,jdbcType=TINYINT},
+      </if>
+      <if test="hotNewsSwitch != null">
+        hot_news_switch = #{hotNewsSwitch,jdbcType=TINYINT},
+      </if>
+      <if test="newsflashSwitch != null">
+        newsflash_switch = #{newsflashSwitch,jdbcType=TINYINT},
+      </if>
+      <if test="bonusSwitch != null">
+        bonus_switch = #{bonusSwitch,jdbcType=TINYINT}
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgInfoSwitchInModel">
+    update kg_info_switch
+    set system_info_switch = #{systemInfoSwitch,jdbcType=TINYINT},
+      dynamic_message_switch = #{dynamicMessageSwitch,jdbcType=TINYINT},
+      hot_news_switch = #{hotNewsSwitch,jdbcType=TINYINT},
+      bonus_switch = #{bonusSwitch,jdbcType=TINYINT},
+      newsflash_switch = #{newsflashSwitch,jdbcType=TINYINT}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

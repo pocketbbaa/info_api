@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgNewsFlashRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgNewsFlashOutModel">
+    <id column="newsflash_id" jdbcType="BIGINT" property="newsflashId" />
+    <result column="newsflash_title" jdbcType="VARCHAR" property="newsflashTitle" />
+    <result column="newsflash_link" jdbcType="VARCHAR" property="newsflashLink" />
+    <result column="newsflash_type" jdbcType="INTEGER" property="newsflashType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+
+    <result column="newsflash_origin" jdbcType="INTEGER" property="newsflashOrigin" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="ifPush" jdbcType="INTEGER" property="ifPush" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="newsflash_bottom_img" jdbcType="VARCHAR" property="newsflashBottomImg" />
+    <result column="display_status" jdbcType="INTEGER" property="displayStatus" />
+
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="newsflash_bottom_img" jdbcType="VARCHAR" property="newsflashBottomImg" />
+
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.kg.platform.model.out.KgNewsFlashOutModel">
+    <result column="newsflash_text" jdbcType="LONGVARCHAR" property="newsflashText" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    newsflash_id, newsflash_title, newsflash_link, newsflash_type, remark, create_date,newsflash_origin,create_user,ifPush,level,newsflash_bottom_img,display_status
+  </sql>
+  <sql id="Blob_Column_List">
+    newsflash_text
+  </sql>
+
+  <!-- 首页24H快讯()-->
+  <select id="selectIndexFlash" parameterType="com.kg.platform.model.in.KgNewsFlashInModel" resultType="com.kg.platform.model.out.KgNewsFlashOutModel">
+    select newsflash_id,newsflash_title,newsflash_text,create_date,newsflash_link,remark,level,newsflash_bottom_img
+    from kg_news_flash
+    where to_days(create_date) = to_days(#{createDate,jdbcType=TIMESTAMP}) AND display_status=1 ORDER BY create_date  DESC limit 30
+  </select>
+  <!-- 根据快讯类型查询()-->
+  <select id="selectByType" parameterType="com.kg.platform.model.in.KgNewsFlashInModel" resultType="com.kg.platform.model.out.KgNewsFlashOutModel">
+    select newsflash_id,newsflash_title,newsflash_text,create_date,newsflash_link,remark,level,newsflash_bottom_img,newsflash_origin
+    from kg_news_flash
+    where 1=1
+    <if test="newsflashType !=-1">
+      AND newsflash_type=#{newsflashType,jdbcType=INTEGER}
+    </if> AND create_date &lt;= #{createDate,jdbcType=TIMESTAMP} AND display_status=1 ORDER BY create_date ASC limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+  <!-- 查询总条数-->
+  <select id="selectCountNewsFlash" parameterType="com.kg.platform.model.in.KgNewsFlashInModel" resultType="java.lang.Long">
+    select count(newsflash_id)
+    from kg_news_flash
+    where 1=1 AND display_status=1
+    <if test="newsflashType !=-1">
+      AND newsflash_type=#{newsflashType,jdbcType=INTEGER}
+    </if>
+  </select>
+  <!-- 查询文章详情()-->
+  <select id="selectNewsFlashDetail" parameterType="java.lang.Long" resultType="com.kg.platform.model.out.KgNewsFlashOutModel">
+    select *
+    from kg_news_flash
+    where newsflash_id=#{newsflashId,jdbcType=INTEGER} AND display_status=1
+  </select>
+  <!-- 查询上次浏览时间到现在的未读总条数-->
+  <select id="selectCountUnread" parameterType="com.kg.platform.model.in.KgNewsFlashInModel" resultType="java.lang.Long">
+    select count(newsflash_id)
+    from kg_news_flash
+    where 1=1
+    <if test="newsflashType !=-1">
+      AND newsflash_type=#{newsflashType,jdbcType=INTEGER}
+    </if>
+    AND create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} and NOW() ORDER BY create_date DESC
+  </select>
+
+  <!-- 获取最新的3条快讯-->
+  <select id="getThreeNewNewsFlash"  resultType="com.kg.platform.model.out.KgNewsFlashOutModel">
+    select newsflash_id,newsflash_title,newsflash_text,create_date,level,newsflash_bottom_img
+    from kg_news_flash
+    where display_status=1 ORDER BY create_date DESC limit 3
+  </select>
+</mapper>

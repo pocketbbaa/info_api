@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.SiteinfoRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.SiteinfoOutModel">
+    <id column="site_id" jdbcType="INTEGER" property="siteId" />
+    <result column="site_logo" jdbcType="VARCHAR" property="siteLogo" />
+    <result column="site_icon" jdbcType="VARCHAR" property="siteIcon" />
+    <result column="site_title" jdbcType="VARCHAR" property="siteTitle" />
+    <result column="site_desc" jdbcType="VARCHAR" property="siteDesc" />
+    <result column="site_keyword" jdbcType="VARCHAR" property="siteKeyword" />
+    <result column="site_copyright" jdbcType="VARCHAR" property="siteCopyright" />
+    <result column="site_license" jdbcType="VARCHAR" property="siteLicense" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="contact_email" jdbcType="VARCHAR" property="contactEmail" />
+    <result column="login_time" jdbcType="VARCHAR" property="loginTime" />
+    <result column="login_time_unit" jdbcType="BIT" property="loginTimeUnit" />
+    <result column="personal_info" jdbcType="VARCHAR" property="personalInfo" />
+    <result column="personal_info_status" jdbcType="BIT" property="personalInfoStatus" />
+    <result column="comment_audit" jdbcType="BIT" property="commentAudit" />
+    <result column="limit_ip" jdbcType="VARCHAR" property="limitIp" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    site_id, site_logo, site_icon, site_title, site_desc, site_keyword, site_copyright, 
+    site_license, contact_phone, contact_email, login_time, login_time_unit, personal_info, 
+    personal_info_status, comment_audit, limit_ip
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_siteinfo
+    where site_id = #{siteId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectSiteinfo" resultMap="BaseResultMap">
+  	     SELECT
+  	      <include refid="Base_Column_List" />
+  	     FROM kg_siteinfo  kgs where site_id=1
+  </select>
+  
+</mapper>

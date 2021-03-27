@@ -1,0 +1,1 @@
+ALTER TABLE kg_user modify COLUMN `register_origin` tinyint(1) DEFAULT '3' COMMENT '1：IOS 2：ANDROID 3：WEB 4：H5 （BTC123 32 钛值 33）5: 作者端  6：其他 7:M站'

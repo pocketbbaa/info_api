@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.RoleProfileWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.RoleProfile">
+    <id column="role_profile_id" jdbcType="INTEGER" property="roleProfileId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="profile_name" jdbcType="VARCHAR" property="profileName" />
+    <result column="profile_type" jdbcType="VARCHAR" property="profileType" />
+    <result column="default_value" jdbcType="VARCHAR" property="defaultValue" />
+    <result column="display_status" jdbcType="BIT" property="displayStatus" />
+    <result column="required_status" jdbcType="BIT" property="requiredStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_profile_id, role_id, profile_name, profile_type, default_value, display_status, 
+    required_status
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_role_profile
+    where role_profile_id = #{roleProfileId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.RoleProfile">
+    insert into kg_role_profile (role_profile_id, role_id, profile_name, 
+      profile_type, default_value, display_status, 
+      required_status)
+    values (#{roleProfileId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{profileName,jdbcType=VARCHAR}, 
+      #{profileType,jdbcType=VARCHAR}, #{defaultValue,jdbcType=VARCHAR}, #{displayStatus,jdbcType=BIT}, 
+      #{requiredStatus,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.RoleProfile">
+    insert into kg_role_profile
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleProfileId != null">
+        role_profile_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="profileName != null">
+        profile_name,
+      </if>
+      <if test="profileType != null">
+        profile_type,
+      </if>
+      <if test="defaultValue != null">
+        default_value,
+      </if>
+      <if test="displayStatus != null">
+        display_status,
+      </if>
+      <if test="requiredStatus != null">
+        required_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleProfileId != null">
+        #{roleProfileId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="profileName != null">
+        #{profileName,jdbcType=VARCHAR},
+      </if>
+      <if test="profileType != null">
+        #{profileType,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultValue != null">
+        #{defaultValue,jdbcType=VARCHAR},
+      </if>
+      <if test="displayStatus != null">
+        #{displayStatus,jdbcType=BIT},
+      </if>
+      <if test="requiredStatus != null">
+        #{requiredStatus,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.RoleProfile">
+    update kg_role_profile
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="profileName != null">
+        profile_name = #{profileName,jdbcType=VARCHAR},
+      </if>
+      <if test="profileType != null">
+        profile_type = #{profileType,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultValue != null">
+        default_value = #{defaultValue,jdbcType=VARCHAR},
+      </if>
+      <if test="displayStatus != null">
+        display_status = #{displayStatus,jdbcType=BIT},
+      </if>
+      <if test="requiredStatus != null">
+        required_status = #{requiredStatus,jdbcType=BIT},
+      </if>
+    </set>
+    where role_profile_id = #{roleProfileId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.RoleProfile">
+    update kg_role_profile
+    set role_id = #{roleId,jdbcType=INTEGER},
+      profile_name = #{profileName,jdbcType=VARCHAR},
+      profile_type = #{profileType,jdbcType=VARCHAR},
+      default_value = #{defaultValue,jdbcType=VARCHAR},
+      display_status = #{displayStatus,jdbcType=BIT},
+      required_status = #{requiredStatus,jdbcType=BIT}
+    where role_profile_id = #{roleProfileId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.admin.AdminKgNewsFlashWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.in.KgNewsFlashInModel">
+    <id column="newsflash_id" jdbcType="BIGINT" property="newsflashId" />
+    <result column="newsflash_title" jdbcType="VARCHAR" property="newsflashTitle" />
+    <result column="newsflash_link" jdbcType="VARCHAR" property="newsflashLink" />
+    <result column="newsflash_type" jdbcType="INTEGER" property="newsflashType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+
+    <result column="newsflash_origin" jdbcType="INTEGER" property="newsflashOrigin" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="ifPush" jdbcType="INTEGER" property="ifPush" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="newsflash_bottom_img" jdbcType="VARCHAR" property="newsflashBottomImg" />
+    <result column="display_status" jdbcType="INTEGER" property="displayStatus" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.kg.platform.model.in.KgNewsFlashInModel">
+    <result column="newsflash_text" jdbcType="LONGVARCHAR" property="newsflashText" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    newsflash_id, newsflash_title, newsflash_link, newsflash_type, remark, create_date
+  </sql>
+  <sql id="Blob_Column_List">
+    newsflash_text
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_news_flash
+    where newsflash_id = #{newsflashId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgNewsFlashInModel">
+    <selectKey keyProperty="newsflashId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_news_flash (newsflash_title, newsflash_link, newsflash_type,
+      remark, create_date, newsflash_text
+      )
+    values (#{newsflashTitle,jdbcType=VARCHAR}, #{newsflashLink,jdbcType=VARCHAR}, #{newsflashType,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{newsflashText,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgNewsFlashInModel">
+    insert into kg_news_flash
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="newsflashId != null">
+        newsflash_id,
+      </if>
+      <if test="newsflashTitle != null">
+        newsflash_title,
+      </if>
+      <if test="newsflashLink != null">
+        newsflash_link,
+      </if>
+      <if test="newsflashType != null">
+        newsflash_type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="newsflashText != null">
+        newsflash_text,
+      </if>
+
+      <if test="level != null">
+        level,
+      </if>
+      <if test="newsflashBottomImg != null">
+        newsflash_bottom_img,
+      </if>
+      <if test="ifPush != null">
+        ifPush,
+      </if>
+      <if test="displayStatus != null">
+        display_status,
+      </if>
+      <if test="newsflashOrigin != null">
+        newsflash_origin,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="newsflashId != null">
+        #{newsflashId,jdbcType=BIGINT},
+      </if>
+      <if test="newsflashTitle != null">
+        #{newsflashTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="newsflashLink != null">
+        #{newsflashLink,jdbcType=VARCHAR},
+      </if>
+      <if test="newsflashType != null">
+        #{newsflashType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newsflashText != null">
+        #{newsflashText,jdbcType=LONGVARCHAR},
+      </if>
+
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="newsflashBottomImg != null">
+        #{newsflashBottomImg,jdbcType=VARCHAR},
+      </if>
+      <if test="ifPush != null">
+        #{ifPush,jdbcType=INTEGER},
+      </if>
+      <if test="displayStatus != null">
+        #{displayStatus,jdbcType=INTEGER},
+      </if>
+      <if test="newsflashOrigin != null">
+        #{newsflashOrigin,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgNewsFlashInModel">
+    update kg_news_flash
+    <set>
+      <if test="newsflashTitle != null">
+        newsflash_title = #{newsflashTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="newsflashLink != null">
+        newsflash_link = #{newsflashLink,jdbcType=VARCHAR},
+      </if>
+      <if test="newsflashType != null">
+        newsflash_type = #{newsflashType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newsflashText != null">
+        newsflash_text = #{newsflashText,jdbcType=LONGVARCHAR},
+      </if>
+
+
+      <if test="newsflashOrigin != null">
+        newsflash_origin = #{newsflashOrigin,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="ifPush != null">
+        ifPush = #{ifPush,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="newsflashBottomImg != null">
+        newsflash_bottom_img = #{newsflashBottomImg,jdbcType=INTEGER},
+      </if>
+      <if test="displayStatus != null">
+        display_status = #{displayStatus,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where newsflash_id = #{newsflashId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.kg.platform.model.in.KgNewsFlashInModel">
+    update kg_news_flash
+    set newsflash_title = #{newsflashTitle,jdbcType=VARCHAR},
+      newsflash_link = #{newsflashLink,jdbcType=VARCHAR},
+      newsflash_type = #{newsflashType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      newsflash_text = #{newsflashText,jdbcType=LONGVARCHAR}
+    where newsflash_id = #{newsflashId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgNewsFlashInModel">
+    update kg_news_flash
+    set newsflash_title = #{newsflashTitle,jdbcType=VARCHAR},
+      newsflash_link = #{newsflashLink,jdbcType=VARCHAR},
+      newsflash_type = #{newsflashType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where newsflash_id = #{newsflashId,jdbcType=BIGINT}
+  </update>
+</mapper>

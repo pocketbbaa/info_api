@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.SysUserUserRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SysUserUser">
+    <id column="rel_id" jdbcType="INTEGER" property="relId" />
+    <result column="sys_user_id" jdbcType="INTEGER" property="sysUserId" />
+    <result column="kg_user_id" jdbcType="BIGINT" property="kgUserId" />
+  </resultMap>
+  
+   <resultMap id="SysUserResultMap" type="com.kg.platform.model.response.admin.SysUserUserResponse">
+    <id column="rel_id" jdbcType="INTEGER" property="relId" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="kg_user_id" jdbcType="BIGINT" property="kgUserId" />
+    <result column="kg_username" jdbcType="VARCHAR" property="kgUsername" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    rel_id, sys_user_id, kg_user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_sys_user_user
+    where rel_id = #{relId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectBySysUser" parameterType="java.lang.Integer" resultMap="SysUserResultMap">
+    select 
+    rel_id,kg_user_id,(SELECT user_mobile FROM kg_user WHERE user_id =u.kg_user_id) user_mobile,
+    (SELECT user_name FROM kg_user WHERE user_id =u.kg_user_id) kg_username
+    from kg_sys_user_user u
+    where sys_user_id = #{sysUserId,jdbcType=INTEGER}
+  </select>
+   
+   <select id="selectByUserAndKgUser" parameterType="com.kg.platform.model.request.admin.SysUserUserRequest" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_sys_user_user u
+    where sys_user_id = #{sysUserId,jdbcType=INTEGER} and kg_user_id = #{kgUserId,jdbcType=BIGINT}
+  </select>
+ 
+</mapper>

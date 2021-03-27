@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgInfoSwitchRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgInfoSwitchOutModel">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="system_info_switch" jdbcType="TINYINT" property="systemInfoSwitch" />
+    <result column="dynamic_message_switch" jdbcType="TINYINT" property="dynamicMessageSwitch" />
+    <result column="hot_news_switch" jdbcType="TINYINT" property="hotNewsSwitch" />
+    <result column="newsflash_switch" jdbcType="TINYINT" property="newsflashSwitch" />
+    <result column="bonus_switch" jdbcType="TINYINT" property="bonusSwitch" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, system_info_switch, dynamic_message_switch, hot_news_switch, newsflash_switch,bonus_switch
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_info_switch
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getAllUserIdBySwitchOn" parameterType="com.kg.platform.model.in.KgInfoSwitchInModel" resultType="java.lang.String">
+    SELECT ku.user_id as user_id FROM kg_user ku LEFT JOIN kg_info_switch kis on ku.user_id=kis.user_id where 1=1
+    <if test="hotNewsSwitch !=null">
+      AND (kis.hot_news_switch is null or kis.hot_news_switch=1)
+    </if>
+    <if test="systemInfoSwitch !=null">
+      AND (kis.system_info_switch is null or kis.system_info_switch=1)
+    </if>
+    <if test="commentReplySwitch !=null">
+      AND (kis.dynamic_message_switch is null or kis.dynamic_message_switch=1)
+    </if>
+    <if test="newsflashSwitch !=null">
+      AND (kis.newsflash_switch is null or kis.newsflash_switch=1)
+    </if>
+    <if test="bonusSwitch !=null">
+      AND (kis.bonus_switch is null or kis.bonus_switch=1)
+    </if>
+  </select>
+
+</mapper>

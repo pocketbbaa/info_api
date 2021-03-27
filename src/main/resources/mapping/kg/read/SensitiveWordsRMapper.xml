@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.SensitiveWordsRMapper">
+
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SensitiveWords">
+    <id column="word_id" jdbcType="INTEGER" property="wordId" />
+    <result column="word_desc" jdbcType="VARCHAR" property="wordDesc" />
+    <result column="word_type" jdbcType="BIT" property="wordType" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  
+  <resultMap id="OneResultMap" type="String">
+    <result column="word_desc" jdbcType="VARCHAR" property="wordDesc" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    word_id, word_desc, word_type, create_user, create_date, update_user, update_date
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_sensitive_words
+    where word_id = #{wordId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAllWords"  resultMap="OneResultMap" >
+    select 
+    word_desc
+    from kg_sensitive_words
+    where status=1
+  </select>
+  
+</mapper>

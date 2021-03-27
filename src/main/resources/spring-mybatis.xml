@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<context:property-placeholder location="classpath*:jdbc.properties" ignore-unresolvable="true" />
+	
+	<bean id="kg.dbcp" destroy-method="close" abstract="true">
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="initialSize" value="${jdbc.initialSize}"/>
+		<property name="maxWait" value="${jdbc.maxWait}"/>
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+        <property name="maxActive" value="500"/>
+
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
+
+        <property name="removeAbandoned" value="${jdbc.removeAbandoned}"/>
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}"/>
+
+        <property name="validationQuery" value="${jdbc.validationQuery}"/>
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}" />
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}"/>
+        <property name="testOnReturn" value="${jdbc.testOnReturn}" />
+
+        <property name="filters" value="stat" />
+	</bean>
+
+	<bean id="kg.read" parent="kg.dbcp" class="com.alibaba.druid.pool.DruidDataSource">
+		<property value="${kg.read.url}" name="url" />
+		<property value="${kg.read.username}" name="username" />
+		<property value="${kg.read.password}" name="password" />
+	</bean>
+	<bean id="kg.write" parent="kg.dbcp" class="com.alibaba.druid.pool.DruidDataSource">
+		<property value="${kg.write.url}" name="url" />
+		<property value="${kg.write.username}" name="username" />
+		<property value="${kg.write.password}" name="password" />
+	</bean>
+	<bean id="kg.cloud" parent="kg.dbcp" class="com.alibaba.druid.pool.DruidDataSource">
+		<property value="${kg.read.url}" name="url" />
+		<property value="${kg.read.username}" name="username" />
+		<property value="${kg.read.password}" name="password" />
+	</bean>
+	<bean id="kg.sqlSessionFactoryBean.R" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="kg.read" />
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<property name="mapperLocations">
+			<array>
+				<value>classpath*:mapping/kg/**/read/*Mapper.xml</value>
+			</array>
+		</property>
+	</bean>
+	<bean id="kg.sqlSessionFactoryBean.W" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="kg.write" />
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<property name="mapperLocations">
+			<array>
+				<value>classpath*:mapping/kg/**/write/*Mapper.xml</value>
+			</array>
+		</property>
+	</bean>
+	<bean id="kg.sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="kg.cloud" />
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<property name="mapperLocations">
+			<array>
+				<value>classpath*:mapping/kg/**/cloud/*Mapper.xml</value>
+			</array>
+		</property>
+	</bean>
+	
+
+	<bean id="kg.mapperScannerConfigurer.R" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.kg.platform.dao.read"/>
+		<property name="sqlSessionFactoryBeanName" value="kg.sqlSessionFactoryBean.R"/>
+	</bean>
+	<bean id="kg.mapperScannerConfigurer.W" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.kg.platform.dao.write"/>
+		<property name="sqlSessionFactoryBeanName" value="kg.sqlSessionFactoryBean.W"/>
+	</bean>
+	<bean id="kg.mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.kg.platform.dao.cloud"/>
+		<property name="sqlSessionFactoryBeanName" value="kg.sqlSessionFactoryBean"/>
+	</bean>
+</beans>

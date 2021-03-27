@@ -1,0 +1,2 @@
+INSERT INTO `kg_account_businesstype` (`business_type_id`, `business_typename`, `status`, `remark`) VALUES ('2111', '获取签到奖励', '1', '兑吧签到');
+INSERT INTO `kg_account_businesstype` (`business_type_id`, `business_typename`, `status`, `remark`) VALUES ('2112', '签到奖励', '1', '兑吧签到');

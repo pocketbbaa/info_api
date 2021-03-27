@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.admin.AppVersionManageWMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.AppVersionManage">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="version_num" jdbcType="VARCHAR" property="versionNum"/>
+        <result column="prompt" jdbcType="VARCHAR" property="prompt"/>
+        <result column="forced" jdbcType="INTEGER" property="forced"/>
+        <result column="system_type" jdbcType="INTEGER" property="systemType"/>
+        <result column="download_url" jdbcType="VARCHAR" property="downloadUrl"/>
+        <result column="download_url_apk" jdbcType="VARCHAR" property="downloadUrlApk"/>
+        <result column="channel" jdbcType="VARCHAR" property="channel"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="app_version_table_name"> kg_app_version_manage </sql>
+    <sql id="base_column">
+        version_num,prompt,forced,system_type,download_url,download_url_apk,channel,create_time,update_time
+    </sql>
+
+    <insert id="create" parameterType="com.kg.platform.dao.entity.AppVersionManage">
+        insert ignore into
+        <include refid="app_version_table_name"/>
+        (<include refid="base_column"/>)
+        values
+        (
+        #{versionNum}, #{prompt}, #{forced}, #{systemType}, #{downloadUrl}, #{downloadUrlApk},#{channel}, #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from
+        <include refid="app_version_table_name"/>
+        where id = #{id}
+    </delete>
+
+    <!--<insert id="insertSelective" parameterType="com.kg.platform.dao.entity.SysUserUser">-->
+    <!--insert into kg_sys_user_user-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+    <!--<if test="relId != null">-->
+    <!--rel_id,-->
+    <!--</if>-->
+    <!--<if test="sysUserId != null">-->
+    <!--sys_user_id,-->
+    <!--</if>-->
+    <!--<if test="kgUserId != null">-->
+    <!--kg_user_id,-->
+    <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+    <!--<if test="relId != null">-->
+    <!--#{relId,jdbcType=INTEGER},-->
+    <!--</if>-->
+    <!--<if test="sysUserId != null">-->
+    <!--#{sysUserId,jdbcType=INTEGER},-->
+    <!--</if>-->
+    <!--<if test="kgUserId != null">-->
+    <!--#{kgUserId,jdbcType=BIGINT},-->
+    <!--</if>-->
+    <!--</trim>-->
+    <!--</insert>-->
+    <!--<update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.SysUserUser">-->
+    <!--update kg_sys_user_user-->
+    <!--<set>-->
+    <!--<if test="sysUserId != null">-->
+    <!--sys_user_id = #{sysUserId,jdbcType=INTEGER},-->
+    <!--</if>-->
+    <!--<if test="kgUserId != null">-->
+    <!--kg_user_id = #{kgUserId,jdbcType=BIGINT},-->
+    <!--</if>-->
+    <!--</set>-->
+    <!--where rel_id = #{relId,jdbcType=INTEGER}-->
+    <!--</update>-->
+    <!--<update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.SysUserUser">-->
+    <!--update kg_sys_user_user-->
+    <!--set sys_user_id = #{sysUserId,jdbcType=INTEGER},-->
+    <!--kg_user_id = #{kgUserId,jdbcType=BIGINT}-->
+    <!--where rel_id = #{relId,jdbcType=INTEGER}-->
+    <!--</update>-->
+</mapper>

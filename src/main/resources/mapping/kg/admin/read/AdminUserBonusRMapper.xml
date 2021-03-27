@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminUserBonusRMapper">
+
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.UserBonusQueryResponse">
+    <result column="extra_bonus_id" jdbcType="VARCHAR" property="extraBonusId" />
+    <result column="total_tv_amount" jdbcType="DECIMAL" property="totalTv" />
+    <result column="total_kg_amount" jdbcType="DECIMAL" property="totalKg" />
+    <result column="bonus_reason" jdbcType="VARCHAR" property="bonusReason" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="sys_user_id" jdbcType="INTEGER" property="sysUserId" />
+    <result column="user_realname" jdbcType="VARCHAR" property="adminName" />
+    <result column="total_num" jdbcType="INTEGER" property="totalNum" />
+    <result column="total_rit_amount" jdbcType="VARCHAR" property="totalRitAmount" />
+  </resultMap>
+
+ <sql id="user_bonus_list">
+    keb.extra_bonus_id,keb.bonus_reason,
+    keb.total_num,sys.user_realname, ROUND(keb.total_tv_amount, 3) as total_tv_amount,ROUND(keb.total_kg_amount, 3) as total_kg_amount,
+    ROUND((SELECT if(sum(amount) is null ,0,sum(amount)) from  kg_muti_bonus_detail kd where keb.extra_bonus_id=kd.extra_bonus_id and coin_type=1),3) as total_rit_amount,
+    DATE_FORMAT(keb.create_time ,'%Y-%m-%d %H:%i:%S') as create_time
+ </sql>
+
+ <!-- 用户奖励列表 -->
+ <select id="getUserBonusList" parameterType="com.kg.platform.model.request.admin.UserBonusQueryRequest" resultMap="BaseResultMap">
+
+     SELECT kb.*  from (
+         SELECT <include refid="user_bonus_list"/>
+         from kg_extra_bonus keb
+         LEFT JOIN kg_sys_user sys on keb.sys_user_id=sys.sys_user_id
+     ) kb
+     where 1=1
+     <if test="extraBonusId != null">
+      <bind name="extraBonusId" value="'%'+extraBonusId+'%'"/>
+      and kb.extra_bonus_id like #{extraBonusId}
+    </if>
+    <if test="adminName != null">
+      <bind name="adminName" value="'%'+adminName+'%'"/>
+      and kb.user_realname like #{adminName}
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ and kb.create_time >= #{startTime}]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ and kb.create_time <= #{endTime}]]>
+    </if>
+    
+    <if test="startTvBonus != null">
+      <![CDATA[ and kb.total_tv_amount >= #{startTvBonus}]]>
+    </if>
+    <if test="endTvBonus != null">
+      <![CDATA[ and kb.total_tv_amount <= #{endTvBonus}]]>
+    </if>
+    
+    <if test="startKgBonus != null">
+      <![CDATA[ and kb.total_kg_amount >= #{startKgBonus}]]>
+    </if>
+    <if test="endKgBonus != null">
+      <![CDATA[ and kb.total_kg_amount <= #{endKgBonus}]]>
+    </if>
+
+     <if test="startRitBonus != null">
+         <![CDATA[ and kb.total_rit_amount >= #{startRitBonus}]]>
+     </if>
+     <if test="endRitBonus != null">
+         <![CDATA[ and kb.total_rit_amount <= #{endRitBonus}]]>
+     </if>
+    
+    <if test="numStart != null">
+      <![CDATA[ and kb.total_num >= #{numStart}]]>
+    </if>
+    <if test="numEnd != null">
+      <![CDATA[ and kb.total_num <= #{numEnd}]]>
+    </if>
+    order by kb.create_time desc
+    limit #{start},#{limit}
+  </select>
+  
+   <select id="getUserBonusCount" parameterType="com.kg.platform.model.request.admin.UserBonusQueryRequest" resultType="java.lang.Long">
+
+    SELECT count(1)  from (
+           SELECT <include refid="user_bonus_list"/>
+           from kg_extra_bonus keb
+           LEFT JOIN kg_sys_user sys on keb.sys_user_id=sys.sys_user_id
+    ) kb
+    where 1=1
+    <if test="extraBonusId != null">
+      <bind name="extraBonusId" value="'%'+extraBonusId+'%'"/>
+      and kb.extra_bonus_id like #{extraBonusId}
+    </if>
+    <if test="adminName != null">
+      <bind name="adminName" value="'%'+adminName+'%'"/>
+      and kb.user_realname like #{adminName}
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ and kb.create_time >= #{startTime}]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ and kb.create_time <= #{endTime}]]>
+    </if>
+    
+    <if test="startTvBonus != null">
+      <![CDATA[ and kb.total_tv_amount >= #{startTvBonus}]]>
+    </if>
+    <if test="endTvBonus != null">
+      <![CDATA[ and kb.total_tv_amount <= #{endTvBonus}]]>
+    </if>
+    
+    <if test="startKgBonus != null">
+      <![CDATA[ and kb.total_kg_amount >= #{startKgBonus}]]>
+    </if>
+    <if test="endKgBonus != null">
+      <![CDATA[ and kb.total_kg_amount <= #{endKgBonus}]]>
+    </if>
+    
+    <if test="numStart != null">
+      <![CDATA[ and kb.total_num >= #{numStart}]]>
+    </if>
+    <if test="numEnd != null">
+      <![CDATA[ and kb.total_num <= #{numEnd}]]>
+    </if>
+   <if test="startRitBonus != null">
+       <![CDATA[ and kb.total_rit_amount >= #{startRitBonus}]]>
+   </if>
+   <if test="endRitBonus != null">
+       <![CDATA[ and kb.total_rit_amount <= #{endRitBonus}]]>
+   </if>
+  </select>
+  
+  <!-- 用户奖励详情 -->
+  <select id="getUserBonusDetail" parameterType="com.kg.platform.model.request.admin.UserBonusQueryRequest" resultMap="BaseResultMap">
+     SELECT <include refid="user_bonus_list"/>  
+     from  kg_extra_bonus keb
+     LEFT JOIN kg_sys_user sys on keb.sys_user_id=sys.sys_user_id
+     where keb.extra_bonus_id=#{extraBonusId}
+  </select>
+  
+</mapper>

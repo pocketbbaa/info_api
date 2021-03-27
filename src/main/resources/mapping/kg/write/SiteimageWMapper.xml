@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.SiteimageWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Siteimage">
+    <id column="image_id" jdbcType="BIGINT" property="imageId" />
+    <result column="image_address" jdbcType="VARCHAR" property="imageAddress" />
+    <result column="image_type" jdbcType="BIT" property="imageType" />
+    <result column="image_detail" jdbcType="VARCHAR" property="imageDetail" />
+    <result column="navigator_pos" jdbcType="BIT" property="navigatorPos" />
+    <result column="image_pos" jdbcType="BIT" property="imagePos" />
+    <result column="image_status" jdbcType="BIT" property="imageStatus" />
+    <result column="image_order" jdbcType="INTEGER" property="imageOrder" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+
+    <result column="display_port" jdbcType="INTEGER" property="displayPort" />
+    <result column="adver_style" jdbcType="INTEGER" property="adverStyle" />
+    <result column="adver_img_type" jdbcType="INTEGER" property="adverImageType" />
+    <result column="adver_title" jdbcType="VARCHAR" property="adverTitle" />
+    <result column="adver_intro" jdbcType="VARCHAR" property="adverIntro" />
+    <result column="adver_link" jdbcType="VARCHAR" property="adverLink" />
+    <result column="adver_owner" jdbcType="VARCHAR" property="adverOwner" />
+    <result column="adver_target" jdbcType="VARCHAR" property="adverTarget" />
+    <result column="spread_time" jdbcType="INTEGER" property="spreadTime" />
+    <result column="spread_time_s" jdbcType="TIMESTAMP" property="spreadTimeS" />
+    <result column="spread_time_e" jdbcType="TIMESTAMP" property="spreadTimeE" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    image_id, image_address, image_type, image_detail, navigator_pos, image_pos, image_status,
+    image_order, create_date, create_user, update_date, update_user
+    , display_port, adver_style, adver_img_type, adver_title, adver_intro, adver_link,
+    adver_owner, adver_target, spread_time, spread_time_s, spread_time_e
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_siteimage
+    where image_id = #{imageId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.Siteimage">
+    insert into kg_siteimage (image_id, image_address, image_type, 
+      image_detail, navigator_pos, image_pos, 
+      image_status, image_order, create_date, 
+      create_user, update_date, update_user
+      )
+    values (#{imageId,jdbcType=INTEGER}, #{imageAddress,jdbcType=VARCHAR}, #{imageType,jdbcType=BIT}, 
+      #{imageDetail,jdbcType=VARCHAR}, #{navigatorPos,jdbcType=BIT}, #{imagePos,jdbcType=BIT}, 
+      #{imageStatus,jdbcType=BIT}, #{imageOrder,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.Siteimage">
+    insert into kg_siteimage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="imageId != null">
+        image_id,
+      </if>
+      <if test="imageAddress != null">
+      image_address,
+    </if>
+      <if test="imageType != null">
+        image_type,
+      </if>
+      <if test="imageDetail != null">
+        image_detail,
+      </if>
+      <if test="navigatorPos != null">
+        navigator_pos,
+      </if>
+      <if test="imagePos != null">
+        image_pos,
+      </if>
+      <if test="imageStatus != null">
+        image_status,
+      </if>
+      <if test="imageOrder != null">
+        image_order,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+
+      <if test="displayPort != null">
+        display_port,
+      </if>
+      <if test="adverStyle != null">
+        adver_style,
+      </if>
+      <if test="adverImageType != null">
+        adver_img_type,
+      </if>
+      <if test="adverTitle != null">
+        adver_title,
+      </if>
+      <if test="adverIntro != null">
+        adver_intro,
+      </if>
+      <if test="adverLink != null">
+        adver_link,
+      </if>
+      <if test="adverOwner != null">
+        adver_owner,
+      </if>
+      <if test="adverTarget != null">
+        adver_target,
+      </if>
+      <if test="spreadTime != null">
+        spread_time,
+      </if>
+      <if test="spreadTimeS != null">
+        spread_time_s,
+      </if>
+      <if test="spreadTimeE != null">
+        spread_time_e,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="imageId != null">
+        #{imageId,jdbcType=INTEGER},
+      </if>
+      <if test="imageAddress != null">
+        #{imageAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="imageType != null">
+        #{imageType,jdbcType=BIT},
+      </if>
+      <if test="imageDetail != null">
+        #{imageDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="navigatorPos != null">
+        #{navigatorPos,jdbcType=BIT},
+      </if>
+      <if test="imagePos != null">
+        #{imagePos,jdbcType=BIT},
+      </if>
+      <if test="imageStatus != null">
+        #{imageStatus,jdbcType=BIT},
+      </if>
+      <if test="imageOrder != null">
+        #{imageOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+
+      <if test="displayPort != null">
+        #{displayPort,jdbcType=INTEGER},
+      </if>
+      <if test="adverStyle != null">
+        #{adverStyle,jdbcType=INTEGER},
+      </if>
+      <if test="adverImageType != null">
+        #{adverImageType,jdbcType=INTEGER},
+      </if>
+      <if test="adverTitle != null">
+        #{adverTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="adverIntro != null">
+        #{adverIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="adverLink != null">
+        #{adverLink,jdbcType=VARCHAR},
+      </if>
+      <if test="adverOwner != null">
+        #{adverOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="adverTarget != null">
+        #{adverTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="spreadTime != null">
+        #{spreadTime,jdbcType=INTEGER},
+      </if>
+      <if test="spreadTimeS != null">
+        #{spreadTimeS,jdbcType=TIMESTAMP},
+      </if>
+      <if test="spreadTimeE != null">
+        #{spreadTimeE,jdbcType=TIMESTAMP},
+      </if>
+
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.Siteimage">
+    update kg_siteimage
+    <set>
+      <if test="imageAddress != null">
+        image_address = #{imageAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="imageType != null">
+        image_type = #{imageType,jdbcType=BIT},
+      </if>
+      <if test="imageDetail != null">
+        image_detail = #{imageDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="navigatorPos != null">
+        navigator_pos = #{navigatorPos,jdbcType=BIT},
+      </if>
+      <if test="imagePos != null">
+        image_pos = #{imagePos,jdbcType=BIT},
+      </if>
+      <if test="imageStatus != null">
+        image_status = #{imageStatus,jdbcType=BIT},
+      </if>
+      <if test="imageOrder != null">
+        image_order = #{imageOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+
+
+      <if test="displayPort != null">
+        display_port =  #{displayPort,jdbcType=INTEGER},
+      </if>
+      <if test="adverStyle != null">
+        adver_style =  #{adverStyle,jdbcType=INTEGER},
+      </if>
+      <if test="adverImageType != null">
+        adver_img_type =  #{adverImageType,jdbcType=INTEGER},
+      </if>
+      <if test="adverTitle != null">
+        adver_title = #{adverTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="adverIntro != null">
+        adver_intro = #{adverIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="adverLink != null">
+        adver_link = #{adverLink,jdbcType=VARCHAR},
+      </if>
+      <if test="adverOwner != null">
+        adver_owner = #{adverOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="adverTarget != null">
+        adver_target =  #{adverTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="spreadTime != null">
+        spread_time =  #{spreadTime,jdbcType=INTEGER},
+      </if>
+      <if test="spreadTimeS != null">
+        spread_time_s =  #{spreadTimeS,jdbcType=TIMESTAMP},
+      </if>
+      <if test="spreadTimeE != null">
+        spread_time_e = #{spreadTimeE,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.Siteimage">
+    update kg_siteimage
+    set image_address = #{imageAddress,jdbcType=VARCHAR},
+      image_type = #{imageType,jdbcType=BIT},
+      image_detail = #{imageDetail,jdbcType=VARCHAR},
+      navigator_pos = #{navigatorPos,jdbcType=BIT},
+      image_pos = #{imagePos,jdbcType=BIT},
+      image_status = #{imageStatus,jdbcType=BIT},
+      image_order = #{imageOrder,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.VoteUserRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.VoteUser">
+    <id column="vote_user_id" jdbcType="BIGINT" property="voteUserId" />
+    <result column="vote_id" jdbcType="BIGINT" property="voteId" />
+    <result column="voter_id" jdbcType="BIGINT" property="voterId" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="vote_time" jdbcType="TIMESTAMP" property="voteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    vote_user_id, vote_id, voter_id, vote_num, vote_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_vote_user
+    where vote_user_id = #{voteUserId,jdbcType=BIGINT}
+  </select>
+  
+</mapper>

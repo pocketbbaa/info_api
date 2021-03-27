@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminBaseinfoRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.BaseinfoQueryResponse">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="create_date" jdbcType="VARCHAR" property="createDate" />
+    <result column="update_date" jdbcType="VARCHAR" property="updateDate" />
+    <result column="info_status" jdbcType="BIT" property="infoStatus" />
+    <result column="info_order" jdbcType="INTEGER" property="infoOrder" />
+    <result column="info_detail" jdbcType="VARCHAR" property="infoDetail"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    info_order,info_detail,info_id id,info_name name,info_type type,info_status,create_date,update_date,(select user_realname from kg_sys_user where sys_user_id = create_user) user
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select b.info_order,b.info_detail,info_id id,b.info_name name,b.info_type type,b.info_status,b.create_date,b.update_date,u.user_realname user from kg_baseinfo b left join kg_sys_user u on(u.sys_user_id = b.create_user)
+  </select>
+</mapper>

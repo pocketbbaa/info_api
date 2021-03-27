@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgMinerRobRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgMinerRobOutModel">
+    <id column="rob_id" jdbcType="BIGINT" property="robId" />
+    <result column="miner_id" jdbcType="BIGINT" property="minerId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="assist_code" jdbcType="VARCHAR" property="assistCode" />
+    <result column="rob_date" jdbcType="TIMESTAMP" property="robDate" />
+    <result column="rob_status" jdbcType="INTEGER" property="robStatus" />
+    <result column="rob_avatar" jdbcType="VARCHAR" property="robAvatar" />
+    <result column="rob_name" jdbcType="VARCHAR" property="robName" />
+    <result column="deal_date" jdbcType="TIMESTAMP" property="dealDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rob_id, miner_id, user_id, assist_code, rob_date, rob_status,deal_date
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_miner_rob
+    where rob_id = #{robId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="countRobedByMinerId" parameterType="com.kg.platform.model.in.KgMinerRobInModel" resultType="java.lang.Long">
+    select
+    count(user_id)
+    from kg_miner_rob
+    where miner_id = #{minerId,jdbcType=BIGINT} AND rob_status=1
+  </select>
+
+  
+   <select id="checkCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(user_id)
+    from kg_miner_rob
+    where assist_code = #{code}
+  </select>
+
+
+  <select id="myRobList" parameterType="com.kg.platform.model.in.KgMinerRobInModel" resultMap="BaseResultMap">
+  SELECT
+  (SELECT sum(assist_amount) from kg_miner_assist as kma where kma.rob_id=kmr.rob_id and kma.assist_status=1 ) as assistAmount,
+  kam.miner_id,kmr.rob_id,kam.miner_name as minerName,kam.miner_photo as minerPhoto,kam.miner_number as minerNumber,kam.miner_end_date as minerEndDate,kam.miner_price as minerPrice,
+  kmr.rob_status
+  from kg_miner_rob as kmr JOIN kg_activity_miner as kam on kmr.miner_id=kam.miner_id WHERE kmr.user_id= #{userId,jdbcType=BIGINT} and rob_status!=0;
+  </select>
+  <select id="detailRob" parameterType="com.kg.platform.model.in.KgMinerRobInModel" resultMap="BaseResultMap">
+    SELECT (SELECT avatar from kg_user_profile where user_id=kmr.user_id) as robAvatar,(SELECT user_name from kg_user where user_id=kmr.user_id) as robName,
+    kmr.rob_id,kmr.miner_id,assist_code,
+    (SELECT sum(assist_amount) from kg_miner_assist as kma where kma.rob_id=kmr.rob_id and kma.assist_status=1 ) as assistAmount
+    from kg_miner_rob kmr where kmr.rob_id=#{robId,jdbcType=BIGINT} and rob_status!=0
+  </select>
+
+  <select id="topTenList" parameterType="com.kg.platform.model.in.KgMinerAssistInModel" resultMap="BaseResultMap">
+    SELECT  (SELECT sum(assist_amount) from kg_miner_assist as kma where kma.rob_id=kmr.rob_id and kma.assist_status=1) as assistAmount,user_id,rob_status,
+        (SELECT avatar from kg_user_profile where user_id=kmr.user_id) as robAvatar,
+        (SELECT user_name from kg_user where user_id=kmr.user_id) as robName
+         from kg_miner_rob as kmr where miner_id= #{minerId,jdbcType=BIGINT} and rob_status!=0 ORDER BY assistAmount DESC,deal_date DESC LIMIT 0,10
+  </select>
+  
+  <select id="selectByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_miner_rob
+    where assist_code = #{code}
+  </select>
+
+  <select id="checkIsRob" parameterType="com.kg.platform.model.in.KgMinerRobInModel" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_miner_rob
+    where user_id = #{userId} and miner_id=#{minerId}
+  </select>
+
+</mapper>

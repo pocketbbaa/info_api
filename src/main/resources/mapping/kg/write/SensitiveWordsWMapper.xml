@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.SensitiveWordsWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SensitiveWords">
+    <id column="word_id" jdbcType="INTEGER" property="wordId" />
+    <result column="word_desc" jdbcType="VARCHAR" property="wordDesc" />
+    <result column="word_type" jdbcType="BIT" property="wordType" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    word_id, word_desc, word_type, create_user, create_date, update_user, update_date
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_sensitive_words
+    where word_id = #{wordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.SensitiveWords">
+    insert into kg_sensitive_words (word_id, word_desc, word_type, 
+      create_user, create_date, update_user, 
+      update_date)
+    values (#{wordId,jdbcType=INTEGER}, #{wordDesc,jdbcType=VARCHAR}, #{wordType,jdbcType=BIT}, 
+      #{createUser,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.SensitiveWords">
+    insert into kg_sensitive_words
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="wordId != null">
+        word_id,
+      </if>
+      <if test="wordDesc != null">
+        word_desc,
+      </if>
+      <if test="wordType != null">
+        word_type,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="wordId != null">
+        #{wordId,jdbcType=INTEGER},
+      </if>
+      <if test="wordDesc != null">
+        #{wordDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="wordType != null">
+        #{wordType,jdbcType=BIT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.SensitiveWords">
+    update kg_sensitive_words
+    <set>
+      <if test="wordDesc != null">
+        word_desc = #{wordDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="wordType != null">
+        word_type = #{wordType,jdbcType=BIT},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where word_id = #{wordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.SensitiveWords">
+    update kg_sensitive_words
+    set word_desc = #{wordDesc,jdbcType=VARCHAR},
+      word_type = #{wordType,jdbcType=BIT},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where word_id = #{wordId,jdbcType=INTEGER}
+  </update>
+</mapper>

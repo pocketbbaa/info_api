@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgMobileImgWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgMobileImgOutModel">
+    <id column="img_id" jdbcType="INTEGER" property="imgId" />
+    <result column="normal_img" jdbcType="VARCHAR" property="normalImg" />
+    <result column="choise_img" jdbcType="VARCHAR" property="choiseImg" />
+    <result column="is_del" jdbcType="INTEGER" property="isDel" />
+    <result column="orderby" jdbcType="INTEGER" property="orderby" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    img_id, normal_img, choise_img, is_del, orderby, remark
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_mobile_img
+    where img_id = #{imgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgMobileImgInModel">
+    <selectKey keyProperty="imgId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_mobile_img (normal_img, choise_img, is_del,
+    orderby, remark)
+    values (#{normalImg,jdbcType=VARCHAR}, #{choiseImg,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER},
+    #{orderby,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgMobileImgInModel">
+    <selectKey keyProperty="imgId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_mobile_img
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="normalImg != null">
+        normal_img,
+      </if>
+      <if test="choiseImg != null">
+        choise_img,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="orderby != null">
+        orderby,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="normalImg != null">
+        #{normalImg,jdbcType=VARCHAR},
+      </if>
+      <if test="choiseImg != null">
+        #{choiseImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="orderby != null">
+        #{orderby,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgMobileImgInModel">
+    update kg_mobile_img
+    <set>
+      <if test="normalImg != null">
+        normal_img = #{normalImg,jdbcType=VARCHAR},
+      </if>
+      <if test="choiseImg != null">
+        choise_img = #{choiseImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=INTEGER},
+      </if>
+      <if test="orderby != null">
+        orderby = #{orderby,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where img_id = #{imgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgMobileImgInModel">
+    update kg_mobile_img
+    set normal_img = #{normalImg,jdbcType=VARCHAR},
+    choise_img = #{choiseImg,jdbcType=VARCHAR},
+    is_del = #{isDel,jdbcType=INTEGER},
+    orderby = #{orderby,jdbcType=INTEGER},
+    remark = #{remark,jdbcType=VARCHAR}
+    where img_id = #{imgId,jdbcType=INTEGER}
+  </update>
+</mapper>

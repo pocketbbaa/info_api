@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.UserLogMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.UserLog">
+    <id column="log_id" jdbcType="BIGINT" property="logId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_ip" jdbcType="VARCHAR" property="userIp" />
+    <result column="log_time" jdbcType="TIMESTAMP" property="logTime" />
+    <result column="user_source" jdbcType="BIT" property="userSource" />
+    <result column="log_type" jdbcType="TINYINT" property="logType" />
+    <result column="log_detail" jdbcType="VARCHAR" property="logDetail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    log_id, user_id, user_email, user_phone, user_ip, log_time, user_source, log_type, 
+    log_detail
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_user_log
+    where log_id = #{logId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.UserLog">
+    insert into kg_user_log (log_id, user_id, user_email, 
+      user_phone, user_ip, log_time, 
+      user_source, log_type, log_detail
+      )
+    values (#{logId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userEmail,jdbcType=VARCHAR}, 
+      #{userPhone,jdbcType=VARCHAR}, #{userIp,jdbcType=VARCHAR}, #{logTime,jdbcType=TIMESTAMP}, 
+      #{userSource,jdbcType=BIT}, #{logType,jdbcType=TINYINT}, #{logDetail,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.UserLog">
+    insert into kg_user_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        log_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userEmail != null">
+        user_email,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="userIp != null">
+        user_ip,
+      </if>
+      <if test="logTime != null">
+        log_time,
+      </if>
+      <if test="userSource != null">
+        user_source,
+      </if>
+      <if test="logType != null">
+        log_type,
+      </if>
+      <if test="logDetail != null">
+        log_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        #{logId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userEmail != null">
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userIp != null">
+        #{userIp,jdbcType=VARCHAR},
+      </if>
+      <if test="logTime != null">
+        #{logTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userSource != null">
+        #{userSource,jdbcType=BIT},
+      </if>
+      <if test="logType != null">
+        #{logType,jdbcType=TINYINT},
+      </if>
+      <if test="logDetail != null">
+        #{logDetail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.UserLog">
+    update kg_user_log
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userEmail != null">
+        user_email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userIp != null">
+        user_ip = #{userIp,jdbcType=VARCHAR},
+      </if>
+      <if test="logTime != null">
+        log_time = #{logTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userSource != null">
+        user_source = #{userSource,jdbcType=BIT},
+      </if>
+      <if test="logType != null">
+        log_type = #{logType,jdbcType=TINYINT},
+      </if>
+      <if test="logDetail != null">
+        log_detail = #{logDetail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.UserLog">
+    update kg_user_log
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_email = #{userEmail,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      user_ip = #{userIp,jdbcType=VARCHAR},
+      log_time = #{logTime,jdbcType=TIMESTAMP},
+      user_source = #{userSource,jdbcType=BIT},
+      log_type = #{logType,jdbcType=TINYINT},
+      log_detail = #{logDetail,jdbcType=VARCHAR}
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+</mapper>

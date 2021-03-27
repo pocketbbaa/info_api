@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.SiteinfoWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Siteinfo">
+    <id column="site_id" jdbcType="INTEGER" property="siteId" />
+    <result column="site_logo" jdbcType="VARCHAR" property="siteLogo" />
+    <result column="site_icon" jdbcType="VARCHAR" property="siteIcon" />
+    <result column="site_title" jdbcType="VARCHAR" property="siteTitle" />
+    <result column="site_desc" jdbcType="VARCHAR" property="siteDesc" />
+    <result column="site_keyword" jdbcType="VARCHAR" property="siteKeyword" />
+    <result column="site_copyright" jdbcType="VARCHAR" property="siteCopyright" />
+    <result column="site_license" jdbcType="VARCHAR" property="siteLicense" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="contact_email" jdbcType="VARCHAR" property="contactEmail" />
+    <result column="login_time" jdbcType="VARCHAR" property="loginTime" />
+    <result column="login_time_unit" jdbcType="BIT" property="loginTimeUnit" />
+    <result column="personal_info" jdbcType="VARCHAR" property="personalInfo" />
+    <result column="personal_info_status" jdbcType="BIT" property="personalInfoStatus" />
+    <result column="comment_audit" jdbcType="BIT" property="commentAudit" />
+    <result column="limit_ip" jdbcType="VARCHAR" property="limitIp" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    site_id, site_logo, site_icon, site_title, site_desc, site_keyword, site_copyright, 
+    site_license, contact_phone, contact_email, login_time, login_time_unit, personal_info, 
+    personal_info_status, comment_audit, limit_ip
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_siteinfo
+    where site_id = #{siteId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.Siteinfo">
+    insert into kg_siteinfo (site_id, site_logo, site_icon, 
+      site_title, site_desc, site_keyword, 
+      site_copyright, site_license, contact_phone, 
+      contact_email, login_time, login_time_unit, 
+      personal_info, personal_info_status, comment_audit, 
+      limit_ip)
+    values (#{siteId,jdbcType=INTEGER}, #{siteLogo,jdbcType=VARCHAR}, #{siteIcon,jdbcType=VARCHAR}, 
+      #{siteTitle,jdbcType=VARCHAR}, #{siteDesc,jdbcType=VARCHAR}, #{siteKeyword,jdbcType=VARCHAR}, 
+      #{siteCopyright,jdbcType=VARCHAR}, #{siteLicense,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
+      #{contactEmail,jdbcType=VARCHAR}, #{loginTime,jdbcType=VARCHAR}, #{loginTimeUnit,jdbcType=BIT}, 
+      #{personalInfo,jdbcType=VARCHAR}, #{personalInfoStatus,jdbcType=BIT}, #{commentAudit,jdbcType=BIT}, 
+      #{limitIp,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.Siteinfo">
+    insert into kg_siteinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="siteId != null">
+        site_id,
+      </if>
+      <if test="siteLogo != null">
+        site_logo,
+      </if>
+      <if test="siteIcon != null">
+        site_icon,
+      </if>
+      <if test="siteTitle != null">
+        site_title,
+      </if>
+      <if test="siteDesc != null">
+        site_desc,
+      </if>
+      <if test="siteKeyword != null">
+        site_keyword,
+      </if>
+      <if test="siteCopyright != null">
+        site_copyright,
+      </if>
+      <if test="siteLicense != null">
+        site_license,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
+      </if>
+      <if test="contactEmail != null">
+        contact_email,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+      <if test="loginTimeUnit != null">
+        login_time_unit,
+      </if>
+      <if test="personalInfo != null">
+        personal_info,
+      </if>
+      <if test="personalInfoStatus != null">
+        personal_info_status,
+      </if>
+      <if test="commentAudit != null">
+        comment_audit,
+      </if>
+      <if test="limitIp != null">
+        limit_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="siteId != null">
+        #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="siteLogo != null">
+        #{siteLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="siteIcon != null">
+        #{siteIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="siteTitle != null">
+        #{siteTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="siteDesc != null">
+        #{siteDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="siteKeyword != null">
+        #{siteKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="siteCopyright != null">
+        #{siteCopyright,jdbcType=VARCHAR},
+      </if>
+      <if test="siteLicense != null">
+        #{siteLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmail != null">
+        #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTimeUnit != null">
+        #{loginTimeUnit,jdbcType=BIT},
+      </if>
+      <if test="personalInfo != null">
+        #{personalInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="personalInfoStatus != null">
+        #{personalInfoStatus,jdbcType=BIT},
+      </if>
+      <if test="commentAudit != null">
+        #{commentAudit,jdbcType=BIT},
+      </if>
+      <if test="limitIp != null">
+        #{limitIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.Siteinfo">
+    update kg_siteinfo
+    <set>
+      <if test="siteLogo != null">
+        site_logo = #{siteLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="siteIcon != null">
+        site_icon = #{siteIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="siteTitle != null">
+        site_title = #{siteTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="siteDesc != null">
+        site_desc = #{siteDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="siteKeyword != null">
+        site_keyword = #{siteKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="siteCopyright != null">
+        site_copyright = #{siteCopyright,jdbcType=VARCHAR},
+      </if>
+      <if test="siteLicense != null">
+        site_license = #{siteLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmail != null">
+        contact_email = #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTimeUnit != null">
+        login_time_unit = #{loginTimeUnit,jdbcType=BIT},
+      </if>
+      <if test="personalInfo != null">
+        personal_info = #{personalInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="personalInfoStatus != null">
+        personal_info_status = #{personalInfoStatus,jdbcType=BIT},
+      </if>
+      <if test="commentAudit != null">
+        comment_audit = #{commentAudit,jdbcType=BIT},
+      </if>
+      <if test="limitIp != null">
+        limit_ip = #{limitIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where site_id = #{siteId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.Siteinfo">
+    update kg_siteinfo
+    set site_logo = #{siteLogo,jdbcType=VARCHAR},
+      site_icon = #{siteIcon,jdbcType=VARCHAR},
+      site_title = #{siteTitle,jdbcType=VARCHAR},
+      site_desc = #{siteDesc,jdbcType=VARCHAR},
+      site_keyword = #{siteKeyword,jdbcType=VARCHAR},
+      site_copyright = #{siteCopyright,jdbcType=VARCHAR},
+      site_license = #{siteLicense,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      contact_email = #{contactEmail,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=VARCHAR},
+      login_time_unit = #{loginTimeUnit,jdbcType=BIT},
+      personal_info = #{personalInfo,jdbcType=VARCHAR},
+      personal_info_status = #{personalInfoStatus,jdbcType=BIT},
+      comment_audit = #{commentAudit,jdbcType=BIT},
+      limit_ip = #{limitIp,jdbcType=VARCHAR}
+    where site_id = #{siteId,jdbcType=INTEGER}
+  </update>
+</mapper>

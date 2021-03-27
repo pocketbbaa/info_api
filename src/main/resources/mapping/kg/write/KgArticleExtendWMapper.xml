@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgArticleExtendWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgArticleExtendOutModel">
+    <id column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="if_into_index" jdbcType="INTEGER" property="ifIntoIndex" />
+    <result column="title_modify" jdbcType="INTEGER" property="titleModify" />
+    <result column="blockchain_url" jdbcType="VARCHAR" property="blockchainUrl" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    article_id, if_into_index, title_modify, blockchain_url
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_article_extend
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgArticleExtendInModel">
+
+    insert into kg_article_extend (article_id,if_into_index)
+    values (#{articleId,jdbcType=BIGINT},#{ifIntoIndex,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgArticleExtendInModel">
+    insert into kg_article_extend
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="ifIntoIndex != null">
+        if_into_index,
+      </if>
+      <if test="titleModify != null">
+        title_modify,
+      </if>
+      <if test="blockchainUrl != null">
+        blockchain_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="ifIntoIndex != null">
+        #{ifIntoIndex,jdbcType=INTEGER},
+      </if>
+      <if test="titleModify != null">
+        #{titleModify,jdbcType=INTEGER},
+      </if>
+      <if test="blockchainUrl != null">
+        #{blockchainUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgArticleExtendInModel">
+    update kg_article_extend
+    <set>
+      <if test="ifIntoIndex != null">
+        if_into_index = #{ifIntoIndex,jdbcType=INTEGER},
+      </if>
+      <if test="titleModify != null">
+        title_modify = #{titleModify,jdbcType=INTEGER},
+      </if>
+      <if test="blockchainUrl != null">
+        blockchain_url = #{blockchainUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgArticleExtendInModel">
+    update kg_article_extend
+    set if_into_index = #{ifIntoIndex,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+</mapper>

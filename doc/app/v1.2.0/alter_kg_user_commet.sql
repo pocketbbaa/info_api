@@ -1,0 +1,1 @@
+ALTER TABLE kg_user_comment modify `comment_date` timestamp NULL DEFAULT NULL COMMENT '评论时间'

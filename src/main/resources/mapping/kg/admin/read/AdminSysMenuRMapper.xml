@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminSysMenuRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SysMenu">
+    <id column="menu_id" jdbcType="INTEGER" property="menuId" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="menu_link" jdbcType="VARCHAR" property="menuLink" />
+    <result column="menu_icon" jdbcType="VARCHAR" property="menuIcon" />
+    <result column="menu_type" jdbcType="VARCHAR" property="menuType" />
+    <result column="prev_menu" jdbcType="INTEGER" property="prevMenu" />
+    <result column="menu_order" jdbcType="INTEGER" property="menuOrder" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from kg_sys_menu m where m.menu_status = 1 and m.menu_id in (select a.menu_id from kg_sys_auth a where a.sys_auth_id in (select pa.auth_id from kg_sys_post_auth pa where pa.post_id = (select u.post_id from kg_sys_user u where u.sys_user_id = #{userId,jdbcType=BIGINT})))
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from kg_sys_menu where menu_status = 1
+  </select>
+</mapper>

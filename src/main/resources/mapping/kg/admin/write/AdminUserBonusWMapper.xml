@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.admin.AdminUserBonusWMapper">
+
+  <insert id="addUserBonus" parameterType="com.kg.platform.model.in.admin.UserBonusInModel">
+    insert into kg_extra_bonus
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="extraBonusId != null">
+        extra_bonus_id,
+      </if>
+      <if test="totalTvAmount != null">
+        total_tv_amount,
+      </if>
+        <if test="totalKgAmount != null">
+        total_kg_amount,
+      </if>
+      <if test="bonusReason != null">
+        bonus_reason,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+       <if test="sysUserId != null">
+        sys_user_id,
+      </if>
+      <if test="totalNum != null">
+        total_num,
+      </if>
+      <if test="rewardType != null">
+        reward_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="extraBonusId != null">
+        #{extraBonusId},
+      </if>
+      <if test="totalTvAmount != null">
+        #{totalTvAmount},
+      </if>
+      <if test="totalKgAmount != null">
+        #{totalKgAmount},
+      </if>
+      <if test="bonusReason != null">
+        #{bonusReason},
+      </if>
+       <if test="createTime != null">
+        #{createTime},
+      </if>
+       <if test="sysUserId != null">
+        #{sysUserId},
+      </if>
+      <if test="totalNum != null">
+         #{totalNum},
+      </if>
+      <if test="rewardType != null">
+        #{rewardType},
+      </if>
+    </trim>
+  </insert>
+ 
+ 
+ 
+ 
+</mapper>

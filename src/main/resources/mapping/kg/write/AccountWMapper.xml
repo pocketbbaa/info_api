@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.AccountWMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Account">
+        <id column="account_id" jdbcType="BIGINT" property="accountId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="balance" jdbcType="DECIMAL" property="balance"/>
+        <result column="frozen_balance" jdbcType="DECIMAL" property="frozenBalance"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="tx_address" jdbcType="VARCHAR" property="txAddress"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="tx_password" jdbcType="VARCHAR" property="txPassword"/>
+        <result column="txb_balance" jdbcType="DECIMAL" property="txbBalance"/>
+        <result column="txb_frozen_balance" jdbcType="DECIMAL" property="txbFrozenBalance"/>
+        <result column="rit_balance" jdbcType="DECIMAL" property="ritBalance"/>
+        <result column="rit_frozen_balance" jdbcType="DECIMAL" property="ritFrozenBalance"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    account_id, user_id, balance, frozen_balance, status, tx_address, create_date, tx_password, txb_balance, txb_frozen_balance,rit_balance,rit_frozen_balance
+  </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.kg.platform.dao.entity.Account">
+    insert into kg_account (account_id, user_id, balance, 
+      frozen_balance, status, tx_address, 
+      create_date, tx_password, txb_balance, txb_frozen_balance)
+    values (#{accountId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{balance,jdbcType=DECIMAL}, 
+      #{frozenBalance,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{txAddress,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{txPassword,jdbcType=VARCHAR}, #{txbBalance,jdbcType=DECIMAL}, 
+      #{txbFrozenBalance,jdbcType=DECIMAL})
+  </insert>
+    <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.Account">
+        insert into kg_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="accountId != null">
+                account_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="balance != null">
+                balance,
+            </if>
+            <if test="frozenBalance != null">
+                frozen_balance,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="txAddress != null">
+                tx_address,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="txPassword != null">
+                tx_password,
+            </if>
+            <if test="txbBalance != null">
+                txb_balance,
+            </if>
+            <if test="txbFrozenBalance != null">
+                txb_frozen_balance,
+            </if>
+            <if test="ritBalance != null">
+                rit_balance,
+            </if>
+            <if test="ritFrozenBalance != null">
+                rit_frozen_balance,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="accountId != null">
+                #{accountId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="frozenBalance != null">
+                #{frozenBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="txAddress != null">
+                #{txAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="txPassword != null">
+                #{txPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="txbBalance != null">
+                #{txbBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="txbFrozenBalance != null">
+                #{txbFrozenBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="ritBalance != null">
+                #{ritBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="ritFrozenBalance != null">
+                #{ritFrozenBalance,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.Account">
+        update kg_account
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="balance != null">
+                balance = #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="frozenBalance != null">
+                frozen_balance = #{frozenBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="txAddress != null">
+                tx_address = #{txAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="txPassword != null">
+                tx_password = #{txPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="txbBalance != null">
+                txb_balance = #{txbBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="txbFrozenBalance != null">
+                txb_frozen_balance = #{txbFrozenBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="ritBalance != null">
+                rit_balance = #{ritBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="ritFrozenBalance != null">
+                rit_frozen_balance = #{ritFrozenBalance,jdbcType=DECIMAL}
+            </if>
+        </set>
+        where account_id = #{accountId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.Account">
+    update kg_account
+    set user_id = #{userId,jdbcType=BIGINT},
+      balance = #{balance,jdbcType=DECIMAL},
+      frozen_balance = #{frozenBalance,jdbcType=DECIMAL},
+      txb_balance = #{txbBalance,jdbcType=DECIMAL},
+      txb_frozen_balance = #{txbFrozenBalance,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
+      tx_address = #{txAddress,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      tx_password = #{txPassword,jdbcType=VARCHAR}
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </update>
+    <update id="updateByUserId" parameterType="com.kg.platform.dao.entity.Account">
+    update kg_account
+    set 
+      balance = balance + #{balance,jdbcType=DECIMAL}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <update id="updateOutUserId" parameterType="com.kg.platform.model.in.AccountInModel">
+    update kg_account
+    set 
+      balance = balance - #{balance,jdbcType=DECIMAL},frozen_balance=frozen_balance + #{balance,jdbcType=DECIMAL}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <!-- 账号余额加差数，冻结金额-差数 ,撤销提现功能同用，终止操作同用-->
+    <update id="updateAddBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  UPDATE kg_account
+    SET 
+      balance = balance + #{balance} ,frozen_balance=frozen_balance - #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <!-- 账号余额-差数，冻结金额+差数 -->
+    <update id="updateReduction" parameterType="com.kg.platform.model.in.AccountInModel">
+  UPDATE kg_account
+    SET 
+      balance = balance - #{balance} ,frozen_balance=frozen_balance + #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <!-- 打赏作者,账号+金额 -->
+    <update id="updateAddUbalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  UPDATE kg_account
+    SET 
+      balance = balance + #{balance}
+    WHERE user_id = (SELECT create_user FROM kg_article WHERE article_id=#{articleId,jdbcType=BIGINT})
+  </update>
+
+    <update id="addUserbalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  UPDATE kg_account
+    SET 
+      balance = balance + #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <!-- 打赏作者,当前用户账号-金额 -->
+    <update id="updateReductionUbalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  UPDATE kg_account
+    SET 
+      balance = balance - #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+
+    <update id="addTxbBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  UPDATE kg_account
+    SET 
+      txb_balance = txb_balance + #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <update id="reduceTxbBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  UPDATE kg_account
+    SET 
+      txb_balance = txb_balance - #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <!--  RIT-->
+    <update id="reduceRitBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+    UPDATE kg_account
+    SET
+    rit_balance = rit_balance - #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT} AND rit_balance &gt;= #{balance}
+  </update>
+
+    <update id="reduceRitFrozenBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+    UPDATE kg_account
+    SET
+    rit_frozen_balance = rit_frozen_balance - #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT} AND rit_frozen_balance &gt;= #{balance}
+  </update>
+
+    <update id="addRitFrozenBalanceReduceRitBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+    UPDATE kg_account
+    SET
+    rit_frozen_balance = rit_frozen_balance + #{balance},
+    rit_balance = rit_balance - #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT} AND rit_balance &gt;= #{balance}
+  </update>
+
+    <update id="addRitBalanceReduceRitFrozenBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+    UPDATE kg_account
+    SET
+    rit_frozen_balance = rit_frozen_balance - #{balance},
+    rit_balance = rit_balance + #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT} AND rit_frozen_balance &gt;= #{balance}
+  </update>
+
+    <!--BTC-->
+    <update id="reduceBtcBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+        UPDATE kg_account
+        SET
+        btc_balance = btc_balance - #{balance}
+        WHERE user_id = #{userId,jdbcType=BIGINT} AND btc_balance &gt;= #{balance}
+    </update>
+
+    <update id="reduceFBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  
+   UPDATE kg_account
+    SET 
+      frozen_balance = frozen_balance - #{frozenBalance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  
+  </update>
+
+    <update id="increaseFbalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  
+   UPDATE kg_account
+    SET 
+      frozen_balance = frozen_balance + #{frozenBalance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  
+  </update>
+
+    <!-- 添加rit冻结余额 -->
+    <update id="addRitFrozenBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+     UPDATE kg_account
+      SET
+        rit_frozen_balance = rit_frozen_balance + #{balance}
+      WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <!-- 添加rit余额 -->
+    <update id="addRitBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  UPDATE kg_account
+    SET
+      rit_balance = rit_balance + #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <!-- 文章作者账号冻结金额减金额 -->
+    <update id="updateFbalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  
+   UPDATE kg_account
+    SET 
+      frozen_balance = frozen_balance - #{frozenBalance}
+    WHERE user_id = (SELECT create_user FROM kg_article WHERE article_id=#{articleId,jdbcType=BIGINT})
+  
+  </update>
+
+    <!-- 阅读用户账户余额加金额 -->
+    <update id="updateUbalance" parameterType="com.kg.platform.model.in.AccountInModel">
+  
+   UPDATE kg_account
+    SET 
+      balance = balance + #{balance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  
+  </update>
+
+    <update id="upatekgToRitBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+    UPDATE kg_account
+    SET
+      txb_balance = txb_balance - #{txbBalance},
+      rit_balance = rit_balance + #{ritBalance}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+    <update id="upatekgToRitSysBalance" parameterType="com.kg.platform.model.in.AccountInModel">
+    UPDATE kg_account
+    SET
+      txb_balance = txb_balance + #{txbBalance},
+      rit_balance = rit_balance - #{ritBalance}
+    WHERE user_id = -1
+    </update>
+
+    <update id="issueBTCEarnings">
+        UPDATE kg_account
+    SET
+      btc_balance = btc_balance + #{price}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+    </update>
+
+</mapper>

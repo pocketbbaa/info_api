@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SysMenu">
+    <id column="menu_id" jdbcType="INTEGER" property="menuId" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="menu_link" jdbcType="VARCHAR" property="menuLink" />
+    <result column="menu_icon" jdbcType="VARCHAR" property="menuIcon" />
+    <result column="menu_type" jdbcType="VARCHAR" property="menuType" />
+    <result column="prev_menu" jdbcType="INTEGER" property="prevMenu" />
+    <result column="menu_order" jdbcType="INTEGER" property="menuOrder" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    menu_id, menu_name, menu_link, menu_icon, menu_type, prev_menu, menu_order, create_user, 
+    create_date, update_user, update_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_sys_menu
+    where menu_id = #{menuId,jdbcType=INTEGER}
+  </select>
+ 
+</mapper>

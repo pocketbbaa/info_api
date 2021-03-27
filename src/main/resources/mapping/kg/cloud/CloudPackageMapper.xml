@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.cloud.CloudPackageMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.CloudPackage">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="cast_lines" jdbcType="DOUBLE" property="castLines"/>
+        <result column="performance" jdbcType="DOUBLE" property="performance"/>
+        <result column="years_earnings_percent" jdbcType="DOUBLE" property="yearsEarningsPercent"/>
+        <result column="time_limit" jdbcType="INTEGER" property="timeLimit"/>
+        <result column="have_electric_price" jdbcType="INTEGER" property="haveElectricPrice"/>
+        <result column="daily_electric_power" jdbcType="DOUBLE" property="dailyElectricPower"/>
+        <result column="electric_price" jdbcType="DOUBLE" property="electricPrice"/>
+        <result column="have_other_price" jdbcType="INTEGER" property="haveOtherPrice"/>
+        <result column="other_price_name" jdbcType="VARCHAR" property="otherPriceName"/>
+        <result column="classify" jdbcType="TINYINT" property="classify"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="daily_earnings_btc" jdbcType="DECIMAL" property="dailyEarningsBtc"/>
+        <result column="daily_earnings_rmb" jdbcType="DOUBLE" property="dailyEarningsRmb"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, name, price, cast_lines, performance, years_earnings_percent, time_limit, 
+    have_electric_price, daily_electric_power, electric_price, have_other_price, other_price_name, 
+    classify, type, daily_earnings_btc, daily_earnings_rmb, create_time, update_time, 
+    state, remark
+  </sql>
+    <select id="selectByExample" parameterType="com.kg.platform.dao.entity.CloudPackageExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from cloud_package
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cloud_package
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cloud_package
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.kg.platform.dao.entity.CloudPackageExample">
+        delete from cloud_package
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.kg.platform.dao.entity.CloudPackage">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into cloud_package (name, price, cast_lines,
+        performance, years_earnings_percent, time_limit,
+        have_electric_price, daily_electric_power, electric_price,
+        have_other_price, other_price_name, classify,
+        type, daily_earnings_btc, daily_earnings_rmb,
+        create_time, update_time, state
+        )
+        values (#{name,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{castLines,jdbcType=DOUBLE},
+        #{performance,jdbcType=DOUBLE}, #{yearsEarningsPercent,jdbcType=DOUBLE}, #{timeLimit,jdbcType=INTEGER},
+        #{haveElectricPrice,jdbcType=BIT}, #{dailyElectricPower,jdbcType=DOUBLE}, #{electricPrice,jdbcType=DOUBLE},
+        #{haveOtherPrice,jdbcType=BIT}, #{otherPriceName,jdbcType=VARCHAR}, #{classify,jdbcType=TINYINT},
+        #{type,jdbcType=TINYINT}, #{dailyEarningsBtc,jdbcType=DECIMAL}, #{dailyEarningsRmb,jdbcType=DOUBLE},
+        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=BIT}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.CloudPackage">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into cloud_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="castLines != null">
+                cast_lines,
+            </if>
+            <if test="performance != null">
+                performance,
+            </if>
+            <if test="yearsEarningsPercent != null">
+                years_earnings_percent,
+            </if>
+            <if test="timeLimit != null">
+                time_limit,
+            </if>
+            <if test="haveElectricPrice != null">
+                have_electric_price,
+            </if>
+            <if test="dailyElectricPower != null">
+                daily_electric_power,
+            </if>
+            <if test="electricPrice != null">
+                electric_price,
+            </if>
+            <if test="haveOtherPrice != null">
+                have_other_price,
+            </if>
+            <if test="otherPriceName != null">
+                other_price_name,
+            </if>
+            <if test="classify != null">
+                classify,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="dailyEarningsBtc != null">
+                daily_earnings_btc,
+            </if>
+            <if test="dailyEarningsRmb != null">
+                daily_earnings_rmb,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="castLines != null">
+                #{castLines,jdbcType=DOUBLE},
+            </if>
+            <if test="performance != null">
+                #{performance,jdbcType=DOUBLE},
+            </if>
+            <if test="yearsEarningsPercent != null">
+                #{yearsEarningsPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="timeLimit != null">
+                #{timeLimit,jdbcType=INTEGER},
+            </if>
+            <if test="haveElectricPrice != null">
+                #{haveElectricPrice,jdbcType=BIT},
+            </if>
+            <if test="dailyElectricPower != null">
+                #{dailyElectricPower,jdbcType=DOUBLE},
+            </if>
+            <if test="electricPrice != null">
+                #{electricPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="haveOtherPrice != null">
+                #{haveOtherPrice,jdbcType=BIT},
+            </if>
+            <if test="otherPriceName != null">
+                #{otherPriceName,jdbcType=VARCHAR},
+            </if>
+            <if test="classify != null">
+                #{classify,jdbcType=TINYINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="dailyEarningsBtc != null">
+                #{dailyEarningsBtc,jdbcType=DECIMAL},
+            </if>
+            <if test="dailyEarningsRmb != null">
+                #{dailyEarningsRmb,jdbcType=DOUBLE},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.kg.platform.dao.entity.CloudPackageExample"
+            resultType="java.lang.Long">
+        select count(*) from cloud_package
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update cloud_package
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.price != null">
+                price = #{record.price,jdbcType=DOUBLE},
+            </if>
+            <if test="record.castLines != null">
+                cast_lines = #{record.castLines,jdbcType=DOUBLE},
+            </if>
+            <if test="record.performance != null">
+                performance = #{record.performance,jdbcType=DOUBLE},
+            </if>
+            <if test="record.yearsEarningsPercent != null">
+                years_earnings_percent = #{record.yearsEarningsPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="record.timeLimit != null">
+                time_limit = #{record.timeLimit,jdbcType=INTEGER},
+            </if>
+            <if test="record.haveElectricPrice != null">
+                have_electric_price = #{record.haveElectricPrice,jdbcType=BIT},
+            </if>
+            <if test="record.dailyElectricPower != null">
+                daily_electric_power = #{record.dailyElectricPower,jdbcType=DOUBLE},
+            </if>
+            <if test="record.electricPrice != null">
+                electric_price = #{record.electricPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="record.haveOtherPrice != null">
+                have_other_price = #{record.haveOtherPrice,jdbcType=BIT},
+            </if>
+            <if test="record.otherPriceName != null">
+                other_price_name = #{record.otherPriceName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.classify != null">
+                classify = #{record.classify,jdbcType=TINYINT},
+            </if>
+            <if test="record.type != null">
+                type = #{record.type,jdbcType=TINYINT},
+            </if>
+            <if test="record.dailyEarningsBtc != null">
+                daily_earnings_btc = #{record.dailyEarningsBtc,jdbcType=DECIMAL},
+            </if>
+            <if test="record.dailyEarningsRmb != null">
+                daily_earnings_rmb = #{record.dailyEarningsRmb,jdbcType=DOUBLE},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.state != null">
+                state = #{record.state,jdbcType=BIT},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update cloud_package
+        set id = #{record.id,jdbcType=INTEGER},
+        name = #{record.name,jdbcType=VARCHAR},
+        price = #{record.price,jdbcType=DOUBLE},
+        cast_lines = #{record.castLines,jdbcType=DOUBLE},
+        performance = #{record.performance,jdbcType=DOUBLE},
+        years_earnings_percent = #{record.yearsEarningsPercent,jdbcType=DOUBLE},
+        time_limit = #{record.timeLimit,jdbcType=INTEGER},
+        have_electric_price = #{record.haveElectricPrice,jdbcType=BIT},
+        daily_electric_power = #{record.dailyElectricPower,jdbcType=DOUBLE},
+        electric_price = #{record.electricPrice,jdbcType=DOUBLE},
+        have_other_price = #{record.haveOtherPrice,jdbcType=BIT},
+        other_price_name = #{record.otherPriceName,jdbcType=VARCHAR},
+        classify = #{record.classify,jdbcType=TINYINT},
+        type = #{record.type,jdbcType=TINYINT},
+        daily_earnings_btc = #{record.dailyEarningsBtc,jdbcType=DECIMAL},
+        daily_earnings_rmb = #{record.dailyEarningsRmb,jdbcType=DOUBLE},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        state = #{record.state,jdbcType=BIT}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.CloudPackage">
+        update cloud_package
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="castLines != null">
+                cast_lines = #{castLines,jdbcType=DOUBLE},
+            </if>
+            <if test="performance != null">
+                performance = #{performance,jdbcType=DOUBLE},
+            </if>
+            <if test="yearsEarningsPercent != null">
+                years_earnings_percent = #{yearsEarningsPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="timeLimit != null">
+                time_limit = #{timeLimit,jdbcType=INTEGER},
+            </if>
+            <if test="haveElectricPrice != null">
+                have_electric_price = #{haveElectricPrice,jdbcType=BIT},
+            </if>
+            <if test="dailyElectricPower != null">
+                daily_electric_power = #{dailyElectricPower,jdbcType=DOUBLE},
+            </if>
+            <if test="electricPrice != null">
+                electric_price = #{electricPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="haveOtherPrice != null">
+                have_other_price = #{haveOtherPrice,jdbcType=BIT},
+            </if>
+            <if test="otherPriceName != null">
+                other_price_name = #{otherPriceName,jdbcType=VARCHAR},
+            </if>
+            <if test="classify != null">
+                classify = #{classify,jdbcType=TINYINT},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="dailyEarningsBtc != null">
+                daily_earnings_btc = #{dailyEarningsBtc,jdbcType=DECIMAL},
+            </if>
+            <if test="dailyEarningsRmb != null">
+                daily_earnings_rmb = #{dailyEarningsRmb,jdbcType=DOUBLE},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.CloudPackage">
+    update cloud_package
+    set name = #{name,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      cast_lines = #{castLines,jdbcType=DOUBLE},
+      performance = #{performance,jdbcType=DOUBLE},
+      years_earnings_percent = #{yearsEarningsPercent,jdbcType=DOUBLE},
+      time_limit = #{timeLimit,jdbcType=INTEGER},
+      have_electric_price = #{haveElectricPrice,jdbcType=BIT},
+      daily_electric_power = #{dailyElectricPower,jdbcType=DOUBLE},
+      electric_price = #{electricPrice,jdbcType=DOUBLE},
+      have_other_price = #{haveOtherPrice,jdbcType=BIT},
+      other_price_name = #{otherPriceName,jdbcType=VARCHAR},
+      classify = #{classify,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT},
+      daily_earnings_btc = #{dailyEarningsBtc,jdbcType=DECIMAL},
+      daily_earnings_rmb = #{dailyEarningsRmb,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="getPackageList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cloud_package
+        where state = 1
+    </select>
+</mapper>

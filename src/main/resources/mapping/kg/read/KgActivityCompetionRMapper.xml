@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgActivityCompetionRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgActivityCompetionOutModel">
+    <id column="competion_id" jdbcType="INTEGER" property="competionId" />
+    <result column="home_team_logo" jdbcType="VARCHAR" property="homeTeamLogo" />
+    <result column="guest_team_logo" jdbcType="VARCHAR" property="guestTeamLogo" />
+    <result column="home_team_name" jdbcType="VARCHAR" property="homeTeamName" />
+    <result column="home_team_id" jdbcType="INTEGER" property="homeTeamId" />
+    <result column="guest_team_name" jdbcType="VARCHAR" property="guestTeamName" />
+    <result column="guest_team_id" jdbcType="INTEGER" property="guestTeamId" />
+    <result column="competition_date" jdbcType="TIMESTAMP" property="competitionDate" />
+    <result column="home_team_panda" jdbcType="VARCHAR" property="homeTeamPanda" />
+    <result column="guest_team_panda" jdbcType="VARCHAR" property="guestTeamPanda" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    competion_id, home_team_logo, guest_team_logo, home_team_name, home_team_id, guest_team_name, 
+    guest_team_id, competition_date,home_team_panda,guest_team_panda
+  </sql>
+  <sql id="Alia_Base_Column_List">
+    a.competion_id, a.home_team_logo, a.guest_team_logo, a.home_team_name, a.home_team_id, a.guest_team_name,
+    a.guest_team_id, a.competition_date,a.home_team_panda,a.guest_team_panda
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_activity_competion
+    where competion_id = #{competionId,jdbcType=INTEGER}
+  </select>
+
+
+   <select id="checkTodayMatch" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+      select count(1) from kg_activity_competion where competition_date &gt;= now()
+  </select>
+
+
+
+  <select id="worldCupCompetionList" parameterType="com.kg.platform.model.in.KgActivityCompetionInModel" resultMap="BaseResultMap">
+    SELECT <include refid="Alia_Base_Column_List" />,(SELECT COUNT(guess_id) from kg_activity_guess where competion_id=a.competion_id and user_id=#{userId}) guessCount,
+    (SELECT support_team_id from kg_activity_guess WHERE competion_id=a.competion_id and user_id=#{userId}) supportTeamId
+    from  kg_activity_competion a
+    where a.competition_date &gt;= (SELECT DATE_FORMAT((SELECT competition_date from kg_activity_competion WHERE competition_date &gt;= NOW() AND competition_date &lt; #{endTime} ORDER BY competition_date ASC LIMIT 0,1),"%Y-%m-%d"))
+    AND a.competition_date &lt;(SELECT DATE_ADD((SELECT DATE_FORMAT((SELECT competition_date from kg_activity_competion WHERE competition_date &gt;= NOW() AND competition_date &lt; #{endTime} ORDER BY competition_date ASC LIMIT 0,1),"%Y-%m-%d")  ),INTERVAL 1 DAY))
+  </select>
+</mapper>

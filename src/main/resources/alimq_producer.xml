@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean id="producer" class="com.aliyun.openservices.ons.api.bean.ProducerBean" init-method="start" destroy-method="shutdown">
+
+
+        <!-- Spring 接入方式支持 Java SDK 支持的所有配置项 -->
+        <property name="properties" > <!--生产者配置信息-->
+            <props>
+                <prop key="ProducerId">${alimq.producerId}</prop>
+                <prop key="AccessKey">${alimq.accessKey}</prop>
+                <prop key="SecretKey">${alimq.secretKey}</prop>
+                <prop key="ONSAddr">${alimq.onsaddr}</prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+    <bean name="mqProduct" class="com.kg.platform.common.mq.MQProduct"/>
+</beans>

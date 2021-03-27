@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.UserProfileWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.UserProfileOutModel">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="role_id" jdbcType="TINYINT" property="roleId" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="county" jdbcType="VARCHAR" property="county" />
+    <result column="resume" jdbcType="VARCHAR" property="resume" />
+    <result column="role_define" jdbcType="VARCHAR" property="roleDefine" />
+    <result column="column_name" jdbcType="VARCHAR" property="columnName" />
+    <result column="column_intro" jdbcType="VARCHAR" property="columnIntro" />
+    <result column="column_avatar" jdbcType="VARCHAR" property="columnAvatar" />
+    <result column="column_country" jdbcType="VARCHAR" property="columnCountry" />
+    <result column="column_province" jdbcType="VARCHAR" property="columnProvince" />
+    <result column="column_city" jdbcType="VARCHAR" property="columnCity" />
+    <result column="column_county" jdbcType="VARCHAR" property="columnCounty" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="idcard_pic" jdbcType="VARCHAR" property="idcardPic" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="other_pic" jdbcType="VARCHAR" property="otherPic" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="license_pic" jdbcType="VARCHAR" property="licensePic" />
+    <result column="site_link" jdbcType="VARCHAR" property="siteLink" />
+    <result column="idcard_front" property="idcardFront"/>
+    <result column="idcard_back" property="idcardBack"/>
+    <result column="regist_channel" property="regist_channel"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, role_id, avatar, sex, country, province, city, county, resume, role_define, 
+    column_name, column_intro, column_avatar, column_country, column_province, column_city, 
+    column_county, real_name, idcard, idcard_pic, email, mobile, other_pic, company_name, 
+    license_pic, site_link,regist_channel
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_user_profile
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.UserProfileInModel">
+    insert into kg_user_profile (user_id, role_id, avatar, 
+      sex, country, province, 
+      city, county, resume, 
+      role_define, column_name, column_intro, 
+      column_avatar, column_country, column_province, 
+      column_city, column_county, real_name, 
+      idcard, idcard_pic, email, 
+      mobile, other_pic, company_name, 
+      license_pic, site_link,regist_channel)
+    values (#{userId,jdbcType=BIGINT}, #{roleId,jdbcType=TINYINT}, #{avatar,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{resume,jdbcType=VARCHAR}, 
+      #{roleDefine,jdbcType=VARCHAR}, #{columnName,jdbcType=VARCHAR}, #{columnIntro,jdbcType=VARCHAR}, 
+      #{columnAvatar,jdbcType=VARCHAR}, #{columnCountry,jdbcType=VARCHAR}, #{columnProvince,jdbcType=VARCHAR}, 
+      #{columnCity,jdbcType=VARCHAR}, #{columnCounty,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{idcardPic,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{otherPic,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{licensePic,jdbcType=VARCHAR}, #{siteLink,jdbcType=VARCHAR},#{registChannel,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.UserProfile">
+    insert into kg_user_profile
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="country != null">
+        country,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="resume != null">
+        resume,
+      </if>
+      <if test="roleDefine != null">
+        role_define,
+      </if>
+      <if test="columnName != null">
+        column_name,
+      </if>
+      <if test="columnIntro != null">
+        column_intro,
+      </if>
+      <if test="columnAvatar != null">
+        column_avatar,
+      </if>
+      <if test="columnCountry != null">
+        column_country,
+      </if>
+      <if test="columnProvince != null">
+        column_province,
+      </if>
+      <if test="columnCity != null">
+        column_city,
+      </if>
+      <if test="columnCounty != null">
+        column_county,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="idcard != null">
+        idcard,
+      </if>
+      <if test="idcardPic != null">
+        idcard_pic,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="otherPic != null">
+        other_pic,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="licensePic != null">
+        license_pic,
+      </if>
+      <if test="siteLink != null">
+        site_link,
+      </if>
+      
+      <if test="idcardFront != null">
+        idcard_front,
+      </if>
+      
+      <if test="idcardBack != null">
+        idcard_back,
+      </if>
+
+      <if test="registChannel != null">
+        regist_channel,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=TINYINT},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="resume != null">
+        #{resume,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDefine != null">
+        #{roleDefine,jdbcType=VARCHAR},
+      </if>
+      <if test="columnName != null">
+        #{columnName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnIntro != null">
+        #{columnIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="columnAvatar != null">
+        #{columnAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCountry != null">
+        #{columnCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="columnProvince != null">
+        #{columnProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCity != null">
+        #{columnCity,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCounty != null">
+        #{columnCounty,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPic != null">
+        #{idcardPic,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="otherPic != null">
+        #{otherPic,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="licensePic != null">
+        #{licensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="siteLink != null">
+        #{siteLink,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardFront != null">
+        #{idcardFront,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="idcardBack != null">
+        #{idcardBack,jdbcType=VARCHAR},
+      </if>
+
+      <if test="registChannel != null">
+        #{registChannel,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateProfile" parameterType="com.kg.platform.model.in.UserProfileInModel">
+    update kg_user_profile
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=TINYINT},
+      </if>
+      <if test="avatar != null ">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="resume != null">
+        resume = #{resume,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDefine != null">
+        role_define = #{roleDefine,jdbcType=VARCHAR},
+      </if>
+      <if test="columnName != null">
+        column_name = #{columnName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnIntro != null">
+        column_intro = #{columnIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="columnAvatar != null">
+        column_avatar = #{columnAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCountry != null">
+        column_country = #{columnCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="columnProvince != null">
+        column_province = #{columnProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCity != null">
+        column_city = #{columnCity,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCounty != null">
+        column_county = #{columnCounty,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPic != null">
+        idcard_pic = #{idcardPic,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardFront != null">
+        idcard_front = #{idcardFront,jdbcType=VARCHAR},
+      </if>
+       <if test="idcardBack != null">
+        idcard_back = #{idcardBack,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="otherPic != null">
+        other_pic = #{otherPic,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="licensePic != null">
+        license_pic = #{licensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="siteLink != null">
+        site_link = #{siteLink,jdbcType=VARCHAR},
+      </if>
+      <if test="registChannel != null">
+        regist_channel = #{registChannel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.UserProfile">
+    update kg_user_profile
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=TINYINT},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="resume != null">
+        resume = #{resume,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDefine != null">
+        role_define = #{roleDefine,jdbcType=VARCHAR},
+      </if>
+      <if test="columnName != null">
+        column_name = #{columnName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnIntro != null">
+        column_intro = #{columnIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="columnAvatar != null">
+        column_avatar = #{columnAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCountry != null">
+        column_country = #{columnCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="columnProvince != null">
+        column_province = #{columnProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCity != null">
+        column_city = #{columnCity,jdbcType=VARCHAR},
+      </if>
+      <if test="columnCounty != null">
+        column_county = #{columnCounty,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPic != null">
+        idcard_pic = #{idcardPic,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="otherPic != null">
+        other_pic = #{otherPic,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="licensePic != null">
+        license_pic = #{licensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="siteLink != null">
+        site_link = #{siteLink,jdbcType=VARCHAR},
+      </if>
+      <if test="registChannel != null">
+        regist_channel = #{registChannel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.UserProfile">
+    update kg_user_profile
+    set role_id = #{roleId,jdbcType=TINYINT},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      resume = #{resume,jdbcType=VARCHAR},
+      role_define = #{roleDefine,jdbcType=VARCHAR},
+      column_name = #{columnName,jdbcType=VARCHAR},
+      column_intro = #{columnIntro,jdbcType=VARCHAR},
+      column_avatar = #{columnAvatar,jdbcType=VARCHAR},
+      column_country = #{columnCountry,jdbcType=VARCHAR},
+      column_province = #{columnProvince,jdbcType=VARCHAR},
+      column_city = #{columnCity,jdbcType=VARCHAR},
+      column_county = #{columnCounty,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      idcard_pic = #{idcardPic,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      other_pic = #{otherPic,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      license_pic = #{licensePic,jdbcType=VARCHAR},
+      site_link = #{siteLink,jdbcType=VARCHAR},
+      regist_channel = #{registChannel,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateColumnAuthed">
+    update kg_user_profile
+    set column_identity = #{columnIdentity}
+    where user_id = #{userId}
+  </update>
+</mapper>

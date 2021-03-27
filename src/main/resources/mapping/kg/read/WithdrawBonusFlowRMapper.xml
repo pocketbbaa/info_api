@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.WithdrawBonusFlowRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.WithdrawBonusFlow">
+    <id column="withdraw_flow_id" jdbcType="BIGINT" property="withdrawFlowId" />
+    <result column="account_flow_id" jdbcType="BIGINT" property="accountFlowId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="invite_count" jdbcType="INTEGER" property="inviteCount" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="withdraw_amount" jdbcType="DECIMAL" property="withdrawAmount" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="poundage_amount" jdbcType="DECIMAL" property="poundageAmount" />
+    <result column="withdraw_time" jdbcType="TIMESTAMP" property="withdrawTime" />
+    <result column="account_time" jdbcType="TIMESTAMP" property="accountTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    withdraw_flow_id, account_flow_id, user_id, invite_count, user_phone, user_email, withdraw_amount, 
+    account_amount, poundage_amount, withdraw_time, account_time, remark, status
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_withdraw_bonus_flow
+    where withdraw_flow_id = #{withdrawFlowId,jdbcType=BIGINT}
+  </select>
+  
+    <!--查询是否已经 申请提现 -->
+   <select id="getauditAmount" parameterType="com.kg.platform.model.in.WithdrawBonusInModel" resultType="com.kg.platform.model.out.WithdrawBonusOutModel">
+    
+    SELECT kwf.status  FROM   kg_withdraw_bonus_flow kwf WHERE kwf.user_id=#{userId}  AND kwf.status=0
+            
+  </select>
+  
+  
+ 
+</mapper>

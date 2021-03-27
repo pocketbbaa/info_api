@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.VoteRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Vote">
+    <id column="vote_id" jdbcType="BIGINT" property="voteId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_logo" jdbcType="VARCHAR" property="companyLogo" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    vote_id, user_id, company_name, company_logo, vote_num, activity_id, create_user, 
+    create_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_vote
+    where vote_id = #{voteId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getVoteList" parameterType="com.kg.platform.model.in.VoteInModel" resultType="com.kg.platform.model.response.VoteResponse">
+    SELECT vote_id as voteId,company_name as companyName,company_logo as companyLogo,vote_num as voteNum from kg_vote
+    where activity_id=#{activityId}
+    ORDER BY vote_num desc
+  </select>
+  
+  <!-- 验证用户凌晨4点到第二天凌晨4点投票数是否否超过一万 -->
+  <select id="getVoteNum" parameterType="com.kg.platform.model.in.VoteInModel" resultType="java.lang.Long">
+   SELECT sum(vote_num)  from kg_vote_user ku
+   where voter_id=#{userId}
+   and  ku.vote_time BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d 04:00:00') 
+   and TIMESTAMPADD(DAY,1,DATE_FORMAT(NOW(),'%Y-%m-%d 04:00:00'))
+  </select>
+  
+   <select id="checkVoteExsits" parameterType="com.kg.platform.model.in.VoteInModel" resultType="com.kg.platform.model.response.VoteResponse">
+    SELECT vote_id as voteId,company_name as companyName,company_logo as companyLogo,vote_num as voteNum from kg_vote
+    where vote_id=#{voteId}
+  </select>
+  
+ 
+</mapper>

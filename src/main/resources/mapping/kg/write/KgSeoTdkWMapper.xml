@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgSeoTdkWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgSeoTdkOutModel">
+    <id column="tdk_id" jdbcType="INTEGER" property="tdkId" />
+    <result column="target_id" jdbcType="BIGINT" property="targetId" />
+    <result column="seo_title" jdbcType="VARCHAR" property="seoTitle" />
+    <result column="seo_desc" jdbcType="VARCHAR" property="seoDesc" />
+    <result column="seo_keywords" jdbcType="VARCHAR" property="seoKeywords" />
+    <result column="target_type" jdbcType="INTEGER" property="targetType" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+    
+  <sql id="Base_Column_List">
+    tdk_id, target_id, seo_title, seo_desc, seo_keywords, target_type, update_date
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_seo_tdk
+    where tdk_id = #{tdkId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgSeoTdkInModel">
+    <selectKey keyProperty="tdkId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_seo_tdk (target_id, seo_title, seo_desc, 
+      seo_keywords, target_type, update_date
+      )
+    values (#{targetId,jdbcType=BIGINT}, #{seoTitle,jdbcType=VARCHAR}, #{seoDesc,jdbcType=VARCHAR}, 
+      #{seoKeywords,jdbcType=VARCHAR}, #{targetType,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgSeoTdkInModel">
+    <selectKey keyProperty="tdkId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_seo_tdk
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="targetId != null">
+        target_id,
+      </if>
+      <if test="seoTitle != null">
+        seo_title,
+      </if>
+      <if test="seoDesc != null">
+        seo_desc,
+      </if>
+      <if test="seoKeywords != null">
+        seo_keywords,
+      </if>
+      <if test="targetType != null">
+        target_type,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="targetId != null">
+        #{targetId,jdbcType=BIGINT},
+      </if>
+      <if test="seoTitle != null">
+        #{seoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDesc != null">
+        #{seoDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="seoKeywords != null">
+        #{seoKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="targetType != null">
+        #{targetType,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgSeoTdkInModel">
+    update kg_seo_tdk
+    <set>
+      <if test="targetId != null">
+        target_id = #{targetId,jdbcType=BIGINT},
+      </if>
+      <if test="seoTitle != null">
+        seo_title = #{seoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDesc != null">
+        seo_desc = #{seoDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="seoKeywords != null">
+        seo_keywords = #{seoKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="targetType != null">
+        target_type = #{targetType,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where tdk_id = #{tdkId,jdbcType=INTEGER}
+  </update>
+
+    <update id="editTdk" parameterType="com.kg.platform.model.in.KgSeoTdkInModel">
+        update kg_seo_tdk
+        <set>
+            <if test="seoTitle != null">
+                seo_title = #{seoTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="seoDesc != null">
+                seo_desc = #{seoDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="seoKeywords != null">
+                seo_keywords = #{seoKeywords,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where target_id = #{targetId,jdbcType=BIGINT} AND target_type = #{targetType,jdbcType=INTEGER}
+    </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgSeoTdkInModel">
+    update kg_seo_tdk
+    set target_id = #{targetId,jdbcType=BIGINT},
+      seo_title = #{seoTitle,jdbcType=VARCHAR},
+      seo_desc = #{seoDesc,jdbcType=VARCHAR},
+      seo_keywords = #{seoKeywords,jdbcType=VARCHAR},
+      target_type = #{targetType,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where tdk_id = #{tdkId,jdbcType=INTEGER}
+  </update>
+</mapper>

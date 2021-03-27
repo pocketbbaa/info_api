@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.SiteimageRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.SiteimageOutModel">
+    <id column="image_id" jdbcType="INTEGER" property="imageId" />
+    <result column="image_address" jdbcType="VARCHAR" property="imageAddress" />
+    <result column="image_type"  property="imageType" />
+    <result column="image_detail" jdbcType="VARCHAR" property="imageDetail" />
+    <result column="navigator_pos"  property="navigatorPos" />
+    <result column="image_pos"  property="imagePos" />
+    <result column="image_status"  property="imageStatus" />
+    <result column="image_order" jdbcType="INTEGER" property="imageOrder" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="article_id" property="articleId"/>
+    <result column="article_title" property="articleTitle"/>
+    <result column="adver_link" property="adverLink"/>
+
+    <result column="adver_style" property="adverStyle"/>
+    <result column="adver_img_type" property="adverImgType"/>
+    <result column="adver_title" property="adverTitle"/>
+    <result column="adver_intro" property="adverIntro"/>
+    <result column="adver_owner" property="adverOwner"/>
+    <result column="adver_target" property="adverTarget"/>
+    <result column="spread_time" property="spreadTime"/>
+    <result column="spread_time_s" property="spreadTimeS"/>
+    <result column="spread_time_e" property="spreadTimeE"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    image_id, image_address, image_type, image_detail, navigator_pos, image_pos, image_status, 
+    image_order, create_date, create_user, update_date, update_user,adver_link,
+    adver_style,adver_img_type,adver_title,adver_intro,adver_owner,adver_target,spread_time,spread_time_s,spread_time_e
+  </sql>
+  
+    <sql id="BaseList">
+    image_id, image_address, image_type, image_detail, navigator_pos, image_pos, image_status, 
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_siteimage
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll"  parameterType="com.kg.platform.model.in.SiteimageInModel" resultMap="BaseResultMap">
+select 
+    <include refid="Base_Column_List" />
+    from kg_siteimage ks
+    
+      WHERE ks.image_status=1
+    
+     <if test="navigator_pos != null and  navigator_pos!= ''">
+			AND ks.navigator_pos =#{navigator_pos}
+    </if>
+    ORDER BY ks.image_order ASC,ks.update_date DESC
+			
+	
+  </select>
+
+  <!--过滤掉广告-->
+  <select id="selectAllForApp"  parameterType="com.kg.platform.model.in.SiteimageInModel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_siteimage ks
+
+    WHERE ks.image_status=1 AND ks.image_type!=2
+
+    <if test="navigator_pos != null and  navigator_pos!= ''">
+      AND ks.navigator_pos =#{navigator_pos}
+    </if>
+    <if test="os_version != null and os_version==1">
+      AND ks.ios_switch =1
+    </if>
+    <if test="os_version != null and os_version==2">
+      AND ks.android_switch =1
+    </if>
+
+    ORDER BY ks.image_order ASC,ks.update_date DESC
+
+
+  </select>
+ 
+</mapper>

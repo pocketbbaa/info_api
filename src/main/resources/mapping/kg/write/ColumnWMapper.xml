@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.ColumnWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Column">
+    <id column="column_id" jdbcType="INTEGER" property="columnId" />
+    <result column="prev_column" jdbcType="INTEGER" property="prevColumn" />
+    <result column="column_name" jdbcType="VARCHAR" property="columnName" />
+    <result column="navigator_display" jdbcType="BIT" property="navigatorDisplay" />
+    <result column="display_status" jdbcType="BIT" property="displayStatus" />
+    <result column="column_order" jdbcType="INTEGER" property="columnOrder" />
+    <result column="display_mode" jdbcType="BIT" property="displayMode" />
+    <result column="seo_title" jdbcType="VARCHAR" property="seoTitle" />
+    <result column="seo_keyword" jdbcType="VARCHAR" property="seoKeyword" />
+    <result column="seo_description" jdbcType="VARCHAR" property="seoDescription" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="column_level" jdbcType="TINYINT" property="columnLevel" />
+    <result column="column_urlname" jdbcType="VARCHAR" property="columnUrlname" />
+  </resultMap>
+  <sql id="Base_Columnw_List">
+    column_id, prev_column, column_name, navigator_display, display_status, column_order, 
+    display_mode, seo_title, seo_keyword, seo_description, create_date, create_user, 
+    update_date, update_user, column_level,column_urlname
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_column
+    where column_id = #{columnId,jdbcType=INTEGER} OR prev_column = #{columnId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.Column">
+    insert into kg_column (column_id, prev_column, column_name, 
+      navigator_display, display_status, column_order, 
+      display_mode, seo_title, seo_keyword, 
+      seo_description, create_date, create_user, 
+      update_date, update_user, column_level
+      )
+    values (#{columnId,jdbcType=INTEGER}, #{prevColumn,jdbcType=INTEGER}, #{columnName,jdbcType=VARCHAR}, 
+      #{navigatorDisplay,jdbcType=BIT}, #{displayStatus,jdbcType=BIT}, #{columnOrder,jdbcType=INTEGER}, 
+      #{displayMode,jdbcType=BIT}, #{seoTitle,jdbcType=VARCHAR}, #{seoKeyword,jdbcType=VARCHAR}, 
+      #{seoDescription,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{columnLevel,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.Column">
+    insert into kg_column
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="columnId != null">
+        column_id,
+      </if>
+      <if test="prevColumn != null">
+        prev_column,
+      </if>
+      <if test="columnName != null">
+        column_name,
+      </if>
+      <if test="navigatorDisplay != null">
+        navigator_display,
+      </if>
+      <if test="displayStatus != null">
+        display_status,
+      </if>
+      <if test="columnOrder != null">
+        column_order,
+      </if>
+      <if test="displayMode != null">
+        display_mode,
+      </if>
+      <if test="seoTitle != null">
+        seo_title,
+      </if>
+      <if test="seoKeyword != null">
+        seo_keyword,
+      </if>
+      <if test="seoDescription != null">
+        seo_description,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="columnLevel != null">
+        column_level,
+      </if>
+      <if test="columnUrlname != null">
+        column_urlname
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="columnId != null">
+        #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="prevColumn != null">
+        #{prevColumn,jdbcType=INTEGER},
+      </if>
+      <if test="columnName != null">
+        #{columnName,jdbcType=VARCHAR},
+      </if>
+      <if test="navigatorDisplay != null">
+        #{navigatorDisplay,jdbcType=BIT},
+      </if>
+      <if test="displayStatus != null">
+        #{displayStatus,jdbcType=BIT},
+      </if>
+      <if test="columnOrder != null">
+        #{columnOrder,jdbcType=INTEGER},
+      </if>
+      <if test="displayMode != null">
+        #{displayMode,jdbcType=BIT},
+      </if>
+      <if test="seoTitle != null">
+        #{seoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="seoKeyword != null">
+        #{seoKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDescription != null">
+        #{seoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="columnLevel != null">
+        #{columnLevel,jdbcType=TINYINT},
+      </if>
+      <if test="columnUrlname != null">
+        #{columnUrlname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.Column">
+    update kg_column
+    <set>
+      <if test="prevColumn != null">
+        prev_column = #{prevColumn,jdbcType=INTEGER},
+      </if>
+      <if test="columnName != null">
+        column_name = #{columnName,jdbcType=VARCHAR},
+      </if>
+      <if test="navigatorDisplay != null">
+        navigator_display = #{navigatorDisplay,jdbcType=BIT},
+      </if>
+      <if test="displayStatus != null">
+        display_status = #{displayStatus,jdbcType=BIT},
+      </if>
+      <if test="columnOrder != null">
+        column_order = #{columnOrder,jdbcType=INTEGER},
+      </if>
+      <if test="displayMode != null">
+        display_mode = #{displayMode,jdbcType=BIT},
+      </if>
+      <if test="seoTitle != null">
+        seo_title = #{seoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="seoKeyword != null">
+        seo_keyword = #{seoKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDescription != null">
+        seo_description = #{seoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="columnLevel != null">
+        column_level = #{columnLevel,jdbcType=TINYINT},
+      </if>
+      <if test="columnUrlname != null">
+        column_urlname = #{columnUrlname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where column_id = #{columnId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.Column">
+    update kg_column
+    set prev_column = #{prevColumn,jdbcType=INTEGER},
+      column_name = #{columnName,jdbcType=VARCHAR},
+      navigator_display = #{navigatorDisplay,jdbcType=BIT},
+      display_status = #{displayStatus,jdbcType=BIT},
+      column_order = #{columnOrder,jdbcType=INTEGER},
+      display_mode = #{displayMode,jdbcType=BIT},
+      seo_title = #{seoTitle,jdbcType=VARCHAR},
+      seo_keyword = #{seoKeyword,jdbcType=VARCHAR},
+      seo_description = #{seoDescription,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      column_level = #{columnLevel,jdbcType=TINYINT}
+    where column_id = #{columnId,jdbcType=INTEGER}
+  </update>
+</mapper>

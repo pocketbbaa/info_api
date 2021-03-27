@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminAccountRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.AccountQueryResponse">
+    <id column="account_flow_id" jdbcType="VARCHAR" property="flowId" />
+    <id column="business_type_id" jdbcType="INTEGER" property="businessTypeId" />
+    <result column="bussiness_typename" jdbcType="VARCHAR" property="businessTypeName" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="freeze_amount" jdbcType="DECIMAL" property="freezeAmount" />
+    <result column="flow_date" jdbcType="TIMESTAMP" property="flowDate" />
+    <result column="user_phone" jdbcType="VARCHAR" property="mobile" />
+    <result column="user_email" jdbcType="VARCHAR" property="email" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="user_role" jdbcType="INTEGER" property="userRole" />
+    <result column="user_level" jdbcType="INTEGER" property="level" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+    <result column="bonus_total_person" jdbcType="INTEGER" property="bonusTotalPerson" />
+    <result column="poundage_amount" jdbcType="DECIMAL" property="poundageAmount" />
+    <result column="tx_address" jdbcType="VARCHAR" property="address" />
+    <result column="flow_detail" jdbcType="VARCHAR" property="flowDetail" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+  <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultMap="BaseResultMap">
+   SELECT a.flow_status,u.user_name,a.flow_detail,a.article_id,ka.article_title,a.tx_address,a.freeze_amount,a.poundage_amount, a.business_type_id, a.bonus_total_person,a.user_id, a.account_flow_id,b.business_typename,a.amount,a.account_amount,a.flow_date,a.user_phone,a.user_email,(
+	SELECT s.flow_status_name
+	FROM kg_account_flow_status s
+	WHERE s.flow_status_id = a.flow_status) STATUS,u.user_role,u.user_level
+	FROM kg_account_flow a
+	LEFT JOIN kg_user u ON(a.user_id = u.user_id)
+	LEFT JOIN kg_account_businesstype b ON (a.business_type_id = b.business_type_id)
+	left join kg_article ka on (a.article_id = ka.article_id)
+	WHERE 1 = 1
+ <if test="flowId != null and flowId != ''">
+      <bind name="flowIdLike" value="'%'+flowId+'%'"/>
+      and a.account_flow_id like #{flowIdLike}
+    </if>
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and a.user_email like #{emailLike}
+    </if>
+    <if test="nickName != null and nickName != ''">
+      <bind name="nickName" value="'%'+nickName+'%'"/>
+      and u.user_name like #{nickName}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="businessTypeId != null">
+      and a.business_type_id = #{businessTypeId}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.flow_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.flow_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="minAmount != null">
+      <![CDATA[ and a.amount >= #{minAmount,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="maxAmount != null">
+      <![CDATA[ and a.amount <= #{maxAmount,jdbcType=DECIMAL}]]>
+    </if>
+   <if test="searchType != null">
+      and a.business_type_id in (70,80,90,310,320,330,340,345,350,510,520,540,550,560,570) and a.user_id!=-1
+    </if>
+    order by a.flow_date desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultType="java.lang.Long">
+    select
+    count(a.account_flow_id)
+    from kg_account_flow a 
+    LEFT JOIN kg_user u ON(a.user_id = u.user_id)
+    where 1 = 1
+    <if test="flowId != null and flowId != ''">
+      <bind name="flowIdLike" value="'%'+flowId+'%'"/>
+      and a.account_flow_id like #{flowIdLike}
+    </if>
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and a.user_email like #{emailLike}
+    </if>
+    <if test="nickName != null and nickName != ''">
+      <bind name="nickName" value="'%'+nickName+'%'"/>
+      and u.user_name like #{nickName}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="businessTypeId != null">
+      and a.business_type_id = #{businessTypeId}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.flow_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.flow_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="minAmount != null">
+      <![CDATA[ and a.amount >= #{minAmount,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="maxAmount != null">
+      <![CDATA[ and a.amount <= #{maxAmount,jdbcType=DECIMAL}]]>
+    </if>
+   <if test="searchType != null">
+      and a.business_type_id in (70,80,90,310,320,330,340,345,350,510,520,540,550,560,570) and a.user_id!=-1
+    </if>
+  </select>
+  
+  <select id="selectSumByCondition" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultType="java.lang.Double">
+    select
+    ifnull(sum(account_amount),0)+ifnull(sum(freeze_amount),0)
+    from kg_account_flow a where 1 = 1
+    <if test="flowId != null and flowId != ''">
+      <bind name="flowIdLike" value="'%'+flowId+'%'"/>
+      and a.account_flow_id like #{flowIdLike}
+    </if>
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and a.user_email like #{emailLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="businessTypeId != null">
+      and a.business_type_id = #{businessTypeId}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.flow_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.flow_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="minAmount != null">
+      <![CDATA[ and a.amount >= #{minAmount,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="maxAmount != null">
+      <![CDATA[ and a.amount <= #{maxAmount,jdbcType=DECIMAL}]]>
+    </if>
+   <if test="searchType != null">
+      and a.business_type_id in  (70,80,90,310,320,330,340,345,350,510,520,540,550,560,570) and a.user_id!=-1
+    </if>
+  </select>
+  
+  <select id="selectTxbFlow" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultMap="BaseResultMap">
+    select a.flow_status,u.user_name,a.flow_detail,a.tx_address,a.poundage_amount, a.business_type_id, a.bonus_total_person,a.user_id, a.account_flow_id,b.business_typename,a.amount,a.account_amount,a.flow_date,a.user_phone,a.user_email,(select s.flow_status_name from kg_account_flow_status s where s.flow_status_id = a.flow_status) status,u.user_role,u.user_level from kg_account_flow_txb a left join kg_user u on(a.user_id = u.user_id) left join kg_account_businesstype b on (a.business_type_id = b.business_type_id) where 1 = 1
+    <if test="flowId != null and flowId != ''">
+      <bind name="flowIdLike" value="'%'+flowId+'%'"/>
+      and a.account_flow_id like #{flowIdLike}
+    </if>
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and a.user_email like #{emailLike}
+    </if>
+    <if test="nickName != null and nickName != ''">
+      <bind name="nickName" value="'%'+nickName+'%'"/>
+      and u.user_name like #{nickName}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="businessTypeId != null">
+      and a.business_type_id = #{businessTypeId}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.flow_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.flow_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="minAmount != null">
+      <![CDATA[ and a.amount >= #{minAmount,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="maxAmount != null">
+      <![CDATA[ and a.amount <= #{maxAmount,jdbcType=DECIMAL}]]>
+    </if>
+     <if test="searchType != null">
+      and a.business_type_id in  (1000,1510,1520,1530,1560,1570) and a.user_id!=-1
+    </if>
+    order by a.flow_date desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectTxbCount" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultType="java.lang.Long">
+    select
+    count(a.account_flow_id)
+    from kg_account_flow_txb a 
+    left join kg_user u on(a.user_id = u.user_id)
+    where 1 = 1
+    <if test="flowId != null and flowId != ''">
+      <bind name="flowIdLike" value="'%'+flowId+'%'"/>
+      and a.account_flow_id like #{flowIdLike}
+    </if>
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and a.user_email like #{emailLike}
+    </if>
+    <if test="nickName != null and nickName != ''">
+      <bind name="nickName" value="'%'+nickName+'%'"/>
+      and u.user_name like #{nickName}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="businessTypeId != null">
+      and a.business_type_id = #{businessTypeId}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.flow_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.flow_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="minAmount != null">
+      <![CDATA[ and a.amount >= #{minAmount,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="maxAmount != null">
+      <![CDATA[ and a.amount <= #{maxAmount,jdbcType=DECIMAL}]]>
+    </if>
+     <if test="searchType != null">
+      and a.business_type_id in  (1000,1510,1520,1530,1560,1570) and a.user_id!=-1
+    </if>
+  </select>
+
+
+    <select id="selectRitFlow" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultMap="BaseResultMap">
+        select a.flow_status,u.user_name,a.flow_detail,a.tx_address,a.poundage_amount, a.business_type_id, a.bonus_total_person,a.user_id, a.account_flow_id,b.business_typename,a.amount,a.account_amount,a.flow_date,a.user_phone,a.user_email,(select s.flow_status_name from kg_account_flow_status s where s.flow_status_id = a.flow_status) status,u.user_role,u.user_level from kg_account_flow_rit a left join kg_user u on(a.user_id = u.user_id) left join kg_account_businesstype b on (a.business_type_id = b.business_type_id) where 1 = 1
+        <if test="flowId != null and flowId != ''">
+            <bind name="flowIdLike" value="'%'+flowId+'%'"/>
+            and a.account_flow_id like #{flowIdLike}
+        </if>
+        <if test="email != null and email != ''">
+            <bind name="emailLike" value="'%'+email+'%'"/>
+            and a.user_email like #{emailLike}
+        </if>
+        <if test="nickName != null and nickName != ''">
+            <bind name="nickName" value="'%'+nickName+'%'"/>
+            and u.user_name like #{nickName}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            <bind name="mobileLike" value="'%'+mobile+'%'"/>
+            and a.user_phone like #{mobileLike}
+        </if>
+        <if test="businessTypeId != null">
+            and a.business_type_id = #{businessTypeId}
+        </if>
+        <if test="startDate != null">
+            <![CDATA[ and a.flow_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="endDate != null">
+            <![CDATA[ and a.flow_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="minAmount != null">
+            <![CDATA[ and a.amount >= #{minAmount,jdbcType=DECIMAL}]]>
+        </if>
+        <if test="maxAmount != null">
+            <![CDATA[ and a.amount <= #{maxAmount,jdbcType=DECIMAL}]]>
+        </if>
+        <if test="searchType != null">
+            and a.business_type_id in  (2000) and a.user_id!=-1
+        </if>
+        order by a.flow_date desc
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectRitCount" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultType="java.lang.Long">
+        select
+        count(a.account_flow_id)
+        from kg_account_flow_rit a
+        left join kg_user u on(a.user_id = u.user_id)
+        where 1 = 1
+        <if test="flowId != null and flowId != ''">
+            <bind name="flowIdLike" value="'%'+flowId+'%'"/>
+            and a.account_flow_id like #{flowIdLike}
+        </if>
+        <if test="email != null and email != ''">
+            <bind name="emailLike" value="'%'+email+'%'"/>
+            and a.user_email like #{emailLike}
+        </if>
+        <if test="nickName != null and nickName != ''">
+            <bind name="nickName" value="'%'+nickName+'%'"/>
+            and u.user_name like #{nickName}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            <bind name="mobileLike" value="'%'+mobile+'%'"/>
+            and a.user_phone like #{mobileLike}
+        </if>
+        <if test="businessTypeId != null">
+            and a.business_type_id = #{businessTypeId}
+        </if>
+        <if test="startDate != null">
+            <![CDATA[ and a.flow_date >= #{startDate,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="endDate != null">
+            <![CDATA[ and a.flow_date <= #{endDate,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="minAmount != null">
+            <![CDATA[ and a.amount >= #{minAmount,jdbcType=DECIMAL}]]>
+        </if>
+        <if test="maxAmount != null">
+            <![CDATA[ and a.amount <= #{maxAmount,jdbcType=DECIMAL}]]>
+        </if>
+        <if test="searchType != null">
+            and a.business_type_id in  ( 2000 ) and a.user_id!=-1
+        </if>
+    </select>
+
+
+
+  <!-- 查询用户奖励氪金总额和钛值总额 -->
+  <select id="sumUserBonus" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultType="com.kg.platform.model.response.admin.TotalBonusQueryResponse">
+        SELECT  if(sum(kf.account_amount) is null ,0,ROUND(sum(kf.account_amount),3)) as totalTv from  kg_account_flow kf
+        where kf.business_type_id in  (70,80,90,310,320,330,340,345,350,510,520,540,550,560,570)
+        and kf.user_phone=#{mobile}
+  </select>
+
+    <!--<select id="sumUserBonus" parameterType="com.kg.platform.model.request.admin.AccountQueryRequest" resultType="com.kg.platform.model.response.admin.TotalBonusQueryResponse">
+     SELECT
+      (
+        SELECT  if(sum(kf.account_amount) is null ,0,ROUND(sum(kf.account_amount),3))  from  kg_account_flow kf
+        where kf.business_type_id in  (70,80,90,310,320,330,340,345,350,510,520,540,550,560,570)
+        and kf.user_phone=#{mobile}
+      ) as totalTv
+      ,
+      (
+         SELECT if(sum(kft.account_amount) is null ,0,ROUND(sum(kft.account_amount),3)) from  kg_account_flow_txb kft
+         where kft.business_type_id in  (1000,1510,1520,1560,1570)
+         and kft.user_phone=#{mobile}
+      )  as totalKg
+     from  kg_sys_user limit 1
+  </select>-->
+ 
+</mapper>

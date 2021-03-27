@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.ThirdPartyLoginWMapper">
+
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.ThirdPartyLoginInModel">
+    insert into kg_user_third_login
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="thirdPartyId != null">
+        third_login_id,
+      </if>
+      <if test="openId != null">
+        open_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="openType != null">
+        open_type,
+      </if>
+      <if test="expireTime != null">
+        expire_time,
+      </if>
+      <if test="accessToken != null">
+        access_token,
+      </if>
+      <if test="bindTime != null">
+        bind_time,
+      </if>
+      <if test="refreshAccessToken != null">
+        refresh_access_token,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="thirdPartyId != null">
+        #{thirdPartyId},
+      </if>
+      <if test="openId != null">
+        #{openId},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="openType != null">
+        #{openType},
+      </if>
+      <if test="expireTime != null">
+        #{expireTime},
+      </if>
+       <if test="accessToken != null">
+        #{accessToken},
+      </if>
+      <if test="bindTime != null">
+        #{bindTime},
+      </if>
+       <if test="refreshAccessToken != null">
+         #{refreshAccessToken},
+      </if>
+       <if test="nickName != null">
+         #{nickName},
+      </if>
+    </trim>
+  </insert>
+
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.ThirdPartyLoginInModel">
+    update kg_user_third_login
+    <set>
+      <if test="thirdPartyId != null">
+        third_login_id = #{thirdPartyId},
+      </if>
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="openType != null">
+        open_type = #{openType,jdbcType=VARCHAR},
+      </if>
+      <if test="expireTime != null">
+        expire_time = #{expireTime},
+      </if>
+      <if test="accessToken != null">
+        access_token = #{accessToken},
+      </if>
+      <if test="bindTime != null">
+        bind_Time = #{bindTime},
+      </if>
+      <if test="refreshAccessToken != null">
+        refresh_access_token= #{refreshAccessToken},
+      </if>
+       <if test="nickName != null">
+        nick_name= #{nickName},
+      </if>
+    </set>
+    where third_login_id = #{userId}
+  </update>
+  
+   <!-- 解除账号绑定 -->
+   <delete id="unbindAccount" parameterType="com.kg.platform.model.in.ThirdPartyLoginInModel">
+    delete from kg_user_third_login
+    where user_id = #{userId} and open_type=#{openType}
+  </delete>
+
+ 
+ 
+</mapper>

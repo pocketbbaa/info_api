@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://code.alibabatech.com/schema/dubbo 
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath*:dubbo-api.properties"/>
+
+    <dubbo:application name="${dubbo.application.provider.name}"/>
+    <dubbo:registry protocol="${dubbo.registry.protocol}" address="${dubbo.registry.address}" timeout="30000"/>
+
+    <dubbo:reference id="buryingpointDubboService" check="false"
+                     interface="com.kg.search.dubboservice.BuryingpointDubboService" timeout="${dubbo.timeout}"/>
+    <dubbo:reference id="adverService" check="false" interface="com.kg.ad.dubboservice.AdverService"
+                     timeout="${dubbo.timeout}"/>
+
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}"/>
+    <dubbo:service interface="com.kg.platform.service.m.MArticleService" ref="mArticleService" timeout="30000"/>
+    <dubbo:service interface="com.kg.platform.service.m.MUserService" ref="mUserService" timeout="30000"/>
+    <dubbo:service interface="com.kg.platform.service.m.MImgStreamService" ref="mImgStreamService" timeout="30000"/>
+
+    <dubbo:service interface="com.kg.platform.service.m.CloudPackageService" ref="cloudPackageService" timeout="30000"/>
+    <dubbo:service interface="com.kg.platform.service.m.CloudOrderService" ref="cloudOrderService" timeout="30000"/>
+</beans>

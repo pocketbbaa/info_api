@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.UserProfileRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.UserProfileOutModel">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="role_id" jdbcType="TINYINT" property="roleId" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="county" jdbcType="VARCHAR" property="county" />
+    <result column="resume" jdbcType="VARCHAR" property="resume" />
+    <result column="role_define" jdbcType="VARCHAR" property="roleDefine" />
+    <result column="column_name" jdbcType="VARCHAR" property="columnName" />
+    <result column="column_intro" jdbcType="VARCHAR" property="columnIntro" />
+    <result column="column_avatar" jdbcType="VARCHAR" property="columnAvatar" />
+    <result column="column_country" jdbcType="VARCHAR" property="columnCountry" />
+    <result column="column_province" jdbcType="VARCHAR" property="columnProvince" />
+    <result column="column_city" jdbcType="VARCHAR" property="columnCity" />
+    <result column="column_county" jdbcType="VARCHAR" property="columnCounty" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="idcard_pic" jdbcType="VARCHAR" property="idcardPic" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="other_pic" jdbcType="VARCHAR" property="otherPic" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="license_pic" jdbcType="VARCHAR" property="licensePic" />
+    <result column="site_link" jdbcType="VARCHAR" property="siteLink" />
+    <result column="profilename" property="profilename"/>
+    <result column="profileavatar" property="profileavatar"/>
+     <result column="profilename" property="profilename"/>
+    <result column="profileavatar" property="profileavatar"/>
+    <result column="columnintro" property="columnintro" />
+    <result  column="columnname" property="columnname"/>
+    <result   column="article_id" property="article_id"/>
+    <result   column="article_title" property="article_title"/>
+    <result   column="bowse_num" property="bowse_num"/>
+    <result   column="update_date" property="update_date"/>
+    <result   column="browse_num" property="bowse_num"/>
+    <result  column="collect_num" property="collect"/>
+    <result  column="comments" property="comments"/>
+    <result column="pbowsenum" property="pbowsenum"/>
+    <result  column="artsum" property="artsum"/>
+    <result  column="total" property="total"/>
+    <result column="user_name" property="username"/>
+    <result column="idcard_front" property="idcardFront"/>
+    <result column="idcard_back" property="idcardBack"/>
+    <result column="create_user" property="createUser"/>
+    <result column="realname_authed" property="realnameAuthed"/>
+    <result column="tradepassword_set" property="tradepasswordSet"/>
+    <result column="create_date" property="createDate"/>
+    <result column="user_role" property="userRole"/>
+    <result column="kgcolumnname" property="kgcolumnname"/>
+
+    <result column="kgcolumnId" property="kgcolumnId"/>
+    <result column="second_column" property="secondColumn"/>
+      <result column="audit_date" property="auditDate"/>
+      <result column="article_img_size" property="articleImgSize"/>
+      <result column="article_image" property="articleImage"/>
+
+     <result column="concernUserStatus" property="concernUserStatus"/>
+     <result column="concernedStatus" property="concernedStatus"/>
+     <result column="regist_channel" property="registChannel"/>
+      <result column="publish_kind" property="publishKind"/>
+      <result column="column_level" jdbcType="TINYINT" property="columnLevel"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, role_id, avatar, sex, country, province, city, county, resume, role_define, 
+    column_name, column_intro, column_avatar, column_country, column_province, column_city, 
+    column_county, real_name, idcard, idcard_pic, email, mobile, other_pic, company_name, 
+    license_pic, site_link, idcard_front, idcard_back, other_pic,regist_channel,column_level
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_user_profile
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+
+<select id="selectByuserprofileId"  parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+  SELECT kg.article_image,kg.article_id,kg.article_title,kas.browse_num,kg.update_date,kg.second_column,
+         kcn.column_id kgcolumnId,kcn.column_name kgcolumnname, ku.column_name,ku.column_avatar ,ku.column_intro ,
+         ku.user_id,kg.create_user,kg.audit_date,kg.article_img_size,kg.publish_kind
+  FROM
+ kg_article  kg ,kg_column kcn,kg_user_profile ku,kg_article_statistics kas
+ WHERE   
+   kg.display_status!=4 AND kg.publish_status=1 and
+ kg.create_user=ku.user_id AND ku.user_id=#{userId,jdbcType=BIGINT} AND kas.article_id=kg.article_id
+ AND kcn.column_id=kg.column_id    ORDER  BY  kas.browse_num DESC LIMIT 3
+  </select>
+
+    <select id="selectByuserprofileIdWithHotAuthor"  parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+        SELECT kg.article_id,kg.article_title,kg.update_date,kg.audit_date,kg.column_id kgcolumnId,
+		(select column_name from kg_column where column_id=kg.column_id) kgcolumnname
+		FROM kg_article kg
+		WHERE kg.display_status!=4 AND kg.publish_status=1 AND
+        kg.create_user=#{userId,jdbcType=BIGINT} ORDER  BY  kg.audit_date DESC LIMIT 1
+    </select>
+
+  <select id="bowsenumCount"  parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+  
+  	 SELECT SUM( kas.browse_num) AS pbowsenum,COUNT(ka.article_id) AS artsum
+  	 FROM  kg_article ka
+  	 LEFT JOIN kg_article_statistics kas ON kas.article_id=ka.article_id
+  	 WHERE
+  	 ka.create_user=#{userId,jdbcType=BIGINT}
+  	 AND ka.display_status != 4 and  ka.publish_status=1
+  	 
+  </select>
+
+
+  <!-- 统计收藏 -->
+  <select id="countCollect" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+    SELECT SUM(collect_num) AS collect_num  FROM kg_article_statistics kas WHERE kas.article_id IN( SELECT ka.article_id FROM kg_article ka WHERE ka.create_user=#{userId,jdbcType=BIGINT} AND ka.display_status != 4 AND ka.publish_status = 1)
+  
+  </select>
+
+  <!-- 统计评论 -->
+  <select id="countComments" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+      SELECT COUNT(kum.comment_id) AS comments FROM    kg_user_comment  kum WHERE  kum.comment_status=1 AND kum.display_status=1 AND  kum.article_id IN( SELECT ka.article_id FROM kg_article ka  WHERE ka.create_user=#{userId,jdbcType=BIGINT} AND ka.display_status != 4 AND ka.publish_status = 1)
+  </select>
+
+
+  <!-- 首页热门作者 排序统计-->
+
+  <select id="getUserproFile" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+      SELECT * FROM (
+      SELECT kup.column_name,kup.column_avatar, kup.column_intro,kup.user_id,ku.user_order,ku.hot_user,ku.create_date,
+     (SELECT COUNT(kal.article_id) FROM kg_article kal WHERE kal.publish_status=1 AND kal.create_user=ku.user_id AND kal.display_status !=4) AS artsum,
+      (SELECT ifnull(SUM(kas.browse_num),0) FROM kg_article_statistics kas WHERE  ku.user_id=kas.create_user ) AS browse_num
+      FROM
+      kg_user ku,kg_user_profile kup
+      WHERE ku.hot_user =1  and ku.lock_status=1
+      AND kup.user_id=ku.user_id
+     GROUP BY ku.user_id )b ORDER BY b.user_order ASC,b.browse_num DESC LIMIT 10
+  </select>
+
+    <select id="getAppUserproFile" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+    SELECT * FROM (
+        SELECT kup.column_name,kup.column_avatar, kup.column_intro,kup.user_id,ku.user_order,ku.hot_user,ku.create_date,ku.column_authed,ku.user_role,
+        if(ku.user_role!=1 and ku.column_authed=1,1,0) as vipTag,
+      (SELECT ifnull(SUM(kas.browse_num),0) FROM kg_article_statistics kas WHERE  ku.user_id=kas.create_user ) AS browse_num
+     FROM
+     kg_user ku,kg_user_profile kup
+     WHERE ku.hot_user =1  and ku.lock_status=1
+     AND kup.user_id=ku.user_id
+    GROUP BY ku.user_id ) b ORDER BY b.user_order ASC,b.browse_num DESC LIMIT 10
+
+    <!--SELECT kup.column_name,kup.column_avatar, kup.column_intro,kup.user_id,ku.user_order,ku.hot_user,ku.create_date,ku.column_authed,ku.user_role,
+     if(ku.user_role!=1 and ku.column_authed=1,1,0) as vipTag
+     from
+    kg_user ku,kg_user_profile kup
+    WHERE ku.hot_user =1  and ku.lock_status=1
+    AND kup.user_id=ku.user_id
+    ORDER BY user_order
+    LIMIT 10-->
+   </select>
+
+
+   <select id="getBowsnum" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+  SELECT ku.user_id ,ku.user_name , kup.column_name,kup.column_avatar, kup.column_intro,
+(SELECT COUNT(kal.article_id) FROM kg_article kal WHERE kal.publish_status=1 AND kal.create_user=ku.user_id ) AS artsum,
+   (SELECT ifnull(SUM(kas.browse_num),0)  FROM kg_article_statistics kas WHERE  ku.user_id=kas.create_user) AS browse_num
+ FROM
+ kg_user ku left join
+ kg_user_profile kup
+ on ku.user_id=kup.user_id
+ where ku.hot_user=0  and ku.lock_status=1 and ku.user_role !=1 GROUP BY ku.user_id ORDER BY browse_num DESC
+  LIMIT  #{limit}
+
+ </select>
+   <select id="getAppBowsnum" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+       SELECT ku.user_id ,ku.user_name , kup.column_name,kup.column_avatar, kup.column_intro,ku.column_authed,
+       (SELECT count(concern_id) from kg_user_concern where user_id=#{userId,jdbcType=BIGINT} and concern_user_id=ku.user_id) AS concernStatus,
+       (SELECT ifnull(SUM(kas.browse_num),0)  FROM kg_article_statistics kas WHERE  ku.user_id=kas.create_user) AS browse_num
+       FROM
+        kg_user ku left join
+       kg_user_profile kup
+        on ku.user_id=kup.user_id
+       where ku.hot_user=0  and ku.lock_status=1 and ku.user_role !=1 GROUP BY ku.user_id ORDER BY browse_num DESC
+      LIMIT  #{limit}
+   </select>
+
+
+ <select id="countArtsum" parameterType="com.kg.platform.model.in.UserProfileInModel" resultType="java.lang.Integer">
+   SELECT  COUNT(article_id)  FROM kg_article_statistics kas  WHERE kas.create_user=#{userId,jdbcType=BIGINT}
+ </select>
+
+
+
+<!-- 获取基本资料-->
+<select id="getPersonal" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+	SELECT kup.*,ku.user_name AS username FROM 
+	kg_user_profile kup  LEFT JOIN  kg_user ku ON  ku.user_id=kup.user_id  
+	WHERE  kup.user_id=#{userId}
+</select>
+
+<!-- 个人专栏 -->
+<select id="getIndividual" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+SELECT kup.*,ku.user_name AS username FROM 
+	kg_user_profile kup  LEFT JOIN  kg_user ku ON  ku.user_id=kup.user_id  
+	WHERE  kup.user_id=#{userId}
+</select>
+
+<!-- 媒体 专栏-->
+
+<select id="getMedia" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+SELECT kup.*,ku.user_name AS username,ku.realname_authed,ku.tradepassword_set,ku.user_role FROM 
+	kg_user_profile kup  LEFT JOIN  kg_user ku ON  ku.user_id=kup.user_id  
+	WHERE  kup.user_id=#{userId}
+
+</select>
+
+<!-- 企业 -->
+<select id="getEnterprise" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+SELECT kup.*,ku.user_name AS username FROM 
+	kg_user_profile kup  LEFT JOIN  kg_user ku ON  ku.user_id=kup.user_id  
+	WHERE  kup.user_id=#{userId}
+
+
+</select>
+
+<select id="checkProfile" parameterType="com.kg.platform.model.in.UserProfileInModel" resultType="java.lang.Integer">
+SELECT COUNT(user_id) FROM kg_user_profile  us  WHERE 1=1   AND us.user_id=#{userId}
+</select>
+
+<select id="getByIdProfile" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+
+ SELECT kup.avatar,kup.resume,ku.user_name,ku.user_id,kup.province,kup.city,ku.user_role,kup.column_avatar FROM kg_user_profile kup 
+ LEFT JOIN kg_user ku ON kup.user_id=ku.user_id  WHERE kup.user_id=#{userId}
+</select>
+
+
+   <select id="countArticle" parameterType="com.kg.platform.model.in.UserProfileInModel" resultType="java.lang.Integer">
+   	SELECT COUNT(kga.article_id) FROM kg_article kga WHERE kga.create_user=#{userId}
+   </select>
+
+    <select id="selectBaseInfoByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select u.user_name,p.user_id,p.avatar,p.resume,p.column_intro,p.column_avatar,p.column_name
+        from kg_user u
+        left join kg_user_profile p on u.user_id = p.user_id
+        where u.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getIdentityByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
+        select column_identity
+        from kg_user_profile
+        where user_id = #{userId}
+    </select>
+
+    <select id = "selectInfoByColumnName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(user_id)
+        FROM  kg_user_profile
+        WHERE column_name = #{columnName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectMoreUserProfileInfo" parameterType="java.util.List" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM kg_user_profile WHERE user_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

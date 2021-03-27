@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration debug="false" scan="true">
+    <property name="log.path" value="/data/logs/"/>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${log.path}/kgapi/apiall.%d{yyyy-MM-dd}.log
+            </FileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="api-data" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="com.kg.platform.common.filter.ThresholdFilter">
+            <level>warn</level>
+            <rebel>true</rebel>
+        </filter>
+        <file>${log.path}/kgapi/api-data.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${log.path}/kgapi/api-data-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="api-error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="com.kg.platform.common.filter.ThresholdFilter"/>
+        <file>${log.path}/kgapi/api-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/kgapi/api-error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.kg" level="info" additivity="false">
+        <appender-ref ref="api-data"/>
+        <appender-ref ref="api-error"/>
+        <appender-ref ref="stdout"/>
+    </logger>
+
+    <logger name="org.springframework" level="warn"/>
+    <logger name="com.alibaba" level="info"/>
+    <logger name="org.apache" level="warn"/>
+    <logger name="RocketmqClient" level="OFF" additivity="false"/>
+    <logger name="RocketmqRemoting" level="warn"/>
+    <logger name="com.xxl.job" level="warn"/>
+
+    <root level="info">
+        <appender-ref ref="stdout"/>
+    </root>
+
+</configuration>

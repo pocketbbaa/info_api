@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.ColumnRMapper">
+  <resultMap id="BaseColumnMap" type="com.kg.platform.model.out.ColumnOutModel">
+    <id column="column_id" jdbcType="INTEGER" property="columnId" />
+    <result column="prev_column" jdbcType="INTEGER" property="prevColumn" />
+    <result column="column_name" jdbcType="VARCHAR" property="columnName" />
+    <result column="navigator_display" jdbcType="BIT" property="navigatorDisplay" />
+    <result column="display_status" jdbcType="BIT" property="displayStatus" />
+    <result column="column_order" jdbcType="INTEGER" property="columnOrder" />
+    <result column="display_mode" jdbcType="BIT" property="displayMode" />
+    <result column="seo_title" jdbcType="VARCHAR" property="seoTitle" />
+    <result column="seo_keyword" jdbcType="VARCHAR" property="seoKeyword" />
+    <result column="seo_description" jdbcType="VARCHAR" property="seoDescription" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="column_level" jdbcType="TINYINT" property="columnLevel" />
+    <result column="column_urlname" jdbcType="VARCHAR" property="columnUrlName" />
+    
+    <!-- 暂时先字段影射 首页二级频道文章字段 -->
+    <result column="article_title" property="article_title"/>
+     <result column="article_image" property="article_image"/>
+     <result column="article_id" property="article_id"/>
+  </resultMap>
+  <sql id="Base_Columnr_List">
+    column_id, prev_column, column_name, navigator_display, display_status, column_order, 
+    display_mode, seo_title, seo_keyword, seo_description, create_date, create_user, 
+    update_date, update_user, column_level
+  </sql>
+  <select id="selectByColumnKey" parameterType="java.lang.Integer" resultMap="BaseColumnMap">
+    select 
+    <include refid="Base_Columnr_List" />
+    from kg_column
+    where column_id = #{columnId,jdbcType=INTEGER}
+  </select>
+  
+  
+   <select id="selectByname" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseColumnMap">
+    select 
+    <include refid="Base_Columnr_List" />
+    from kg_column
+    where column_id = #{columnId,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+    <select id="selectColumnAll" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseColumnMap">
+  SELECT 
+  
+  	 <include refid="Base_Columnr_List" />
+ 
+  FROM kg_column kg WHERE  ( kg.navigator_display=#{navigatorDisplay}  or kg.navigator_display=1 )
+  AND kg.display_status=1   AND kg.column_level=1
+  
+   <if test=" null != prevColumn and '' != prevColumn">
+	     and prev_column = #{prevColumn,jdbcType=INTEGER}
+	 </if>
+  
+  ORDER BY kg.column_order  ASC , update_date desc
+  
+  </select>
+  
+  
+  <!-- 对应的二级导航 -->
+  <select id="getSecondColumn" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseColumnMap">
+  SELECT <include refid="Base_Columnr_List" />
+  
+   FROM kg_column kg  WHERE  ( kg.navigator_display=#{navigatorDisplay}  or kg.navigator_display=1 )
+     AND kg.column_level=2
+   
+   AND kg.display_status=1 ORDER BY kg.column_order  ASC, update_date desc
+  
+  </select>
+  
+  
+  <select id="selectColumnByName" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseColumnMap">
+    SELECT
+
+    <include refid="Base_Columnr_List" />
+
+    FROM kg_column kg WHERE kg.column_name = #{name,jdbcType = VARCHAR}
+
+  </select>
+
+  <select id="getSecondaryAll" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseColumnMap">
+  
+  	SELECT   <include refid="Base_Columnr_List" />  FROM kg_column kc WHERE kc.display_mode=2 AND kc.display_status=1 ORDER BY kc.column_order 
+  
+  </select>
+  
+  
+  <select id="getColumnarticleId" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseColumnMap">
+  	SELECT ka.article_title,ka.article_image,ka.article_id FROM kg_article ka WHERE ka.column_id=#{columnId} ORDER BY  ka.update_date DESC LIMIT 5
+  
+  </select>
+  
+  <select id="getsecondColumnName" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseColumnMap">
+  
+     	SELECT <include refid="Base_Columnr_List" />
+     	 FROM kg_column ka WHERE ka.prev_column=#{columnId}   AND ka.column_id=#{secondColumn}
+  
+  </select>
+ 
+ 
+   <select id="getSecondColumnByColumnId" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseColumnMap">
+  SELECT <include refid="Base_Columnr_List" />
+  
+   FROM kg_column kg  WHERE kg.prev_column=#{columnId} and kg.column_level=2
+   
+   AND kg.display_status=1 ORDER BY kg.column_order  ASC
+  
+  
+  </select>
+
+  <!-- app首页一级栏目-->
+  <select id="appSelectFistColumn" resultMap="BaseColumnMap">
+    SELECT column_id,column_name,column_urlname from kg_column  where column_level=1 and display_status=1 and  navigator_display in(1,2,3) ORDER BY column_order  ASC , update_date desc
+  </select>
+  <!-- app首页二级栏目-->
+  <select id="appSelectSecondColumn" resultMap="BaseColumnMap">
+    SELECT column_id,column_name,prev_column,column_urlname from kg_column as kc WHERE kc.prev_column in (SELECT column_id from kg_column as kg where kg.column_level=1 and kg.display_status=1 and  navigator_display in(1,3))
+       and kc.display_status=1
+  </select>
+
+  <select id="appSelectFistColumnForSitemap" resultMap="BaseColumnMap">
+    SELECT column_urlname from kg_column  where column_level=1 and display_status=1 and  navigator_display in(1,2,3) ORDER BY column_order  ASC , update_date desc
+  </select>
+  <select id="appSelectSecondColumnForSitemap" resultMap="BaseColumnMap">
+    SELECT column_urlname from kg_column as kc WHERE kc.prev_column in (SELECT column_id from kg_column as kg where kg.column_level=1 and kg.display_status=1 and  navigator_display in(1,3))
+  </select>
+
+  <select id="updateGlobalProfile" >
+        update kg_rule set rule = #{rule} where name = #{name}
+    </select>
+
+  <select id="getProfile" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select * from kg_rule where name = #{name}
+  </select>
+</mapper>

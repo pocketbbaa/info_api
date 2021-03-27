@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.SysUserRMapper">
+
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SysUser">
+    <id column="sys_user_id" jdbcType="BIGINT" property="sysUserId" />
+    <result column="post_id" jdbcType="INTEGER" property="postId" />
+    <result column="sys_user_name" jdbcType="VARCHAR" property="sysUserName" />
+    <result column="sys_user_password" jdbcType="VARCHAR" property="sysUserPassword" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+    <result column="user_realname" jdbcType="VARCHAR" property="userRealname" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="kg_user_id" jdbcType="VARCHAR" property="kgUserId" />
+    <result column="kg_user_name" jdbcType="VARCHAR" property="kgUserName" />
+    <result column="user_status" jdbcType="BIT" property="status" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    u.sys_user_id, post_id, sys_user_name, sys_user_password, user_mobile, user_realname,
+    (select group_concat(user_name) from kg_user where user_id in(select kg_user_id from kg_sys_user_user where sys_user_id=u.sys_user_id)) kg_user_name, 
+    (select group_concat(kg_user_id) from kg_sys_user_user where sys_user_id=u.sys_user_id) kg_user_id, 
+    create_date, create_user, update_date, update_user,user_status
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_sys_user u
+    where sys_user_id = #{sysUserId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUsernameAndPassword" parameterType="com.kg.platform.model.request.admin.LoginRequest" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_sys_user u
+    where sys_user_name = #{username,jdbcType=VARCHAR} and sys_user_password = #{password,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUsername" parameterType="com.kg.platform.model.request.admin.LoginRequest" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_sys_user u
+    where sys_user_name = #{username,jdbcType=VARCHAR} 
+    <if test="userId != null">
+      <![CDATA[ and sys_user_id != #{userId,jdbcType=BIGINT}]]>
+    </if>
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from kg_sys_user
+  </select>
+</mapper>

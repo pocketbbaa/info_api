@@ -1,0 +1,1 @@
+INSERT INTO `kg_common_setting` (`setting_id`, `setting_key`, `setting_value`, `setting_desc`, `setting_status`) VALUES ('13', 'duiba_add_point_limit', '{\"upper\": 1000}', '单个账号每自然日可最多通过签到获得的氪金', '1');

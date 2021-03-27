@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgMinerRobWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgMinerRobOutModel">
+    <id column="rob_id" jdbcType="BIGINT" property="robId" />
+    <result column="miner_id" jdbcType="BIGINT" property="minerId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="assist_code" jdbcType="VARCHAR" property="assistCode" />
+    <result column="rob_date" jdbcType="TIMESTAMP" property="robDate" />
+    <result column="rob_status" jdbcType="INTEGER" property="robStatus" />
+    <result column="rob_avatar" jdbcType="VARCHAR" property="robAvatar" />
+    <result column="rob_name" jdbcType="VARCHAR" property="robName" />
+    <result column="deal_date" jdbcType="TIMESTAMP" property="dealDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rob_id, miner_id, user_id, assist_code, rob_date, rob_status,deal_date
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_miner_rob
+    where rob_id = #{robId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgMinerRobInModel">
+    insert into kg_miner_rob (rob_id,miner_id, user_id, assist_code,
+      rob_date, rob_status,deal_date)
+    values (#{robId,jdbcType=BIGINT},#{minerId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{assistCode,jdbcType=VARCHAR},
+      #{robDate,jdbcType=TIMESTAMP}, #{robStatus,jdbcType=INTEGER},#{dealDate,jdbcType=TIMESTAMP}
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgMinerRobInModel">
+    insert into kg_miner_rob
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="robId != null">
+        rob_id,
+      </if>
+      <if test="minerId != null">
+        miner_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="assistCode != null">
+        assist_code,
+      </if>
+      <if test="robDate != null">
+        rob_date,
+      </if>
+      <if test="robStatus != null">
+        rob_status,
+      </if>
+      <if test="dealDate != null">
+        deal_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="robId != null">
+        #{robId,jdbcType=BIGINT},
+      </if>
+      <if test="minerId != null">
+        #{minerId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="assistCode != null">
+        #{assistCode,jdbcType=VARCHAR},
+      </if>
+      <if test="robDate != null">
+        #{robDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="robStatus != null">
+        #{robStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealDate != null">
+        #{dealDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgMinerRobInModel">
+    update kg_miner_rob
+    <set>
+      <if test="minerId != null">
+        miner_id = #{minerId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="assistCode != null">
+        assist_code = #{assistCode,jdbcType=VARCHAR},
+      </if>
+      <if test="robDate != null">
+        rob_date = #{robDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="robStatus != null">
+        rob_status = #{robStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dealDate != null">
+        deal_date = #{dealDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where rob_id = #{robId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgMinerRobInModel">
+    update kg_miner_rob
+    set miner_id = #{minerId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      assist_code = #{assistCode,jdbcType=VARCHAR},
+      rob_date = #{robDate,jdbcType=TIMESTAMP},
+      rob_status = #{robStatus,jdbcType=INTEGER},
+       deal_date = #{dealDate,jdbcType=TIMESTAMP},
+    where rob_id = #{robId,jdbcType=BIGINT}
+  </update>
+</mapper>

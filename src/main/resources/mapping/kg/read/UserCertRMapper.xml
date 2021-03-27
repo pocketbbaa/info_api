@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.UserCertRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.UserCertOutModel">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="user_email" jdbcType="VARCHAR" property="email" />
+    <result column="certificate_status" jdbcType="INTEGER" property="status" />
+    <result column="real_name" property="realName"/>
+     <result column="idcard_no" property="idcardNo"/>
+     <result column="idcard_front" property="idcardFront"/>
+      <result column="refuse_reason" property="certRefuseReason"/>
+    
+  </resultMap>
+  <select id="selectByUser" parameterType="com.kg.platform.model.in.UserCertInModel" resultMap="BaseResultMap">
+        SELECT * FROM kg_user_certificated WHERE user_id=#{userId}
+  </select>
+    <select id="selectByIdCardNo" parameterType="com.kg.platform.model.in.UserCertInModel" resultType="java.lang.Long">
+        SELECT COUNT(user_id) FROM kg_user_certificated WHERE idcard_no=#{idcardNo} and certificate_status IN (1,2)
+    </select>
+
+  
+ 
+</mapper>

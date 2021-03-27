@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgMinerAssistWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgMinerAssistOutModel">
+      <id column="assist_id" jdbcType="BIGINT" property="assistId"/>
+      <result column="rob_id" jdbcType="BIGINT" property="robId"/>
+      <result column="user_id" jdbcType="BIGINT" property="userId"/>
+      <result column="assist_amount" jdbcType="INTEGER" property="assistAmount"/>
+      <result column="assist_avatar" jdbcType="VARCHAR" property="assistAvatar"/>
+      <result column="assist_name" jdbcType="VARCHAR" property="assistName"/>
+      <result column="assist_date" jdbcType="TIMESTAMP" property="assistDate"/>
+      <result column="assist_status" jdbcType="INTEGER" property="assistStatus"/>
+      <result column="miner_id" jdbcType="BIGINT" property="minerId"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    assist_id, rob_id, user_id, assist_amount, assist_date,assist_status,miner_id
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_miner_assist
+    where assist_id = #{assistId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgMinerAssistInModel">
+    insert into kg_miner_assist (assist_id,rob_id, user_id, assist_amount,
+      assist_date,
+      assist_status,miner_id)
+    values (#{assistId,jdbcType=BIGINT},#{robId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{assistAmount,jdbcType=INTEGER},
+      #{assistAvatar,jdbcType=VARCHAR}, #{assistName,jdbcType=VARCHAR}, #{assistDate,jdbcType=TIMESTAMP}, 
+      #{assistStatus,jdbcType=INTEGER},#{minerId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgMinerAssistInModel">
+    insert into kg_miner_assist
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="assistId != null">
+        assist_id,
+      </if>
+      <if test="robId != null">
+        rob_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="assistAmount != null">
+        assist_amount,
+      </if>
+      <if test="assistDate != null">
+        assist_date,
+      </if>
+      <if test="assistStatus != null">
+        assist_status,
+      </if>
+        <if test="minerId != null">
+            miner_id,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="assistId != null">
+        #{assistId,jdbcType=BIGINT},
+      </if>
+      <if test="robId != null">
+        #{robId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="assistAmount != null">
+        #{assistAmount,jdbcType=INTEGER},
+      </if>
+      <if test="assistDate != null">
+        #{assistDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="assistStatus != null">
+        #{assistStatus,jdbcType=INTEGER},
+      </if>
+        <if test="minerId != null">
+            #{minerId,jdbcType=BIGINT},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgMinerAssistInModel">
+    update kg_miner_assist
+    <set>
+      <if test="robId != null">
+        rob_id = #{robId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="assistAmount != null">
+        assist_amount = #{assistAmount,jdbcType=INTEGER},
+      </if>
+      <if test="assistDate != null">
+        assist_date = #{assistDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="assistStatus != null">
+        assist_status = #{assistStatus,jdbcType=INTEGER},
+      </if>
+        <if test="minerId != null">
+            miner_id = #{minerId,jdbcType=BIGINT},
+        </if>
+    </set>
+    where assist_id = #{assistId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgMinerAssistInModel">
+    update kg_miner_assist
+    set rob_id = #{robId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      assist_amount = #{assistAmount,jdbcType=INTEGER},
+      assist_date = #{assistDate,jdbcType=TIMESTAMP},
+      assist_status = #{assistStatus,jdbcType=INTEGER},
+      miner_id = #{minerId,jdbcType=BIGINT}
+    where assist_id = #{assistId,jdbcType=BIGINT}
+  </update>
+</mapper>

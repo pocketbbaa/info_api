@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminAccountWithdrawRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.AccountWithdrawQueryResponse">
+    <id column="withdraw_flow_id" jdbcType="VARCHAR" property="flowId" />
+    <result column="user_email" jdbcType="VARCHAR" property="email" />
+    <result column="user_phone" jdbcType="VARCHAR" property="mobile" />
+    <result column="to_address" jdbcType="VARCHAR" property="toAddress" />
+    <result column="withdraw_amount" jdbcType="DECIMAL" property="withdrawAmount" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="withdraw_time" jdbcType="TIMESTAMP" property="withdrawTime" />
+    <result column="account_time" jdbcType="TIMESTAMP" property="accountTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="user_role" jdbcType="INTEGER" property="userRole" />
+    <result column="user_level" jdbcType="INTEGER" property="level" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="poundage_amount" jdbcType="DECIMAL" property="poundageAmount" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.AccountWithdrawQueryRequest" resultMap="BaseResultMap">
+    select a.remark,a.withdraw_flow_id,a.user_email,a.user_phone,a.to_address,a.withdraw_amount,a.account_amount,a.withdraw_time,a.account_time,a.`status`,u.user_role,u.user_level,a.user_id,a.poundage_amount from kg_account_withdraw_flow a left join kg_user u on (u.user_id = a.user_id) where 1 = 1
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and a.user_email like #{emailLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.withdraw_time >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.withdraw_time <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="status != null">
+      <![CDATA[ and a.status = #{status,jdbcType=INTEGER}]]>
+    </if>
+    order by a.withdraw_time desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.AccountWithdrawQueryRequest" resultType="java.lang.Long">
+    select
+    count(a.withdraw_flow_id)
+    from kg_account_withdraw_flow a where 1 = 1
+    <if test="email != null and email != ''">
+      <bind name="emailLike" value="'%'+email+'%'"/>
+      and a.user_email like #{emailLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and a.user_phone like #{mobileLike}
+    </if>
+    <if test="startDate != null">
+      <![CDATA[ and a.withdraw_time >= #{startDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="endDate != null">
+      <![CDATA[ and a.withdraw_time <= #{endDate,jdbcType=TIMESTAMP}]]>
+    </if>
+    <if test="status != null">
+      <![CDATA[ and a.status = #{status,jdbcType=INTEGER}]]>
+    </if>
+  </select>
+  <select id="auditAccountWithdraw" parameterType="com.kg.platform.model.request.admin.AccountWithdrawEditRequest">
+    update kg_account_withdraw_flow set status = #{status},refuse_reason = #{refuseReason} where withdraw_flow_id = #{flowId}
+  </select>
+ 
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminSysUserRMapper">
+
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.SysUserQueryResponse">
+    <id column="sys_user_id" jdbcType="VARCHAR" property="id" />
+    <result column="sys_user_name" jdbcType="VARCHAR" property="username" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="user_status" jdbcType="INTEGER" property="status" />
+    <result column="kg_username" jdbcType="VARCHAR" property="kgUsername" />
+    <result column="post_id" jdbcType="INTEGER" property="postId" />
+    <result column="user_realname" jdbcType="VARCHAR" property="realname" />
+  </resultMap>
+  
+
+  <select id="selectByCondition" parameterType="com.kg.platform.model.request.admin.SysUserQueryRequest" resultMap="BaseResultMap">
+    select user_realname, post_id, sys_user_id,sys_user_name,user_mobile,create_date,user_status,
+    (select post_name from kg_sys_post where post_id = u.post_id) post_name,
+    (SELECT group_concat(user_mobile) FROM kg_user 
+    WHERE user_id in(select kg_user_id from kg_sys_user_user uu where uu.sys_user_id=u.sys_user_id)) kg_username 
+    from kg_sys_user u where u.sys_user_id != -999
+    <if test="username != null and username != ''">
+      <bind name="usernameLike" value="'%'+username+'%'"/>
+      and u.sys_user_name like #{usernameLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and u.user_mobile like #{mobileLike}
+    </if>
+    <if test="postId != null">
+      and u.post_id = #{postId}
+    </if>
+    order by u.create_date desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCountByCondition" parameterType="com.kg.platform.model.request.admin.SysUserQueryRequest" resultType="java.lang.Long">
+    select count(u.sys_user_id) from kg_sys_user u where 1 = 1
+    <if test="username != null and username != ''">
+      <bind name="usernameLike" value="'%'+username+'%'"/>
+      and u.sys_user_name like #{usernameLike}
+    </if>
+    <if test="mobile != null and mobile != ''">
+      <bind name="mobileLike" value="'%'+mobile+'%'"/>
+      and u.user_mobile like #{mobileLike}
+    </if>
+    <if test="postId != null">
+      and u.post_id = #{postId}
+    </if>
+  </select>
+  
+   <select id="selectSysUsers" parameterType="com.kg.platform.model.request.admin.SysUserQueryRequest" resultMap="BaseResultMap">
+    select user_realname as sys_user_name, post_id, sys_user_id,user_mobile,create_date,user_status
+    from kg_sys_user u where u.sys_user_id != -99
+    order by u.create_date desc
+  </select>
+  
+  
+  
+</mapper>

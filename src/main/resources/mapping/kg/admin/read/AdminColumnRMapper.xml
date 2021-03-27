@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminColumnRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.ColumnQueryResponse">
+    <id column="column_id" jdbcType="VARCHAR" property="columnId" />
+    <result column="column_order" jdbcType="INTEGER" property="columnOrder" />
+    <result column="column_name" jdbcType="VARCHAR" property="columnName" />
+    <result column="column_level" jdbcType="INTEGER" property="columnLevel" />
+    <result column="column_order" jdbcType="VARCHAR" property="columnOrder" />
+    <result column="create_date" jdbcType="VARCHAR" property="createDate" />
+    <result column="navigator_display" jdbcType="INTEGER" property="navigatorDisplay" />
+    <result column="article_num" jdbcType="INTEGER" property="articleNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    column_id, prev_column, column_name, navigator_display, display_status, column_order, 
+    display_mode, seo_title, seo_keyword, seo_description, create_date, create_user, 
+    update_date, update_user, column_level
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_column
+    where column_id = #{columnId,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" parameterType="com.kg.platform.model.in.ColumnInModel" resultMap="BaseResultMap">
+  SELECT 
+  
+  	 <include refid="Base_Column_List" />
+  	
+  FROM kg_column kg 
+  
+  	WHERE kg. navigator_display= #{navigatorDisplay}  AND kg.display_status=1 ORDER BY kg.column_id  ASC
+  
+  
+  </select>
+ 
+</mapper>

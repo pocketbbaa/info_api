@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.LotterWMapper">
+
+  <insert id="addPrizeRecord" parameterType="com.kg.platform.model.in.PrizeInModel">
+    insert into kg_lottery
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lotteryId != null">
+        lottery_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+       <if test="prizeId != null">
+        prize_id,
+      </if>
+       <if test="lotteryStatus != null">
+        lottery_status,
+      </if>
+      <if test="recieveTime != null">
+        recieve_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lotteryId != null">
+        #{lotteryId},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="activityId != null">
+        #{activityId},
+      </if>
+      <if test="prizeId != null">
+         #{prizeId},
+      </if>
+      <if test="lotteryStatus != null">
+         #{lotteryStatus},
+      </if>
+       <if test="recieveTime != null">
+         #{recieveTime},
+      </if>
+    </trim>
+  </insert>
+  
+  
+</mapper>

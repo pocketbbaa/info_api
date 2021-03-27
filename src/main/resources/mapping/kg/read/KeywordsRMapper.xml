@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KeywordsRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KeywordsOutModel">
+    <id column="keyword_id" jdbcType="INTEGER" property="keywordId" />
+    <result column="keyword_desc" jdbcType="VARCHAR" property="keywordDesc" />
+    <result column="keyword_link" jdbcType="VARCHAR" property="keywordLink" />
+    <result column="second_channel" jdbcType="INTEGER" property="secondChannel" />
+    <result column="keyword_status" jdbcType="BIT" property="keywordStatus" />
+    <result column="keyword_order" jdbcType="INTEGER" property="keywordOrder" />
+     <result column="keyword_insite" jdbcType="INTEGER" property="keywordInsite" />
+    
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    keyword_id, keyword_desc, keyword_link, second_channel, keyword_status, keyword_order, 
+    create_user, create_date, update_user, update_date,keyword_insite
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_keywords
+    where keyword_id = #{keywordId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getKeywordsAll" resultMap="BaseResultMap" parameterType="com.kg.platform.model.in.KeywordsInModel">
+  SELECT <include refid="Base_Column_List" /> FROM kg_keywords kk WHERE  kk.second_channel=#{secondChannel} AND kk.keyword_status=1 ORDER BY kk.keyword_order 
+  
+  
+  </select>
+ 
+</mapper>

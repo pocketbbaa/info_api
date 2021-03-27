@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgArticleBonusRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgArticleBonusOutModel">
+    <id column="bonus_id" jdbcType="BIGINT" property="bonusId" />
+    <result column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="bonus_type" jdbcType="TINYINT" property="bonusType" />
+    <result column="bonus_kind" jdbcType="TINYINT" property="bonusKind" />
+    <result column="bonus_second_type" jdbcType="TINYINT" property="bonusSecondType" />
+    <result column="browse_time" jdbcType="INTEGER" property="browseTime" />
+    <result column="bonus_value" jdbcType="DECIMAL" property="bonusValue" />
+    <result column="max_people" jdbcType="INTEGER" property="maxPeople" />
+    <result column="bonus_status" jdbcType="TINYINT" property="bonusStatus" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+    <result column="bonus_type_id" property="bonusTypeid"/>
+    <result column="bonus_type_name" property="bonusTypename"/>
+  </resultMap>
+   
+  <sql id="Base_Column_List">
+    bonus_id, article_id, bonus_type, bonus_second_type, browse_time, bonus_value, max_people, 
+    bonus_status, create_user, update_user,bonus_kind
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_article_bonus
+    where bonus_id = #{bonusId,jdbcType=BIGINT}
+  </select>
+  
+  <!-- 查父设置 -->
+  <select id="selectByArticleidKey" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />,kbt.bonus_type_id,kbt.bonus_type_name FROM 
+        kg_article_bonus kab LEFT JOIN kg_bonus_type kbt ON  kab.bonus_type=kbt.bonus_type_id 
+        WHERE  article_id=#{articleId,jdbcType=BIGINT}
+  </select>
+  <!-- 查子类型 -->
+  <select id="selectSecondKey" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" resultMap="BaseResultMap">
+  
+   SELECT <include refid="Base_Column_List" />,kbt.bonus_type_id,kbt.bonus_type_name FROM 
+        kg_article_bonus kab LEFT JOIN kg_bonus_type kbt ON  kab.bonus_second_type=kbt.bonus_type_id 
+        WHERE  article_id=#{articleId,jdbcType=BIGINT} AND bonus_type =#{bonusType}
+ 
+  <!-- SELECT kbt.parent_type_id,kbt.bonus_type_name,<include refid="Base_Column_List" /> FROM kg_bonus_type kbt, kg_article_bonus kab WHERE bonus_type_id IN (
+
+SELECT bonus_second_type 
+FROM kg_article_bonus kab LEFT JOIN kg_bonus_type kbt ON  kab.bonus_type=kbt.bonus_type_id WHERE  article_id=#{articleId,jdbcType=BIGINT} AND kab.bonus_second_type > 0
+
+) AND bonus_second_type>0 AND kab.bonus_second_type=bonus_type_id -->
+
+  </select>
+  
+  
+  <!-- 查询阅读奖励值 -->
+  <select id="getBonusValue" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" resultMap="BaseResultMap">
+    SELECT * FROM kg_article_bonus kab WHERE bonus_status=1 
+    
+    <if test=" null != bonusType and '' != bonusType">
+    and  kab.bonus_type=#{bonusType} 
+    </if>
+      <if test=" null != bonusSecondType and '' != bonusSecondType">
+      and ( kab.bonus_second_type=#{bonusSecondType} or kab.bonus_second_type=41 )
+     </if>
+    AND kab.article_id=#{articleId} 
+  </select>
+  
+  
+    <!-- 查询文章下所有的生效阅读简历-->
+  <select id="getArticleBonus" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" resultMap="BaseResultMap">
+     SELECT 
+     <include refid="Base_Column_List" />,kbt.bonus_type_name
+      FROM kg_article_bonus kab LEFT JOIN kg_bonus_type kbt  ON    
+      kbt.bonus_type_id=kab.bonus_type WHERE kab.bonus_status=1 AND  kab.article_id=#{articleId}
+     
+  </select>
+  
+   <select id="getAllArticleBonus" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" resultMap="BaseResultMap">
+     SELECT 
+     <include refid="Base_Column_List" />,kbt.bonus_type_name
+      FROM kg_article_bonus kab LEFT JOIN kg_bonus_type kbt  ON    
+      kbt.bonus_type_id=kab.bonus_type WHERE  kab.article_id=#{articleId}
+     
+  </select>
+  
+  
+  <!-- 查询文章下所有的未生效阅读简历-->
+  <select id="getIneffectiveBonus" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" resultMap="BaseResultMap">
+     SELECT 
+     <include refid="Base_Column_List" />,kbt.bonus_type_name
+      FROM kg_article_bonus kab LEFT JOIN kg_bonus_type kbt  ON    
+      kbt.bonus_type_id=kab.bonus_type WHERE kab.bonus_status=1 AND  kab.article_id=#{articleId}
+     
+  </select>
+  
+  <select id="getBonusStatus" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" resultType="java.lang.Integer">
+<!--    SELECT COUNT(bonus_id) FROM kg_article_bonus WHERE article_id =#{articleId}  AND bonus_status!=3 and bonus_status!=4
+ -->      
+  SELECT COUNT(bonus_id) FROM kg_article_bonus WHERE article_id =#{articleId}  
+ 
+ 
+  </select>
+
+</mapper>

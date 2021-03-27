@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.KgAutherNoticeRMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.KgAutherNotice">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="add_time" jdbcType="VARCHAR" property="addTime"/>
+        <result column="info" jdbcType="VARCHAR" property="info"/>
+        <result column="add_user" jdbcType="VARCHAR" property="addUser"/>
+        <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
+        <result column="time" jdbcType="BIGINT" property="time"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, add_time, info, add_user, update_time, time, title, update_user, user_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_auther_notice
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from kg_auther_notice
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.kg.platform.dao.entity.KgAutherNotice">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into kg_auther_notice (add_time, info, add_user,
+        update_time, time, title,
+        update_user, user_id)
+        values (#{addTime,jdbcType=VARCHAR}, #{info,jdbcType=VARCHAR}, #{addUser,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=VARCHAR}, #{time,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR},
+        #{updateUser,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.KgAutherNotice">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into kg_auther_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="addTime != null">
+                add_time,
+            </if>
+            <if test="info != null">
+                info,
+            </if>
+            <if test="addUser != null">
+                add_user,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="addTime != null">
+                #{addTime,jdbcType=VARCHAR},
+            </if>
+            <if test="info != null">
+                #{info,jdbcType=VARCHAR},
+            </if>
+            <if test="addUser != null">
+                #{addUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.KgAutherNotice">
+        update kg_auther_notice
+        <set>
+            <if test="addTime != null">
+                add_time = #{addTime,jdbcType=VARCHAR},
+            </if>
+            <if test="info != null">
+                info = #{info,jdbcType=VARCHAR},
+            </if>
+            <if test="addUser != null">
+                add_user = #{addUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.KgAutherNotice">
+        update kg_auther_notice
+        set add_time = #{addTime,jdbcType=VARCHAR},
+        info = #{info,jdbcType=VARCHAR},
+        add_user = #{addUser,jdbcType=VARCHAR},
+        update_time = #{updateTime,jdbcType=VARCHAR},
+        time = #{time,jdbcType=BIGINT},
+        title = #{title,jdbcType=VARCHAR},
+        update_user = #{updateUser,jdbcType=VARCHAR},
+        user_id = #{userId,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <resultMap id="value_map" type="map"></resultMap>
+    <select id="execSql_sp" parameterType="com.kg.platform.model.SqlVo" resultMap="value_map">
+        ${p_sql}
+    </select>
+    <select id="execSqlList_sp" parameterType="com.kg.platform.model.SqlVo" resultMap="value_map">
+        ${p_sql}
+    </select>
+
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.UserRelationRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.UserRelation">
+    <id column="rel_id" jdbcType="BIGINT" property="relId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="rel_user_id" jdbcType="BIGINT" property="relUserId" />
+    <result column="bonus_status" jdbcType="TINYINT" property="bonusStatus" />
+    <result column="rel_type" jdbcType="TINYINT" property="relType" />
+    <result column="activity_id" jdbcType="TINYINT" property="activityId" />
+    <result column="rel_time" jdbcType="TIMESTAMP" property="relTime" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="subName" jdbcType="VARCHAR" property="subName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rel_id, user_id, rel_user_id, bonus_status,rel_type,activity_id, rel_time
+  </sql>
+
+    <sql id="parent_column">
+    kr.rel_id, kr.user_id, kr.rel_user_id, bonus_status,rel_type,activity_id, rel_time,ku.user_name,sub.user_name as subName
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_user_relation
+    where rel_id = #{relId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectInviteCount" parameterType="java.lang.Long" resultType="java.lang.Long">
+    SELECT 
+   count(rel_id)
+   from kg_user_relation
+    where bonus_status=0 and rel_type=1 and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+    <select id="selectInviteCountForApp" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT
+        count(rel_id)
+        from kg_user_relation
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+
+  <select id="selectParentUser" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+    <include refid="parent_column" />
+   from kg_user_relation kr
+   LEFT JOIN kg_user ku on ku.user_id=kr.user_id
+   LEFT JOIN kg_user sub on kr.rel_user_id=sub.user_id
+   where kr.rel_user_id = #{userId,jdbcType=BIGINT} and ku.lock_status=1
+  </select>
+
+  <select id="selectInviteUser" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+   from kg_user_relation
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+   <!--查询周杰伦门票活动10条邀新记录-->
+   <select id="getJayActivityInviteUser" parameterType="com.kg.platform.model.in.UserRelationInModel" resultType="com.kg.platform.model.response.InviteUserResponse" >
+     SELECT kr.user_id as userId,if(kup.avatar is null,'',kup.avatar) as headImage
+     from kg_user_relation kr
+     LEFT JOIN kg_user ku on ku.user_id=kr.user_id 
+     LEFT JOIN kg_user_profile kup on kr.rel_user_id=kup.user_id 
+     where kr.user_id=#{userId} and kr.activity_id=#{activityId} 
+     and kr.rel_time &gt;= #{startTime} and kr.rel_time &lt;= #{endTime}
+     order by kr.rel_time limit 10
+  </select>
+
+  <!--查询世界杯活动是否可参加投票-->
+  <select id="checkJoinWordCup" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+     <include refid="Base_Column_List" />
+    from kg_user_relation
+    where user_id = #{userId,jdbcType=BIGINT} and activity_id=4
+  </select>
+
+    <select id="selectMoreUserRelationInfo" parameterType="java.util.List" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM kg_user_relation where rel_user_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectMoreChildUserRelationInfo" parameterType="java.util.List" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM kg_user_relation where user_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+  <select id="selectByRelUserId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from kg_user_relation
+      where rel_user_id = #{relUserId}
+  </select>
+
+    <select id="ifRel" parameterType="com.kg.platform.dao.entity.UserRelation" resultType="java.lang.Integer">
+        SELECT count(1) FROM kg_user_relation WHERE rel_user_id = #{relUserId} and rel_type!=3
+    </select>
+
+
+    <select id="getSubTribList" parameterType="com.kg.platform.model.in.UserRelationInModel" resultType="com.kg.platform.model.response.DiscipleInfoResponse">
+        set @rownum=0;
+        SELECT  c.rel_user_id as tId,if(ku.user_role!=1,kp.column_avatar,kp.avatar) as avatar,
+                if(ku.user_role!=1,kp.column_name,ku.user_name) as userName,rownum
+        from (
+            SELECT a.rel_user_id,a.rownum from	 (
+                 SELECT  rel_user_id,@rownum:=@rownum+1 as rownum
+                 from kg_user_relation kr where  user_id =#{userId}  and rel_user_id in
+                    <foreach collection="subList" index="index" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                 ORDER BY field(rel_user_id,
+                    <foreach collection="subList" index="index" item="item" open="" separator="," close="">
+                          #{item}
+                    </foreach>  )
+               ) a
+
+               UNION All
+
+	           SELECT b.rel_user_id,'a' as rownum from (
+                      SELECT rel_user_id
+                      from kg_user_relation kr where  user_id =#{userId}  and rel_user_id not in
+                      <foreach collection="subList" index="index" item="item" open="(" separator="," close=")">
+                          #{item}
+                      </foreach>
+                      order by rel_time ) b
+
+             ) c
+             LEFT JOIN kg_user ku on ku.user_id=c.rel_user_id
+             LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+             limit #{start},#{limit}
+
+    </select>
+
+    <select id="getSubList" parameterType="com.kg.platform.model.in.UserRelationInModel" resultType="com.kg.platform.model.response.DiscipleInfoResponse">
+          SELECT  kr.rel_user_id as tId,if(ku.user_role!=1,kp.column_avatar,kp.avatar) as avatar,
+                if(ku.user_role!=1,kp.column_name,ku.user_name) as userName
+          from  kg_user_relation kr
+          LEFT JOIN kg_user ku on ku.user_id=kr.rel_user_id
+          LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+          where kr.user_id=#{userId}
+          limit #{start},#{limit}
+    </select>
+
+    <select id="getSubListFilter" resultType="com.kg.platform.model.response.DiscipleInfoResponse">
+        SELECT
+           kr.rel_user_id as tId,
+           if(ku.user_role!=1,kp.column_avatar,kp.avatar) as avatar,
+           if(ku.user_role!=1,kp.column_name,ku.user_name) as userName
+        from  kg_user_relation kr
+        LEFT JOIN kg_user ku on ku.user_id=kr.rel_user_id
+        LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+        where
+           kr.user_id=#{userId}
+           <if test="list != null and list.size() > 0">
+               AND kr.rel_user_id NOT IN
+               <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                  #{item}
+               </foreach>
+           </if>
+           limit #{start},#{limit}
+    </select>
+
+
+
+
+</mapper>

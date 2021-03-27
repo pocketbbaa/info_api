@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kg.platform.dao.write.KgArticleStatisticsHisWMapper" >
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgArticleStatisticsHisOutModel" >
+    <id column="history_id" property="historyId" jdbcType="INTEGER" />
+    <result column="article_id" property="articleId" jdbcType="BIGINT" />
+    <result column="browse_num" property="browseNum" jdbcType="INTEGER" />
+    <result column="share_num" property="shareNum" jdbcType="INTEGER" />
+    <result column="thumbup_num" property="thumbupNum" jdbcType="INTEGER" />
+    <result column="collect_num" property="collectNum" jdbcType="INTEGER" />
+    <result column="bonus_num" property="bonusNum" jdbcType="INTEGER" />
+    <result column="bonus_value" property="bonusValue" jdbcType="DECIMAL" />
+    <result column="bonus_total" property="bonusTotal" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+  </resultMap>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgArticleStatisticsHisInModel" >
+    insert into kg_article_statistics_his
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="historyId != null" >
+        history_id,
+      </if>
+      <if test="articleId != null" >
+        article_id,
+      </if>
+      <if test="browseNum != null" >
+        browse_num,
+      </if>
+      <if test="shareNum != null" >
+        share_num,
+      </if>
+      <if test="thumbupNum != null" >
+        thumbup_num,
+      </if>
+      <if test="collectNum != null" >
+        collect_num,
+      </if>
+      <if test="bonusNum != null" >
+        bonus_num,
+      </if>
+      <if test="bonusValue != null" >
+        bonus_value,
+      </if>
+      <if test="bonusTotal != null" >
+        bonus_total,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="historyId != null" >
+        #{historyId,jdbcType=INTEGER},
+      </if>
+      <if test="articleId != null" >
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="browseNum != null" >
+        #{browseNum,jdbcType=INTEGER},
+      </if>
+      <if test="shareNum != null" >
+        #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="thumbupNum != null" >
+        #{thumbupNum,jdbcType=INTEGER},
+      </if>
+      <if test="collectNum != null" >
+        #{collectNum,jdbcType=INTEGER},
+      </if>
+      <if test="bonusNum != null" >
+        #{bonusNum,jdbcType=INTEGER},
+      </if>
+      <if test="bonusValue != null" >
+        #{bonusValue,jdbcType=DECIMAL},
+      </if>
+      <if test="bonusTotal != null" >
+        #{bonusTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.FriendlyLinkRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.FriendlyLinkOutModel">
+    <id column="link_id" jdbcType="INTEGER" property="linkId" />
+    <result column="link_name" jdbcType="VARCHAR" property="linkName" />
+    <result column="link_address" jdbcType="VARCHAR" property="linkAddress" />
+    <result column="second_channel" jdbcType="INTEGER" property="secondChannel" />
+    <result column="link_status" jdbcType="INTEGER" property="linkStatus" />
+    <result column="link_order" jdbcType="INTEGER" property="linkOrder" />
+    <result column="link_icon" jdbcType="VARCHAR" property="linkIcon" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    link_id, link_name, link_address, second_channel, link_status, link_order, link_icon, 
+    create_user, create_date, update_user, update_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_friendly_link
+    where link_id = #{linkId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="getFriendlyAll" parameterType="com.kg.platform.model.in.FriendlyLinkInModel" resultMap="BaseResultMap">
+  
+  SELECT <include refid="Base_Column_List" /> FROM kg_friendly_link  kfl WHERE kfl.second_channel=#{secondChannel} AND `type`=#{type} AND kfl.link_status=1 ORDER BY kfl.link_order
+  
+  </select>
+
+    <select id="selectByCondition" parameterType="com.kg.platform.model.in.FriendlyLinkInModel" resultMap="BaseResultMap">
+        select
+        k.link_id,k.link_name,k.link_address,k.link_order,
+        (select u.sys_user_name from kg_sys_user u where u.sys_user_id = k.create_user) createUserName,
+        k.create_date,k.link_status,k.second_channel
+        from kg_friendly_link k
+        WHERE `type`= #{type,jdbcType=INTEGER}
+        order by k.link_order asc
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectCountByCondition" resultType="java.lang.Long">
+        select
+        count(k.keyword_id)
+        from kg_keywords k
+    </select>
+</mapper>

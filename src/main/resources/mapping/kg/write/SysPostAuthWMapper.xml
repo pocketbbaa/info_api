@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.SysPostAuthWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SysPostAuth">
+    <id column="post_auth_id" jdbcType="INTEGER" property="postAuthId" />
+    <result column="auth_id" jdbcType="INTEGER" property="authId" />
+    <result column="post_id" jdbcType="INTEGER" property="postId" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    post_auth_id, auth_id, post_id, create_user, create_date
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_sys_post_auth
+    where post_auth_id = #{postAuthId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPostId" parameterType="java.lang.Integer">
+    delete from kg_sys_post_auth
+    where post_id = #{postId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.SysPostAuth">
+    insert into kg_sys_post_auth (post_auth_id, auth_id, post_id, 
+      create_user, create_date)
+    values (#{postAuthId,jdbcType=INTEGER}, #{authId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}, 
+      #{createUser,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.SysPostAuth">
+    insert into kg_sys_post_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="postAuthId != null">
+        post_auth_id,
+      </if>
+      <if test="authId != null">
+        auth_id,
+      </if>
+      <if test="postId != null">
+        post_id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="postAuthId != null">
+        #{postAuthId,jdbcType=INTEGER},
+      </if>
+      <if test="authId != null">
+        #{authId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null">
+        #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.SysPostAuth">
+    update kg_sys_post_auth
+    <set>
+      <if test="authId != null">
+        auth_id = #{authId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null">
+        post_id = #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where post_auth_id = #{postAuthId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.SysPostAuth">
+    update kg_sys_post_auth
+    set auth_id = #{authId,jdbcType=INTEGER},
+      post_id = #{postId,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where post_auth_id = #{postAuthId,jdbcType=INTEGER}
+  </update>
+</mapper>

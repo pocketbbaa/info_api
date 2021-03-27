@@ -1,0 +1,2 @@
+INSERT INTO `kgweb`.`kg_common_setting` (`setting_id`, `setting_key`, `setting_value`, `setting_desc`, `setting_status`) VALUES ('7', 'worldcup_activity_date', '{"endTime": "2018-07-15 23:00:00", "startTime": "2018-06-14 10:00:00"}', '世界杯活动开始时间和结束时间', '1');
+INSERT INTO `kgweb`.`kg_common_setting` (`setting_id`, `setting_key`, `setting_value`, `setting_desc`, `setting_status`) VALUES ('8', 'mine_banner_info', '[{"mineBannerImg": "", "mineBannerLink": "", "mineBannerType": 2}]', 'APP个人中心Banner信息（mineBannerType:1：资讯 2：广告 3：其他 4：活动）', '1');

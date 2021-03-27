@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.SysAuthMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SysAuth">
+    <id column="sys_auth_id" jdbcType="INTEGER" property="sysAuthId" />
+    <result column="sys_auth_name" jdbcType="VARCHAR" property="sysAuthName" />
+    <result column="menu_id" jdbcType="INTEGER" property="menuId" />
+    <result column="prv_auth_id" jdbcType="INTEGER" property="prvAuthId" />
+    <result column="operation_type" jdbcType="VARCHAR" property="operationType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sys_auth_id, sys_auth_name, menu_id, prv_auth_id, operation_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_sys_auth
+    where sys_auth_id = #{sysAuthId,jdbcType=INTEGER}
+  </select>
+ 
+</mapper>

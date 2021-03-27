@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgCommonSettingWMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgCommonSettingOutModel">
+        <id column="setting_id" jdbcType="INTEGER" property="settingId"/>
+        <result column="setting_key" jdbcType="VARCHAR" property="settingKey"/>
+        <result column="setting_value" jdbcType="CHAR" property="settingValue"/>
+        <result column="setting_desc" jdbcType="VARCHAR" property="settingDesc"/>
+        <result column="setting_status" jdbcType="INTEGER" property="settingStatus"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    setting_id, setting_key, setting_value, setting_desc, setting_status
+  </sql>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_common_setting
+    where setting_id = #{settingId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.kg.platform.model.in.KgCommonSettingInModel">
+        <selectKey keyProperty="settingId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into kg_common_setting (setting_key, setting_value, setting_desc,
+        setting_status)
+        values (#{settingKey,jdbcType=VARCHAR}, #{settingValue,jdbcType=CHAR}, #{settingDesc,jdbcType=VARCHAR},
+        #{settingStatus,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgCommonSettingInModel">
+        <selectKey keyProperty="settingId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into kg_common_setting
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="settingKey != null">
+                setting_key,
+            </if>
+            <if test="settingValue != null">
+                setting_value,
+            </if>
+            <if test="settingDesc != null">
+                setting_desc,
+            </if>
+            <if test="settingStatus != null">
+                setting_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="settingKey != null">
+                #{settingKey,jdbcType=VARCHAR},
+            </if>
+            <if test="settingValue != null">
+                #{settingValue,jdbcType=CHAR},
+            </if>
+            <if test="settingDesc != null">
+                #{settingDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="settingStatus != null">
+                #{settingStatus,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgCommonSettingInModel">
+        update kg_common_setting
+        <set>
+            <if test="settingKey != null">
+                setting_key = #{settingKey,jdbcType=VARCHAR},
+            </if>
+            <if test="settingValue != null">
+                setting_value = #{settingValue,jdbcType=CHAR},
+            </if>
+            <if test="settingDesc != null">
+                setting_desc = #{settingDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="settingStatus != null">
+                setting_status = #{settingStatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where setting_id = #{settingId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgCommonSettingInModel">
+    update kg_common_setting
+    set setting_key = #{settingKey,jdbcType=VARCHAR},
+      setting_value = #{settingValue,jdbcType=CHAR},
+      setting_desc = #{settingDesc,jdbcType=VARCHAR},
+      setting_status = #{settingStatus,jdbcType=INTEGER}
+    where setting_id = #{settingId,jdbcType=INTEGER}
+  </update>
+
+  <update id="upateBySettingKey" parameterType="com.kg.platform.model.in.KgCommonSettingInModel">
+    update kg_common_setting
+    set
+    setting_value = #{settingValue,jdbcType=CHAR}
+    where setting_key = #{settingKey,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

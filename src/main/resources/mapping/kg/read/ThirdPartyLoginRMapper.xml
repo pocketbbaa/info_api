@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.ThirdPartyLoginRMapper">
+
+   <resultMap id="BaseResultMap" type="com.kg.platform.model.out.ThirdPartyLoginOutModel">
+    <id column="third_login_id" jdbcType="BIGINT" property="thirdPartyId" />
+    <result column="open_id" jdbcType="BIGINT" property="openId" />
+    <result column="user_id" jdbcType="BIGINT" property="accessToken" />
+    <result column="open_type" jdbcType="INTEGER" property="openType" />
+    <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+    <result column="bind_time" jdbcType="TIMESTAMP" property="bindTime" />
+    <result column="access_token" jdbcType="VARCHAR" property="accessToken" />
+    <result column="refresh_access_token" jdbcType="VARCHAR" property="refreshAccessToken" />
+     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+  </resultMap>
+  
+  <select id="checkUserBind" parameterType="java.lang.String" resultType="java.lang.Long">
+  	 SELECT COUNT(1) from kg_user_third_login where open_id=#{openId}
+  </select>
+  
+   <select id="getUserThirdPartyLogin" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	 SELECT open_id,third_login_id,access_token,nick_name from kg_user_third_login where user_id=#{userId}
+  </select>
+  
+   <select id="checkBindStatus" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	 SELECT open_id,third_login_id,access_token,open_type,nick_name from kg_user_third_login where user_id=#{userId}
+  </select>
+  
+   <select id="getBindInfo" parameterType="com.kg.platform.model.in.ThirdPartyLoginInModel" resultMap="BaseResultMap">
+  	 SELECT open_id,third_login_id,access_token,open_type,nick_name from kg_user_third_login where user_id=#{userId}
+  	 and open_type=#{openType}
+  </select>
+  
+   <select id="checkBindStatusByOpenId" parameterType="com.kg.platform.model.in.ThirdPartyLoginInModel" resultMap="BaseResultMap">
+  	 SELECT open_id,third_login_id,access_token,open_type,nick_name from kg_user_third_login  where 
+  	 (open_id=#{openId} or user_id=#{userId}) and open_type=#{openType}
+  </select>
+  
+  
+  
+</mapper>

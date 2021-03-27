@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.TagsRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.TagsOutModel">
+    <id column="tag_id" jdbcType="BIGINT" property="tagId" />
+    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="used_num" jdbcType="INTEGER" property="usedNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tag_id, tag_name, create_date, create_user,used_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_tags
+    where tag_id = #{tagId,jdbcType=BIGINT}
+  </select>
+  
+  
+  <select id="getTags" parameterType="com.kg.platform.model.in.TagsInModel" resultMap="BaseResultMap">
+      SELECT tag_id,tag_name,used_num FROM kg_tags WHERE  tag_name =#{tagName}
+  </select>
+  
+  
+  <select id="listTags" resultMap="BaseResultMap">
+  SELECT <include refid="Base_Column_List" /> FROM kg_tags ORDER BY used_num DESC LIMIT 20
+  </select>
+
+  <select id="listTagsForSitemap" parameterType="com.kg.platform.model.in.TagsInModel" resultMap="BaseResultMap">
+    SELECT tag_name FROM kg_tags ORDER BY create_date DESC limit #{start,jdbcType=INTEGER}, #{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="countTagsForSitemap" resultType="java.lang.Long">
+    SELECT count(*) FROM kg_tags
+  </select>
+</mapper>

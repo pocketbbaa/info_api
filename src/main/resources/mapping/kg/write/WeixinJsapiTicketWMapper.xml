@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.WeixinJsapiTicketWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.WeixinJsapiTicket">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ticket" jdbcType="VARCHAR" property="ticket" />
+    <result column="expire" jdbcType="BIGINT" property="expire" />
+  </resultMap>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from weixin_jsapi_ticket
+  </select>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.WeixinJsapiTicket">
+    insert into weixin_jsapi_ticket(ticket,expire)values(#{ticket},#{expire})
+  </insert>
+  <update id="update" parameterType="com.kg.platform.dao.entity.WeixinJsapiTicket">
+    update weixin_jsapi_ticket set ticket = #{ticket},expire = #{expire} where id = #{id}
+  </update>
+</mapper>

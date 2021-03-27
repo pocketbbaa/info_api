@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.RoleLevelAuthMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.RoleLevelAuth">
+    <id column="auth_id" jdbcType="INTEGER" property="authId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="level_id" jdbcType="INTEGER" property="levelId" />
+    <result column="auth_action" jdbcType="TINYINT" property="authAction" />
+    <result column="auth_action_type" jdbcType="VARCHAR" property="authActionType" />
+    <result column="auth_action_name" jdbcType="VARCHAR" property="authActionName" />
+    <result column="action_times" jdbcType="INTEGER" property="actionTimes" />
+    <result column="action_times_type" jdbcType="BIT" property="actionTimesType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    auth_id, role_id, level_id, auth_action, auth_action_type, auth_action_name, action_times, 
+    action_times_type
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_role_level_auth
+    where auth_id = #{authId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.RoleLevelAuth">
+    insert into kg_role_level_auth (auth_id, role_id, level_id, 
+      auth_action, auth_action_type, auth_action_name, 
+      action_times, action_times_type)
+    values (#{authId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{levelId,jdbcType=INTEGER}, 
+      #{authAction,jdbcType=TINYINT}, #{authActionType,jdbcType=VARCHAR}, #{authActionName,jdbcType=VARCHAR}, 
+      #{actionTimes,jdbcType=INTEGER}, #{actionTimesType,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.RoleLevelAuth">
+    insert into kg_role_level_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="authId != null">
+        auth_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="levelId != null">
+        level_id,
+      </if>
+      <if test="authAction != null">
+        auth_action,
+      </if>
+      <if test="authActionType != null">
+        auth_action_type,
+      </if>
+      <if test="authActionName != null">
+        auth_action_name,
+      </if>
+      <if test="actionTimes != null">
+        action_times,
+      </if>
+      <if test="actionTimesType != null">
+        action_times_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="authId != null">
+        #{authId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="levelId != null">
+        #{levelId,jdbcType=INTEGER},
+      </if>
+      <if test="authAction != null">
+        #{authAction,jdbcType=TINYINT},
+      </if>
+      <if test="authActionType != null">
+        #{authActionType,jdbcType=VARCHAR},
+      </if>
+      <if test="authActionName != null">
+        #{authActionName,jdbcType=VARCHAR},
+      </if>
+      <if test="actionTimes != null">
+        #{actionTimes,jdbcType=INTEGER},
+      </if>
+      <if test="actionTimesType != null">
+        #{actionTimesType,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.RoleLevelAuth">
+    update kg_role_level_auth
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="levelId != null">
+        level_id = #{levelId,jdbcType=INTEGER},
+      </if>
+      <if test="authAction != null">
+        auth_action = #{authAction,jdbcType=TINYINT},
+      </if>
+      <if test="authActionType != null">
+        auth_action_type = #{authActionType,jdbcType=VARCHAR},
+      </if>
+      <if test="authActionName != null">
+        auth_action_name = #{authActionName,jdbcType=VARCHAR},
+      </if>
+      <if test="actionTimes != null">
+        action_times = #{actionTimes,jdbcType=INTEGER},
+      </if>
+      <if test="actionTimesType != null">
+        action_times_type = #{actionTimesType,jdbcType=BIT},
+      </if>
+    </set>
+    where auth_id = #{authId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.RoleLevelAuth">
+    update kg_role_level_auth
+    set role_id = #{roleId,jdbcType=INTEGER},
+      level_id = #{levelId,jdbcType=INTEGER},
+      auth_action = #{authAction,jdbcType=TINYINT},
+      auth_action_type = #{authActionType,jdbcType=VARCHAR},
+      auth_action_name = #{authActionName,jdbcType=VARCHAR},
+      action_times = #{actionTimes,jdbcType=INTEGER},
+      action_times_type = #{actionTimesType,jdbcType=BIT}
+    where auth_id = #{authId,jdbcType=INTEGER}
+  </update>
+</mapper>

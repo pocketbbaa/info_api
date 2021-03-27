@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminPostRMapper">
+
+  <resultMap id="QueryResultMap" type="com.kg.platform.model.response.admin.PostQueryResponse">
+    <id column="post_id" jdbcType="INTEGER" property="postId" />
+    <result column="auth" jdbcType="VARCHAR" property="auth" />
+    <result column="post_status" jdbcType="BIT" property="status" />
+    <result column="post_name" jdbcType="VARCHAR" property="name" />
+    <result column="auth_ids" jdbcType="VARCHAR" property="authIds" />
+  </resultMap>
+
+
+
+  <select id="selectAll" resultMap="QueryResultMap">
+    select p.post_id,p.post_name,p.post_status,(select GROUP_CONCAT(a.sys_auth_name) from kg_sys_post_auth pa,kg_sys_auth a where a.sys_auth_id = pa.auth_id and pa.post_id = p.post_id) auth,(select GROUP_CONCAT(a.sys_auth_id) from kg_sys_post_auth pa,kg_sys_auth a where a.sys_auth_id = pa.auth_id and pa.post_id = p.post_id) auth_ids from kg_sys_post p
+  </select>
+
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.UserCollectWMapper">
+    <resultMap id="BaseWResultMap" type="com.kg.platform.model.out.UserCollectOutModel">
+        <id column="collect_id" jdbcType="BIGINT" property="collectId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="article_id" jdbcType="BIGINT" property="articleId"/>
+        <result column="oper_type" jdbcType="BIGINT" property="operType"/>
+        <result column="collect_date" jdbcType="TIMESTAMP" property="collectDate"/>
+        <result column="source" jdbcType="TINYINT" property="source"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    collect_id, user_id, article_id, collect_date, source
+  </sql>
+
+</mapper>

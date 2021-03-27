@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgMinerAssistRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgMinerAssistOutModel">
+    <id column="assist_id" jdbcType="BIGINT" property="assistId" />
+    <result column="rob_id" jdbcType="BIGINT" property="robId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="assist_amount" jdbcType="INTEGER" property="assistAmount" />
+    <result column="assist_avatar" jdbcType="VARCHAR" property="assistAvatar" />
+    <result column="assist_name" jdbcType="VARCHAR" property="assistName" />
+    <result column="assist_date" jdbcType="TIMESTAMP" property="assistDate" />
+    <result column="assist_status" jdbcType="INTEGER" property="assistStatus" />
+    <result column="miner_id" jdbcType="BIGINT" property="minerId"/>
+    <result column="assistCount" jdbcType="INTEGER" property="assistCount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    assist_id, rob_id, user_id, assist_amount, assist_date,assist_status,miner_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_miner_assist
+    where assist_id = #{assistId,jdbcType=BIGINT}
+  </select>
+  <select id="assistList" parameterType="com.kg.platform.model.in.KgMinerAssistInModel" resultMap="BaseResultMap">
+   SELECT (SELECT avatar from kg_user_profile where user_id=kma.user_id) as assistAvatar,
+   (SELECT user_name from kg_user where user_id=kma.user_id) as assistName,
+  assist_amount from kg_miner_assist as kma where kma.rob_id=#{robId,jdbcType=BIGINT} and kma.assist_status=1
+    ORDER BY kma.assist_date DESC limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+  <select id="countAssistList" parameterType="com.kg.platform.model.in.KgMinerAssistInModel" resultType="java.lang.Long">
+    SELECT count(assist_id) from kg_miner_assist as kma where kma.rob_id=#{robId,jdbcType=BIGINT} and kma.assist_status=1
+  </select>
+  
+  <!-- 查询抢单已蓄力值和已蓄力人数 -->
+  <select id="getTotalAssistInfo" parameterType="com.kg.platform.model.in.KgMinerAssistInModel" resultMap="BaseResultMap">
+    SELECT
+	 ( SELECT sum(assist_amount) from  kg_miner_assist where rob_id=#{robId} and assist_status=1
+	  and user_id !=(SELECT rob.user_id from  kg_miner_rob rob where rob.rob_id=#{robId}) 
+	 ) as assist_amount,
+	 ( SELECT COUNT(1) from  kg_miner_assist where rob_id=#{robId} and assist_status=1 
+	  and user_id !=(SELECT rob.user_id from  kg_miner_rob rob where rob.rob_id=#{robId})
+	 ) as assistCount
+	from  kg_common_setting limit 1
+  </select>
+  
+   <!--查询蓄力人数是否还差一人 -->
+  <select id="getTotalAssist" parameterType="com.kg.platform.model.in.KgMinerAssistInModel" resultType="java.lang.Integer">
+	 SELECT COUNT(1) from  kg_miner_assist where rob_id=#{robId} and assist_status=1  
+  </select>
+  
+    <!-- 统计用户当天已经助力的抢单次数-->
+  <select id="checkRobMinnerTimes" parameterType="com.kg.platform.model.in.KgMinerAssistInModel" resultType="java.lang.Integer">
+     SELECT COUNT(DISTINCT rob_id ) from  kg_miner_assist ka 
+     where ka.user_id=#{userId} and CURDATE()= DATE(ka.assist_date)
+  </select>
+  
+    <!-- 验证用户当天是否已经助力过该抢单 -->
+  <select id="checkUserAssitStatus" parameterType="com.kg.platform.model.in.KgMinerAssistInModel" resultType="java.lang.Integer">
+     SELECT COUNT(DISTINCT ka.rob_id ) from  kg_miner_assist ka 
+     where ka.user_id=#{userId} and CURDATE()= DATE(ka.assist_date) and ka.rob_id=#{robId}
+  </select>
+  
+      <!-- 统计用户当天已经助力的抢单次数-->
+  <select id="checkUserFirstAssit" parameterType="com.kg.platform.model.in.KgMinerAssistInModel" resultType="java.lang.Integer">
+     SELECT COUNT(rob_id ) from  kg_miner_assist ka 
+     where ka.user_id=#{userId} 
+  </select>
+  
+</mapper>

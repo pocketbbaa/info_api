@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KeywordsWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Keywords">
+    <id column="keyword_id" jdbcType="INTEGER" property="keywordId" />
+    <result column="keyword_desc" jdbcType="VARCHAR" property="keywordDesc" />
+    <result column="keyword_link" jdbcType="VARCHAR" property="keywordLink" />
+    <result column="second_channel" jdbcType="INTEGER" property="secondChannel" />
+    <result column="keyword_status" jdbcType="BIT" property="keywordStatus" />
+    <result column="keyword_order" jdbcType="INTEGER" property="keywordOrder" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    keyword_id, keyword_desc, keyword_link, second_channel, keyword_status, keyword_order, 
+    create_user, create_date, update_user, update_date
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_keywords
+    where keyword_id = #{keywordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.Keywords">
+    insert into kg_keywords (keyword_id, keyword_desc, keyword_link, 
+      second_channel, keyword_status, keyword_order, 
+      create_user, create_date, update_user, 
+      update_date)
+    values (#{keywordId,jdbcType=INTEGER}, #{keywordDesc,jdbcType=VARCHAR}, #{keywordLink,jdbcType=VARCHAR}, 
+      #{secondChannel,jdbcType=INTEGER}, #{keywordStatus,jdbcType=BIT}, #{keywordOrder,jdbcType=INTEGER}, 
+      #{createUser,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.Keywords">
+    insert into kg_keywords
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="keywordId != null">
+        keyword_id,
+      </if>
+      <if test="keywordDesc != null">
+        keyword_desc,
+      </if>
+      <if test="keywordLink != null">
+        keyword_link,
+      </if>
+      <if test="secondChannel != null">
+        second_channel,
+      </if>
+      <if test="keywordStatus != null">
+        keyword_status,
+      </if>
+      <if test="keywordOrder != null">
+        keyword_order,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="keywordId != null">
+        #{keywordId,jdbcType=INTEGER},
+      </if>
+      <if test="keywordDesc != null">
+        #{keywordDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="keywordLink != null">
+        #{keywordLink,jdbcType=VARCHAR},
+      </if>
+      <if test="secondChannel != null">
+        #{secondChannel,jdbcType=INTEGER},
+      </if>
+      <if test="keywordStatus != null">
+        #{keywordStatus,jdbcType=BIT},
+      </if>
+      <if test="keywordOrder != null">
+        #{keywordOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.Keywords">
+    update kg_keywords
+    <set>
+      <if test="keywordDesc != null">
+        keyword_desc = #{keywordDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="keywordLink != null">
+        keyword_link = #{keywordLink,jdbcType=VARCHAR},
+      </if>
+      <if test="secondChannel != null">
+        second_channel = #{secondChannel,jdbcType=INTEGER},
+      </if>
+      <if test="keywordStatus != null">
+        keyword_status = #{keywordStatus,jdbcType=BIT},
+      </if>
+      <if test="keywordOrder != null">
+        keyword_order = #{keywordOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where keyword_id = #{keywordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.Keywords">
+    update kg_keywords
+    set keyword_desc = #{keywordDesc,jdbcType=VARCHAR},
+      keyword_link = #{keywordLink,jdbcType=VARCHAR},
+      second_channel = #{secondChannel,jdbcType=INTEGER},
+      keyword_status = #{keywordStatus,jdbcType=BIT},
+      keyword_order = #{keywordOrder,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where keyword_id = #{keywordId,jdbcType=INTEGER}
+  </update>
+</mapper>

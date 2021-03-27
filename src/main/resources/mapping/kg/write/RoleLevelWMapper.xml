@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.RoleLevelMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.RoleLevel">
+    <id column="role_level_id" jdbcType="INTEGER" property="roleLevelId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="level_name" jdbcType="VARCHAR" property="levelName" />
+    <result column="level_info" jdbcType="VARCHAR" property="levelInfo" />
+    <result column="level_status" jdbcType="BIT" property="levelStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_level_id, role_id, level_name, level_info, level_status
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_role_level
+    where role_level_id = #{roleLevelId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.RoleLevel">
+    insert into kg_role_level (role_level_id, role_id, level_name, 
+      level_info, level_status)
+    values (#{roleLevelId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{levelName,jdbcType=VARCHAR}, 
+      #{levelInfo,jdbcType=VARCHAR}, #{levelStatus,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.RoleLevel">
+    insert into kg_role_level
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleLevelId != null">
+        role_level_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="levelName != null">
+        level_name,
+      </if>
+      <if test="levelInfo != null">
+        level_info,
+      </if>
+      <if test="levelStatus != null">
+        level_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleLevelId != null">
+        #{roleLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="levelName != null">
+        #{levelName,jdbcType=VARCHAR},
+      </if>
+      <if test="levelInfo != null">
+        #{levelInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="levelStatus != null">
+        #{levelStatus,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.RoleLevel">
+    update kg_role_level
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="levelName != null">
+        level_name = #{levelName,jdbcType=VARCHAR},
+      </if>
+      <if test="levelInfo != null">
+        level_info = #{levelInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="levelStatus != null">
+        level_status = #{levelStatus,jdbcType=BIT},
+      </if>
+    </set>
+    where role_level_id = #{roleLevelId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.RoleLevel">
+    update kg_role_level
+    set role_id = #{roleId,jdbcType=INTEGER},
+      level_name = #{levelName,jdbcType=VARCHAR},
+      level_info = #{levelInfo,jdbcType=VARCHAR},
+      level_status = #{levelStatus,jdbcType=BIT}
+    where role_level_id = #{roleLevelId,jdbcType=INTEGER}
+  </update>
+</mapper>

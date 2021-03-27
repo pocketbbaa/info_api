@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.UserCommentWMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.model.out.UserCommentOutModel">
+        <id column="comment_id" jdbcType="BIGINT" property="commentId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="article_id" jdbcType="BIGINT" property="articleId"/>
+        <result column="parent_comment_id" jdbcType="BIGINT" property="parentCommentId"/>
+        <result column="comment_desc" jdbcType="VARCHAR" property="commentDesc"/>
+        <result column="comment_date" jdbcType="TIMESTAMP" property="commentDate"/>
+        <result column="comment_status" jdbcType="TINYINT" property="commentStatus"/>
+        <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason"/>
+        <result column="display_status" jdbcType="TINYINT" property="displayStatus"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    comment_id, user_id, article_id, parent_comment_id, comment_desc, comment_date, comment_status, 
+    refuse_reason, display_status
+  </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_user_comment
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </delete>
+
+    <delete id="deleteByKey" parameterType="com.kg.platform.model.in.UserCommentInModel">
+    delete from kg_user_comment
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </delete>
+
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from kg_user_comment where comment_id IN
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" parameterType="com.kg.platform.dao.entity.UserComment">
+    insert into kg_user_comment (comment_id, user_id, article_id, 
+      parent_comment_id, comment_desc, comment_date, 
+      comment_status, refuse_reason, display_status
+      )
+    values (#{commentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, 
+      #{parentCommentId,jdbcType=BIGINT}, #{commentDesc,jdbcType=VARCHAR}, #{commentDate,jdbcType=TIMESTAMP}, 
+      #{commentStatus,jdbcType=TINYINT}, #{refuseReason,jdbcType=VARCHAR}, #{displayStatus,jdbcType=TINYINT}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.kg.platform.model.in.UserCommentInModel">
+        insert into kg_user_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commentId != null">
+                comment_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="articleId != null">
+                article_id,
+            </if>
+            <if test="parentCommentId != null">
+                parent_comment_id,
+            </if>
+            <if test="commentDesc != null">
+                comment_desc,
+            </if>
+            <if test="commentDate != null">
+                comment_date,
+            </if>
+            <if test="commentStatus != null">
+                comment_status,
+            </if>
+            <if test="refuseReason != null">
+                refuse_reason,
+            </if>
+            <if test="displayStatus != null">
+                display_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commentId != null">
+                #{commentId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="articleId != null">
+                #{articleId,jdbcType=BIGINT},
+            </if>
+            <if test="parentCommentId != null">
+                #{parentCommentId,jdbcType=BIGINT},
+            </if>
+            <if test="commentDesc != null">
+                #{commentDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="commentDate != null">
+                #{commentDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commentStatus != null">
+                #{commentStatus,jdbcType=TINYINT},
+            </if>
+            <if test="refuseReason != null">
+                #{refuseReason,jdbcType=VARCHAR},
+            </if>
+            <if test="displayStatus != null">
+                #{displayStatus,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.UserComment">
+        update kg_user_comment
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="articleId != null">
+                article_id = #{articleId,jdbcType=BIGINT},
+            </if>
+            <if test="parentCommentId != null">
+                parent_comment_id = #{parentCommentId,jdbcType=BIGINT},
+            </if>
+            <if test="commentDesc != null">
+                comment_desc = #{commentDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="commentDate != null">
+                comment_date = #{commentDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commentStatus != null">
+                comment_status = #{commentStatus,jdbcType=TINYINT},
+            </if>
+            <if test="refuseReason != null">
+                refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+            </if>
+            <if test="displayStatus != null">
+                display_status = #{displayStatus,jdbcType=TINYINT},
+            </if>
+        </set>
+        where comment_id = #{commentId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.UserComment">
+    update kg_user_comment
+    set user_id = #{userId,jdbcType=BIGINT},
+      article_id = #{articleId,jdbcType=BIGINT},
+      parent_comment_id = #{parentCommentId,jdbcType=BIGINT},
+      comment_desc = #{commentDesc,jdbcType=VARCHAR},
+      comment_date = #{commentDate,jdbcType=TIMESTAMP},
+      comment_status = #{commentStatus,jdbcType=TINYINT},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      display_status = #{displayStatus,jdbcType=TINYINT}
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </update>
+
+
+    <insert id="addCommentReply" parameterType="com.kg.platform.model.in.CommentReplyInModel">
+        insert into kg_user_comment_reply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commentId != null">
+                comment_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="articleId != null">
+                article_id,
+            </if>
+            <if test="parentCommentId != null">
+                parent_comment_id,
+            </if>
+            <if test="commentDesc != null">
+                comment_desc,
+            </if>
+            <if test="commentDate != null">
+                comment_date,
+            </if>
+            <if test="commentStatus != null">
+                comment_status,
+            </if>
+            <if test="refuseReason != null">
+                refuse_reason,
+            </if>
+            <if test="displayStatus != null">
+                display_status,
+            </if>
+            <if test="toUserId != null">
+                to_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commentId != null">
+                #{commentId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="articleId != null">
+                #{articleId,jdbcType=BIGINT},
+            </if>
+            <if test="parentCommentId != null">
+                #{parentCommentId,jdbcType=BIGINT},
+            </if>
+            <if test="commentDesc != null">
+                #{commentDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="commentDate != null">
+                #{commentDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commentStatus != null">
+                #{commentStatus,jdbcType=TINYINT},
+            </if>
+            <if test="refuseReason != null">
+                #{refuseReason,jdbcType=VARCHAR},
+            </if>
+            <if test="displayStatus != null">
+                #{displayStatus,jdbcType=TINYINT},
+            </if>
+            <if test="toUserId != null">
+                #{toUserId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateDisplayStatusFroComment">
+        update kg_user_comment set display_status = #{displayStatus} where comment_id = #{commentId}
+    </update>
+
+    <update id="updateDisplayStatusFroCommentReply">
+        update kg_user_comment_reply set display_status = #{displayStatus} where comment_id = #{commentId}
+    </update>
+
+    <update id="updateCommentStatusForCommentReply">
+        update kg_user_comment_reply
+        <set>
+            <if test="status != null">
+                comment_status = #{status},
+            </if>
+            <if test="refuseReason != null">
+                refuse_reason = #{refuseReason},
+            </if>
+        </set>
+        where comment_id = #{commentId}
+    </update>
+
+    <update id="updateDisplayStatusFroCommentBatch">
+        update kg_user_comment set display_status = 2 where comment_id IN
+        <foreach collection="list" index="index" item="commentId" open="(" separator="," close=")">
+            #{commentId}
+        </foreach>
+    </update>
+
+    <update id="updateDisplayStatusFroCommentReolyBatch">
+        update kg_user_comment_reply set display_status = 2 where comment_id IN
+        <foreach collection="list" index="index" item="commentId" open="(" separator="," close=")">
+            #{commentId}
+        </foreach>
+    </update>
+</mapper>

@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.UserRMapper">
+
+    <resultMap id="BaseResultMap" type="com.kg.platform.model.out.UserkgOutModel">
+        <id column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_email" jdbcType="VARCHAR" property="userEmail"/>
+        <result column="user_mobile" jdbcType="VARCHAR" property="userMobile"/>
+        <result column="mobile_area" jdbcType="VARCHAR" property="mobileArea"/>
+        <result column="user_password" jdbcType="VARCHAR" property="userPassword"/>
+        <result column="user_role" jdbcType="TINYINT" property="userRole"/>
+        <result column="user_level" jdbcType="TINYINT" property="userLevel"/>
+        <result column="audit_status" jdbcType="BIT" property="auditStatus"/>
+        <result column="lock_status" jdbcType="BIT" property="lockStatus"/>
+        <result column="third_party_id" jdbcType="VARCHAR" property="thirdPartyId"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="register_ip" jdbcType="VARCHAR" property="registerIp"/>
+        <result column="email_authed" jdbcType="BIT" property="emailAuthed"/>
+        <result column="mobile_authed" jdbcType="BIT" property="mobileAuthed"/>
+        <result column="apply_role" jdbcType="BIT" property="applyRole"/>
+        <result column="articlesum" property="articlesum"/>
+
+        <result column="realname_authed" property="realnameAuthed"/>
+        <result column="tradepassword_set" property="tradepasswordSet"/>
+        <result column="deposit_status" property="depositStatus"/>
+
+        <result column="lock_date" jdbcType="TIMESTAMP" property="lockDate"/>
+        <result column="lock_time" jdbcType="VARCHAR" property="lockTime"/>
+        <result column="lock_unit" jdbcType="TINYINT" property="lockUnit"/>
+        <result column="column_authed" jdbcType="TINYINT" property="columnAuthed"/>
+        <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason"/>
+        <result column="certificate_status" property="certificateStatus"/>
+
+        <result column="invite_code" property="inviteCode"/>
+        <result column="invite_status" property="inviteStatus"/>
+        <result column="bonus_status" property="bonusStatus"/>
+        <result column="bonus_freeze_reason" property="bonusFreezeReason"/>
+        <result column="register_origin" property="registerOrigin"/>
+        <result column="hot_user" property="isHotUser"/>
+        <result column="user_order" property="userOrder"/>
+        <result column="regist_channel" property="registChannel"/>
+        <result column="ranking_list" property="rankingList"/>
+        <result column="avatar" property="avatar"/>
+        <result column="column_level" jdbcType="TINYINT" property="columnLevel"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    user_id, user_name, user_email, user_mobile, mobile_area, user_password, user_role, invite_code,
+    user_level, audit_status, lock_status, third_party_id, create_date, register_ip, 
+    email_authed, mobile_authed,apply_role,email_authed,mobile_authed,realname_authed,tradepassword_set,deposit_status,register_origin,column_authed,hot_user,user_order
+  </sql>
+
+
+    <sql id="selectByPrimary">
+    us.user_id, us.user_name, us.user_email, us.user_mobile, us.mobile_area, us.user_password, us.user_role, us.invite_code,us.column_authed,
+    us.user_level, us.audit_status, us.lock_status, us.third_party_id, us.create_date, us.register_ip, 
+    us.email_authed, us.mobile_authed,us.apply_role,us.email_authed,us.mobile_authed,us.realname_authed,us.tradepassword_set,us.deposit_status,register_origin
+  </sql>
+
+    <sql id="UserInfo">
+    ku.user_id, ku.user_name, ku.user_email, ku.user_mobile, ku.mobile_area, ku.user_password, ku.user_role, ku.invite_code,
+    ku.user_level, ku.audit_status, ku.lock_status, ku.third_party_id, ku.create_date, ku.register_ip, kua.refuse_reason,
+    ku.email_authed, ku.mobile_authed,ku.apply_role,ku.email_authed,ku.mobile_authed,ku.realname_authed,ku.tradepassword_set,ku.deposit_status
+    ,kua.lock_date,kua.lock_time,kua.lock_unit,kua.invite_status,kua.bonus_status,kua.bonus_freeze_reason,ku.register_origin,column_authed
+  </sql>
+
+    <sql id="selectByPrimaryChannel">
+    us.user_id, us.user_name, us.user_email, us.user_mobile, us.mobile_area, us.user_password, us.user_role, us.invite_code,
+    us.user_level, us.audit_status, us.lock_status, us.third_party_id, us.create_date, us.register_ip,
+    us.email_authed, us.mobile_authed,us.apply_role,us.email_authed,us.mobile_authed,us.realname_authed,us.tradepassword_set,us.deposit_status,us.register_origin,us.column_authed,kp.regist_channel
+  </sql>
+
+    <sql id="common_where_if">
+        <if test="userId != null and userId != ''">
+            <bind name="userIdLike" value="'%'+userId+'%'"/>
+            and us.user_id like #{userIdLike}
+        </if>
+        <if test="userName != null and userName != ''">
+            <bind name="userNameLike" value="'%'+userName+'%'"/>
+            and us.user_name like #{userNameLike}
+        </if>
+        <if test="userEmail != null and userEmail != ''">
+            and us.user_email like #{userEmailLike}
+            <bind name="userEmailLike" value="'%'+userEmail+'%'"/>
+            and us.user_email like #{userEmailLike}
+        </if>
+        <if test="userMobile != null and userMobile != ''">
+            <bind name="userMobileLike" value="'%'+userMobile+'%'"/>
+            and us.user_mobile like #{userMobileLike}
+        </if>
+        <if test="userRole != null and userRole != 6 ">
+            and us.user_role = #{userRole,jdbcType=INTEGER}
+        </if>
+        <if test="userRole == 6">
+            and us.user_role != 1
+        </if>
+        <if test="createDateStart != null">
+            <![CDATA[ and us.create_date >= #{createDateStart}]]>
+        </if>
+        <if test="createDateEnd != null">
+            <![CDATA[ and us.create_date <= #{createDateEnd}]]>
+        </if>
+        <if test="auditStatus != null">
+            and us.audit_status = #{auditStatus,jdbcType=TINYINT}
+        </if>
+        <if test="lockStatus != null">
+            and us.lock_status = #{lockStatus,jdbcType=TINYINT}
+        </if>
+        <if test="platform != null ">
+            and us.register_origin = #{platform,jdbcType=TINYINT}
+        </if>
+        <if test="rankingList != null">
+            and us.ranking_list = #{rankingList,jdbcType=INTEGER}
+        </if>
+        <if test="isHotUser != null">
+            and us.hot_user = #{isHotUser,jdbcType=TINYINT}
+        </if>
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_user
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByPrimaryForModifyPwd" parameterType="com.kg.platform.model.in.UserInModel"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_user
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByInviteCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="UserInfo"/>
+        from kg_user ku,kg_user_active kua
+        where ku.user_id = kua.user_id and
+        ku.invite_code=#{inviteCode}
+    </select>
+
+    <select id="getUserDetails" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="UserInfo"/>
+        from kg_user ku,kg_user_active kua
+        where ku.user_id = kua.user_id and ku.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="checkMobile" parameterType="com.kg.platform.model.in.UserInModel" resultType="java.lang.Integer">
+  	select count(us.user_id) from kg_user  us  where us.user_mobile=#{userMobile}
+  </select>
+
+    <select id="checkEmail" parameterType="com.kg.platform.model.in.UserInModel" resultType="java.lang.Integer">
+  	select count(us.user_id) from kg_user  us where us.user_email=#{userEmail}
+  </select>
+
+    <select id="checkInviteCode" parameterType="com.kg.platform.model.in.UserInModel" resultType="java.lang.Integer">
+  	select count(us.user_id) from kg_user  us where us.invite_code=#{inviteCode}
+  </select>
+
+    <!--验证用户存不存在  -->
+    <select id="getUserInfo" resultMap="BaseResultMap" parameterType="com.kg.platform.model.in.UserInModel">
+        select
+        <include refid="Base_Column_List"/>,(SELECT avatar from kg_user_profile where user_id=us.user_id) avatar
+        from kg_user us
+        where 1=1
+        <if test=" null != userEmail and '' != userEmail">
+            and us.user_email =#{userEmail}
+        </if>
+        <if test=" null != userMobile and '' != userMobile">
+            and us.user_mobile =#{userMobile}
+        </if>
+        <if test=" null != userId and '' != userId">
+            and us.user_id = #{userId}
+        </if>
+    </select>
+
+    <!-- 验证登陆 -->
+    <select id="selectByPrimary" resultMap="BaseResultMap" parameterType="com.kg.platform.model.in.UserInModel">
+
+        SELECT
+        <include refid="selectByPrimary"/>,
+        (SELECT COUNT(article_id) FROM kg_article WHERE create_user=us.user_id) AS
+        articlesum,kucf.certificate_status,kucf.refuse_reason,(SELECT avatar from kg_user_profile where
+        user_id=us.user_id) avatar
+        FROM kg_user us LEFT JOIN kg_user_certificated kucf ON kucf.user_id=us.user_id
+        where 1=1
+        and (us.user_email=#{userEmail} or us.user_mobile = #{userMobile} or us.user_id=#{userId})
+        and us.user_password=#{userPassword}
+    </select>
+
+    <!-- 通过邮箱或手机号码返回用户信息 -->
+    <select id="selectUser" resultMap="BaseResultMap" parameterType="com.kg.platform.model.in.UserInModel">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM kg_user u WHERE 1=1
+        <if test=" null != userEmail and '' != userEmail">
+            and u.user_email =#{userEmail}
+        </if>
+
+        <if test=" null != userMobile and '' != userMobile">
+            AND u.user_mobile=#{userMobile}
+        </if>
+
+    </select>
+
+    <!-- 我的验证第三方登录-->
+    <select id="checkThirdPartyPhone" parameterType="com.kg.platform.model.in.UserProfileInModel"
+            resultMap="BaseResultMap">
+		SELECT count(1) from  kg_user_third_login t
+		LEFT JOIN kg_user u on u.user_id=t.user_id
+		where u.user_mobile=#{userMobile} and t.source=#{userSource} 
+  </select>
+
+
+    <!-- 专栏申请进度显示 -->
+    <select id="selectApply" parameterType="com.kg.platform.model.in.UserProfileInModel" resultMap="BaseResultMap">
+		SELECT ku.user_role,ku.audit_status,ku.apply_role,ku.create_date,ku.deposit_status FROM kg_user ku 
+		WHERE ku.user_id=#{userId,jdbcType=BIGINT}
+	  </select>
+
+
+    <!-- 验证登陆 -->
+    <select id="selectByUser" resultMap="BaseResultMap" parameterType="com.kg.platform.model.in.UserInModel">
+        SELECT
+        <include refid="selectByPrimary"/>,kucf.certificate_status,kucf.refuse_reason
+        FROM kg_user us LEFT JOIN kg_user_certificated kucf ON kucf.user_id=us.user_id
+        where 1=1 AND us.user_id=#{userId}
+    </select>
+
+
+    <!--通过openID获取用户信息 -->
+    <select id="getUserInfoByOpenId" resultMap="BaseResultMap" parameterType="com.kg.platform.model.in.UserInModel">
+        SELECT
+        <include refid="selectByPrimary"/>
+        FROM kg_user us
+        LEFT JOIN kg_user_third_login kt on kt.user_id=us.user_id
+        where 1=1
+        <if test=" null != openId and '' != openId">
+            And kt.open_id= #{openId}
+        </if>
+        <if test=" null != userMobile and '' != userMobile">
+            And us.user_mobile=#{userMobile}
+        </if>
+
+    </select>
+
+    <select id="checkUserIsLock" parameterType="com.kg.platform.model.in.UserInModel" resultType="java.lang.Integer">
+  	     select count(us.user_id) from kg_user  us where us.user_id=#{userId} and us.lock_status=2
+      </select>
+
+    <select id="getUserProfiles" parameterType="com.kg.platform.model.in.UserInModel"
+            resultType="com.kg.platform.model.out.UserkgOutModel">
+         SELECT ku.user_name as userName,ku.user_id as userId,ku.invite_code as inviteCode,ku.lock_status as lockStatus,
+         kua.bonus_status as bonusStatus,
+         if(ku.user_role = 1, kup.avatar,kup.column_avatar ) as avatar
+         FROM kg_user ku 
+         LEFT JOIN kg_user_profile kup on kup.user_id=ku.user_id 
+         LEFT JOIN kg_user_active kua on kua.user_id=ku.user_id 
+         WHERE 1=1 and ( ku.user_id=#{userId} or ku.user_mobile=#{userMobile})
+     </select>
+
+
+    <select id="getAuthorList" resultType="com.kg.platform.model.out.UserkgOutModel"
+            parameterType="com.kg.platform.model.in.UserInModel">
+        select user_id,user_name
+        from kg_user ka
+        where user_role !=1
+        <bind name="userName" value="'%'+userName+'%'"/>
+        and user_name like #{userName} and lock_status=1
+    </select>
+
+    <select id="getAuthorListForSitemap" resultType="com.kg.platform.model.out.UserkgOutModel"
+            parameterType="com.kg.platform.model.in.UserInModel">
+        select user_id
+        from kg_user ka
+        where  user_role !=1  limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="countAuthorListForSitemap" resultType="java.lang.Long">
+        select count(user_id)
+        from kg_user ka
+        where  user_role !=1
+    </select>
+
+    <select id="getChannel" resultType="com.kg.platform.model.response.admin.ChannelResponse">
+         SELECT id,name FROM kg_channel
+     </select>
+
+    <select id="getUserListByUserIds" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultMap="BaseResultMap">
+        select
+        us.*,kp.regist_channel,kp.column_level
+        from kg_user us
+        LEFT JOIN kg_user_profile kp ON us.user_id = kp.user_id
+        LEFT JOIN kg_user_active ka ON us.user_id = ka.user_id
+        <if test="channel!=null and channel!=''">
+            AND kp.regist_channel = #{channel}
+        </if>
+        where us.user_id > 0
+        <include refid="common_where_if"/>
+        <if test="columnLevel!=null">
+            AND us.user_role != 1
+            AND kp.column_level = #{columnLevel}
+        </if>
+        <if test="auditDateStart != null">
+            <![CDATA[ and ka.audit_date >= #{auditDateStart}]]>
+        </if>
+        <if test="auditDateEnd">
+            <![CDATA[ and ka.audit_date <= #{auditDateEnd}]]>
+        </if>
+        <if test="orderByClause == null">
+            order by us.create_date desc
+        </if>
+        <if test="orderByClause != null and sort =='desc'">
+            order by ka.audit_date desc
+        </if>
+        <if test="orderByClause != null and sort == 'asc'">
+            order by ka.audit_date asc
+        </if>
+        <if test="currentPage != -1">
+            limit #{currentPage,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="selectFilterCnt" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultType="java.lang.Integer">
+        select
+        count(us.user_id)
+        from kg_user us
+        LEFT JOIN kg_user_profile kp ON us.user_id = kp.user_id
+        <if test="auditDateStart != null or auditDateEnd != null">
+            LEFT JOIN kg_user_active ka ON us.user_id = ka.user_id
+        </if>
+        where us.user_id > 0
+        <if test="columnLevel!=null">
+            AND us.user_role != 1
+            AND kp.column_level = #{columnLevel}
+        </if>
+        <if test="auditDateStart != null">
+            <![CDATA[ and ka.audit_date >= #{auditDateStart}]]>
+        </if>
+        <if test="auditDateEnd">
+            <![CDATA[ and ka.audit_date <= #{auditDateEnd}]]>
+        </if>
+        <include refid="common_where_if"/>
+    </select>
+
+    <select id="selectMoreParentInfo" parameterType="java.util.List" resultMap="BaseResultMap">
+        SELECT
+        ku.*,kp.avatar
+        FROM kg_user ku
+        LEFT JOIN kg_user_profile kp ON kp.user_id = ku.user_id
+        WHERE ku.user_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectParentFilterQuery" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultType="java.lang.Long">
+        SELECT parent.user_id FROM(
+        select *
+        from kg_user us
+        where us.user_id > 0
+        <include refid="common_where_if"/>
+        <if test="orderByClause == null">
+            order by us.create_date desc
+        </if>
+        ) AS parent
+        WHERE 1=1
+        <if test="master != null and master != ''">
+            <bind name="masterLike" value="'%'+master+'%'"/>
+            AND parent.user_name like #{masterLike}
+        </if>
+        limit #{currentPage,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOrderArticleByFilter" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultMap="BaseResultMap">
+        SELECT us.*,IFNULL(ka.cnt,0) AS sortCnt FROM kg_user us
+        LEFT JOIN
+        (
+        SELECT create_user,count(create_user) AS cnt FROM kg_article GROUP BY create_user
+        ) AS ka
+        ON us.user_id = ka.create_user
+        WHERE 1=1
+        <include refid="common_where_if"/>
+        <if test="sort == 'desc'">
+            ORDER BY sortCnt DESC
+        </if>
+        <if test="sort =='asc'">
+            ORDER BY sortCnt ASC
+        </if>
+        LIMIT #{currentPage,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOrderCommentByFilter" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultMap="BaseResultMap">
+        SELECT us.*,IFNULL(ka.cnt,0) AS sortCnt FROM kg_user us
+        LEFT JOIN
+        (
+        SELECT user_id,count(user_id) AS cnt FROM kg_user_comment GROUP BY user_id
+        ) AS ka
+        ON us.user_id = ka.user_id
+        WHERE 1=1
+        <include refid="common_where_if"/>
+        <if test="sort == 'desc'">
+            ORDER BY sortCnt DESC
+        </if>
+        <if test="sort =='asc'">
+            ORDER BY sortCnt ASC
+        </if>
+        LIMIT #{currentPage,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOrderCollectByFilter" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultMap="BaseResultMap">
+        SELECT us.* FROM kg_user us
+        WHERE 1=1
+        <include refid="common_where_if"/>
+        <if test="sort == 'desc'">
+            ORDER BY sortCnt DESC
+        </if>
+        <if test="sort =='asc'">
+            ORDER BY sortCnt ASC
+        </if>
+        LIMIT #{currentPage,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectOrderShareByFilter" parameterType="com.kg.platform.model.request.admin.UserQueryRequest"
+            resultMap="BaseResultMap">
+        SELECT us.*,IFNULL(ka.cnt,0) AS sortCnt FROM kg_user us
+        LEFT JOIN
+        (
+        SELECT user_id,share_num AS cnt FROM kg_user_active
+        ) AS ka
+        ON us.user_id = ka.user_id
+        WHERE 1=1
+        <include refid="common_where_if"/>
+        <if test="sort == 'desc'">
+            ORDER BY sortCnt DESC
+        </if>
+        <if test="sort =='asc'">
+            ORDER BY sortCnt ASC
+        </if>
+        LIMIT #{currentPage,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="getUserAccountInfo" parameterType="com.kg.platform.model.in.UserInModel" resultMap="BaseResultMap">
+        SELECT ku.user_id,ku.user_mobile,ku.user_role,ka.txb_balance+ka.txb_frozen_balance txbBalance,ka.rit_balance ritBalance,ka.rit_frozen_balance ritFrozenBalance
+        from kg_user ku
+        LEFT JOIN kg_account ka on ku.user_id=ka.user_id
+        WHERE user_mobile=#{userMobile}
+    </select>
+
+    <select id="getExportList" resultType="com.kg.platform.common.easyexcel.AsverageUserExportExcel">
+        SELECT
+        ku.user_id as userId,
+        ku.user_name as userName,
+        ku.user_mobile as userPhone,
+        ku.create_date as createTime,
+        kur.user_id as masterUserId,
+        (select user_name from kg_user where user_id = kur.user_id) as masterUserName,
+        ku.register_origin as registFrom,
+        kup.regist_channel as channel,
+        ku.user_source as activityChannel,
+        0 browseNum,
+        0 collectNum,
+        0 thumbupNum,
+        0 shareNum,
+        ( SELECT count( * ) FROM kg_user_comment WHERE user_id = ku.user_id AND comment_date >= #{startTime} AND
+        #{endTime} >= comment_date) AS commentNum,
+        ka.txb_balance as kgBalance,
+        ka.rit_balance as ritBalance,
+        kua.lastlogin_time as lastLoginTime,
+        '' as lastReadTime
+        FROM
+        kg_user ku
+        LEFT JOIN kg_user_profile kup ON ku.user_id = kup.user_id
+        LEFT JOIN kg_account ka ON ku.user_id = ka.user_id
+        LEFT JOIN kg_user_active kua ON kua.user_id = ku.user_id
+        left join kg_user_relation kur on kur.rel_user_id = ku.user_id
+        where ku.user_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getPostUserIds" resultType="java.lang.Long">
+        select
+        DISTINCT(create_user)
+        from kg_article
+        where publish_status = 1 and audit_date >= #{start} and #{end} >= audit_date
+    </select>
+
+    <select id="getNewFansUserIds" resultType="java.lang.Long">
+        select
+        DISTINCT(concern_user_id)
+        from kg_user_concern
+        where create_date >= #{start} and #{end} >= create_date
+    </select>
+
+    <select id="getLoginUserIds" resultType="java.lang.Long">
+        select
+        DISTINCT(user_id)
+        from kg_user_active
+        where lastlogin_time >= #{start} and #{end} >= lastlogin_time
+    </select>
+
+    <select id="getAuthorExportExcelList" resultType="com.kg.platform.common.easyexcel.AuthorExportExcel">
+        SELECT
+        ku.user_id AS userId,
+        kup.column_name AS userName,
+        ku.user_role AS role,
+        ku.user_mobile AS phone,
+        ku.create_date AS createTime,
+        kua.audit_date AS columnTime,
+        ku.register_origin AS registFrom,
+        ( SELECT count( * ) FROM kg_user_concern WHERE concern_user_id = ku.user_id ) AS fansTotal,
+        ku.hot_user AS hotAuthor,
+        kur.user_id AS masterUserId,
+        ( SELECT user_name FROM kg_user WHERE user_id = kur.user_id ) AS masterUserName,
+        ka.txb_balance AS kgBalance,
+        ka.rit_balance AS ritBalance,
+        ( SELECT count( * ) FROM kg_article WHERE publish_status = 1 AND create_user = ku.user_id ) AS auditNum,
+        ( SELECT count( * ) FROM kg_article WHERE publish_status = 3 AND create_user = ku.user_id ) AS auditFailedNum,
+        kua.lastlogin_time AS lastLoginTime,
+        ( SELECT audit_date FROM kg_article WHERE create_user = ku.user_id AND publish_status = 1 ORDER BY audit_date
+        DESC LIMIT 1 ) AS lastPostTime,
+        ( SELECT count( * ) FROM kg_user_concern WHERE concern_user_id = ku.user_id AND create_date >= #{startTime} AND
+        #{endTime} >= create_date) AS fans,
+        kup.column_level AS columnLevel,
+        ( SELECT audit_date FROM kg_article WHERE create_user = ku.user_id AND publish_status = 1 ORDER BY audit_date
+        ASC LIMIT 1 ) AS firstPostTime
+        FROM
+        kg_user ku
+        LEFT JOIN kg_user_profile kup ON kup.user_id = ku.user_id
+        LEFT JOIN kg_user_relation kur ON kur.rel_user_id = ku.user_id
+        LEFT JOIN kg_account ka ON ku.user_id = ka.user_id
+        LEFT JOIN kg_user_active kua ON kua.user_id = ku.user_id
+        where ku.user_role != 1 AND ku.user_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="postCount" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        kg_article
+        WHERE
+        create_user = #{userId} AND article_id != #{articleId}
+        AND publish_status = 1 AND display_status != 4
+    </select>
+
+    <select id="postCountForBatch" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        kg_article
+        WHERE create_user = #{userId}
+        AND publish_status = 1
+        AND display_status != 4
+        AND article_id NOT IN
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <select id="commentUserList" resultType="com.kg.platform.model.response.CommentUser">
+        SELECT
+        ku.user_id AS userId,
+        IF(ku.user_role = 1, ku.user_name, kup.column_name) AS userName,
+        IF(ku.user_role = 1, kup.avatar, kup.column_avatar) AS avatar,
+        IF(ku.user_id = #{authorId},1,0) AS isAuthor
+        FROM
+        kg_user ku
+        LEFT JOIN kg_user_profile kup ON ku.user_id = kup.user_id
+        WHERE
+        ku.user_id IN
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getCommentUserByUserId" resultType="com.kg.platform.model.response.CommentUser">
+        SELECT
+        ku.user_id AS userId,
+        IF(ku.user_role = 1, ku.user_name, kup.column_name) AS userName,
+        IF(ku.user_role = 1, kup.avatar, kup.column_avatar) AS avatar
+        FROM
+        kg_user ku
+        LEFT JOIN kg_user_profile kup ON ku.user_id = kup.user_id
+        WHERE
+        ku.user_id = #{userId}
+    </select>
+</mapper>

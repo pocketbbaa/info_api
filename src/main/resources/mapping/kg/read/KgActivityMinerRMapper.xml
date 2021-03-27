@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.KgActivityMinerRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgActivityMinerOutModel">
+    <id column="miner_id" jdbcType="BIGINT" property="minerId" />
+    <result column="miner_name" jdbcType="VARCHAR" property="minerName" />
+    <result column="miner_price" jdbcType="DECIMAL" property="minerPrice" />
+    <result column="miner_assist_frequency" jdbcType="INTEGER" property="minerAssistFrequency" />
+    <result column="miner_join_frequency" jdbcType="INTEGER" property="minerJoinFrequency" />
+    <result column="miner_number" jdbcType="INTEGER" property="minerNumber" />
+    <result column="miner_start_date" jdbcType="TIMESTAMP" property="minerStartDate" />
+    <result column="miner_end_date" jdbcType="TIMESTAMP" property="minerEndDate" />
+    <result column="miner_desc" jdbcType="VARCHAR" property="minerDesc" />
+    <result column="miner_link" jdbcType="VARCHAR" property="minerLink" />
+    <result column="miner_photo" jdbcType="VARCHAR" property="minerPhoto" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    miner_id, miner_name, miner_price, miner_assist_frequency, miner_join_frequency, 
+    miner_number, miner_start_date, miner_end_date, miner_desc, miner_link, miner_photo
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_activity_miner
+    where miner_id = #{minerId,jdbcType=BIGINT}
+  </select>
+  <select id="getMinerList" parameterType="com.kg.platform.model.in.KgActivityMinerInModel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,(select count(user_id) from kg_miner_rob where miner_id = kam.miner_id AND rob_status=1 ) robedNumber
+    from kg_activity_miner as kam
+  </select>
+</mapper>

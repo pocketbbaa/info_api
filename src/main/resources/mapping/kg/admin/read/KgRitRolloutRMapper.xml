@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.KgRitRolloutRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.KgRitRollout">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="day_limit" jdbcType="BIGINT" property="dayLimit" />
+    <result column="month_limit" jdbcType="BIGINT" property="monthLimit" />
+    <result column="rate" jdbcType="REAL" property="rate" />
+    <result column="min_amount" jdbcType="BIGINT" property="minAmount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_type, day_limit, month_limit, rate, min_amount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_rit_rollout
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_rit_rollout
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.KgRitRollout">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_rit_rollout (user_type, day_limit, month_limit, 
+      rate, min_amount)
+    values (#{userType,jdbcType=INTEGER}, #{dayLimit,jdbcType=BIGINT}, #{monthLimit,jdbcType=BIGINT}, 
+      #{rate,jdbcType=REAL}, #{minAmount,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.KgRitRollout">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into kg_rit_rollout
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userType != null">
+        user_type,
+      </if>
+      <if test="dayLimit != null">
+        day_limit,
+      </if>
+      <if test="monthLimit != null">
+        month_limit,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="minAmount != null">
+        min_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userType != null">
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="dayLimit != null">
+        #{dayLimit,jdbcType=BIGINT},
+      </if>
+      <if test="monthLimit != null">
+        #{monthLimit,jdbcType=BIGINT},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=REAL},
+      </if>
+      <if test="minAmount != null">
+        #{minAmount,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.KgRitRollout">
+    update kg_rit_rollout
+    <set>
+      <if test="userType != null">
+        user_type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="dayLimit != null">
+        day_limit = #{dayLimit,jdbcType=BIGINT},
+      </if>
+      <if test="monthLimit != null">
+        month_limit = #{monthLimit,jdbcType=BIGINT},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=REAL},
+      </if>
+      <if test="minAmount != null">
+        min_amount = #{minAmount,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.KgRitRollout">
+    update kg_rit_rollout
+    set user_type = #{userType,jdbcType=INTEGER},
+      day_limit = #{dayLimit,jdbcType=BIGINT},
+      month_limit = #{monthLimit,jdbcType=BIGINT},
+      rate = #{rate,jdbcType=REAL},
+      min_amount = #{minAmount,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryUserType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM kg_rit_rollout WHERE user_type = #{userType,jdbcType=INTEGER}
+  </select>
+</mapper>

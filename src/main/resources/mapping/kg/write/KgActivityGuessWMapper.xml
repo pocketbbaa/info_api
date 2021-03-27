@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgActivityGuessWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgActivityGuessOutModel">
+    <id column="guess_id" jdbcType="INTEGER" property="guessId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="guess_date" jdbcType="TIMESTAMP" property="guessDate" />
+    <result column="competion_id" jdbcType="INTEGER" property="competionId" />
+    <result column="support_team_id" jdbcType="INTEGER" property="supportTeamId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    guess_id, user_id, guess_date, competion_id, support_team_id, remark
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_activity_guess
+    where guess_id = #{guessId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgActivityGuessInModel">
+    insert into kg_activity_guess (user_id, guess_date, competion_id,
+      support_team_id, remark)
+    values (#{userId,jdbcType=BIGINT}, #{guessDate,jdbcType=TIMESTAMP}, #{competionId,jdbcType=INTEGER},
+      #{supportTeamId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgActivityGuessInModel">
+    insert into kg_activity_guess
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="guessDate != null">
+        guess_date,
+      </if>
+      <if test="competionId != null">
+        competion_id,
+      </if>
+      <if test="supportTeamId != null">
+        support_team_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="guessDate != null">
+        #{guessDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="competionId != null">
+        #{competionId,jdbcType=INTEGER},
+      </if>
+      <if test="supportTeamId != null">
+        #{supportTeamId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgActivityGuessInModel">
+    update kg_activity_guess
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="guessDate != null">
+        guess_date = #{guessDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="competionId != null">
+        competion_id = #{competionId,jdbcType=INTEGER},
+      </if>
+      <if test="supportTeamId != null">
+        support_team_id = #{supportTeamId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where guess_id = #{guessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgActivityGuessInModel">
+    update kg_activity_guess
+    set user_id = #{userId,jdbcType=BIGINT},
+      guess_date = #{guessDate,jdbcType=TIMESTAMP},
+      competion_id = #{competionId,jdbcType=INTEGER},
+      support_team_id = #{supportTeamId,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where guess_id = #{guessId,jdbcType=INTEGER}
+  </update>
+</mapper>

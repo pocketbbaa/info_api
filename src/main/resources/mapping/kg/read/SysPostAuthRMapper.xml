@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.SysPostAuthRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.SysPostAuth">
+    <id column="post_auth_id" jdbcType="INTEGER" property="postAuthId" />
+    <result column="auth_id" jdbcType="INTEGER" property="authId" />
+    <result column="post_id" jdbcType="INTEGER" property="postId" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    post_auth_id, auth_id, post_id, create_user, create_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_sys_post_auth
+    where post_auth_id = #{postAuthId,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

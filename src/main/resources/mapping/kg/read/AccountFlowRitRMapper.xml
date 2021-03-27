@@ -1,0 +1,181 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.AccountFlowRitRMapper">
+
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.AccountFlowRit">
+    <id column="account_flow_id" jdbcType="BIGINT" property="accountFlowId" />
+    <result column="relation_flow_id" jdbcType="BIGINT" property="relationFlowId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="business_type_id" jdbcType="INTEGER" property="businessTypeId" />
+    <result column="tx_id" jdbcType="VARCHAR" property="txId" />
+    <result column="tx_address" jdbcType="VARCHAR" property="txAddress" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="poundage_amount" jdbcType="DECIMAL" property="poundageAmount" />
+    <result column="account_date" jdbcType="TIMESTAMP" property="accountDate" />
+    <result column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="bonus_total_person" jdbcType="INTEGER" property="bonusTotalPerson" />
+    <result column="flow_status" jdbcType="TINYINT" property="flowStatus" />
+    <result column="flow_date" jdbcType="TIMESTAMP" property="flowDate" />
+    <result column="flow_detail" jdbcType="VARCHAR" property="flowDetail" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+    <resultMap id="AccountFlowOutResultMap" type="com.kg.platform.model.out.AccountFlowOutModel">
+        <id column="account_flow_id" jdbcType="BIGINT" property="accountFlowId"/>
+        <result column="relation_flow_id" jdbcType="BIGINT" property="relationFlowId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_phone" jdbcType="VARCHAR" property="userPhone"/>
+        <result column="user_email" jdbcType="VARCHAR" property="userEmail"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="business_type_id" jdbcType="INTEGER" property="businessTypeId"/>
+        <result column="tx_id" jdbcType="VARCHAR" property="txId"/>
+        <result column="tx_address" jdbcType="VARCHAR" property="txAddress"/>
+        <result column="account_amount" jdbcType="DECIMAL" property="accountAmount"/>
+        <result column="freeze_amount" jdbcType="DECIMAL" property="freezeAmount"/>
+        <result column="poundage_amount" jdbcType="DECIMAL" property="poundageAmount"/>
+        <result column="account_date" jdbcType="TIMESTAMP" property="accountDate"/>
+        <result column="article_id" jdbcType="BIGINT" property="articleId"/>
+        <result column="bonus_total_person" jdbcType="INTEGER" property="bonusTotalPerson"/>
+        <result column="flow_status" jdbcType="TINYINT" property="flowStatus"/>
+        <result column="flow_date" jdbcType="TIMESTAMP" property="flowDate"/>
+        <result column="flow_detail" jdbcType="VARCHAR" property="flowDetail"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="typename" property="typename"/>
+        <result column="Income" property="Income" jdbcType="DECIMAL"/>
+        <result column="TodayIncome" property="TodayIncome" jdbcType="DECIMAL"/>
+        <result column="recenflowDate" property="recenflowDate" jdbcType="VARCHAR"/>
+        <result column="awrad" property="awrad" jdbcType="DECIMAL"/>
+        <result column="Reduce" property="Reduce"/>
+        <result column="BeforeIncome" property="BeforeIncome"/>
+        <result column="tUId" property="tUId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    account_flow_id, relation_flow_id, user_id, user_phone, user_email, amount, business_type_id, 
+    tx_id, tx_address, account_amount, poundage_amount, account_date, article_id, bonus_total_person, 
+    flow_status, flow_date, flow_detail, remark
+  </sql>
+
+  <select id="selectUserTypeFlow" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultMap="BaseResultMap">
+    SELECT 
+     <include refid="Base_Column_List" /> 
+    FROM kg_account_flow_rit WHERE business_type_id=#{businessTypeId} AND  user_id=#{userId}
+  </select>
+
+    <select id="countUserTypeFlow" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultType="java.math.BigDecimal">
+        SELECT
+        sum(amount)
+        FROM kg_account_flow_rit WHERE business_type_id=#{businessTypeId} AND  user_id=#{userId} AND amount>0
+    </select>
+    
+    
+    <select id="selectTypeFlowCount" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultType ="java.lang.Integer">
+	    SELECT  count(1)
+	    FROM kg_account_flow_rit WHERE business_type_id=#{businessTypeId} AND  user_id=#{userId}
+	    AND TO_DAYS(flow_date) = TO_DAYS(NOW()) and user_id !=-1 AND amount>0
+   </select>
+   
+   <!--验证该用户是否已获得该奖励 -->
+    <select id="checkArticleBonus" parameterType="com.kg.platform.model.in.AccountFlowInModel" resultType ="java.lang.Integer">
+	    SELECT count(1)
+	    FROM kg_account_flow_rit WHERE business_type_id=#{businessTypeId} AND  user_id=#{userId}
+	    AND amount>0 AND article_id=#{articleId} AND TO_DAYS(flow_date) = TO_DAYS(NOW()) 
+   </select>
+   
+   <!--验证用户氪金金额是否大于扣取的金额 -->
+    <select id="validatePlatformKgBanlace" parameterType="com.kg.platform.model.in.AccountInModel" resultType="java.lang.Integer">
+	     select count(kg.account_id) from kg_account kg where kg.txb_balance> 0  and kg.txb_balance &gt;= #{balance} and kg.user_id=#{userId}
+   </select>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_account_flow_rit
+        where account_flow_id = #{accountFlowId,jdbcType=BIGINT}
+    </select>
+
+    <select id="cumulativeIncomeRit" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="AccountFlowOutResultMap">
+    SELECT SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) AS  Income FROM kg_account_flow_rit WHERE user_id=#{userId}
+    </select>
+
+    <select id="TodayRit" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="AccountFlowOutResultMap">
+        <![CDATA[
+            SELECT
+            SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) AS TodayIncome,
+            SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END) AS Reduce
+            FROM kg_account_flow_rit WHERE user_id=#{userId} AND DATE(flow_date) = CURDATE()
+        ]]>
+    </select>
+
+    <select id="BeforeIncomeRit" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="AccountFlowOutResultMap">
+        SELECT
+            SUM( CASE WHEN a.amount > 0 THEN a.amount ELSE 0 END ) AS BeforeIncome
+        FROM
+            ( SELECT * FROM kg_account_flow_rit WHERE flow_date BETWEEN DATE_SUB( CURDATE( ), INTERVAL 1 DAY ) AND DATE_SUB( CURDATE( ), INTERVAL 0 DAY ) ) a
+        WHERE
+            a.user_id = #{userId}
+    </select>
+
+    <select id="selectUserRitflowForApp" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="AccountFlowOutResultMap">
+        SELECT
+        kaf.account_flow_id,amount,freeze_amount,flow_date, flow_detail,kab.business_typename AS typename
+        FROM kg_account_flow_rit kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 收入 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(2000)
+        </if>
+        <!-- 支出 -->
+        <if test="Type==2">
+            AND kaf.business_type_id = 0
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT} ORDER BY kaf.flow_date DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectUserRitflowCountForApp" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultType="java.lang.Integer">
+        SELECT
+        count(kaf.account_flow_id)
+        FROM kg_account_flow_rit kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE 1=1
+        <if test=" null != startTime and '' != startTime">
+            AND kaf.flow_date >= #{startTime}
+        </if>
+        <if test=" null != endTime and '' != endTime">
+            AND #{endTime} >= kaf.flow_date
+        </if>
+        <!-- 收入 -->
+        <if test="Type==1">
+            AND kaf.business_type_id IN(2000)
+        </if>
+        <!-- 支出 -->
+        <if test="Type==2">
+            AND kaf.business_type_id = 0
+        </if>
+        AND kaf.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getRitDetailBill" parameterType="com.kg.platform.model.in.AccountFlowInModel"
+            resultMap="AccountFlowOutResultMap">
+        SELECT
+        amount,freeze_amount,flow_date, flow_detail,tx_address,kab.business_typename AS typename
+        FROM kg_account_flow_rit kaf LEFT JOIN kg_account_businesstype kab ON kaf.business_type_id=kab.business_type_id
+        WHERE
+        kaf.account_flow_id = #{accountFlowId,jdbcType=BIGINT} limit 1
+    </select>
+
+</mapper>

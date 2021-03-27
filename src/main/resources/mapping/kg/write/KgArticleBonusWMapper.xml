@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kg.platform.dao.write.KgArticleBonusWMapper" >
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgArticleBonusOutModel" >
+    <id column="bonus_id" property="bonusId" jdbcType="BIGINT" />
+    <result column="article_id" property="articleId" jdbcType="BIGINT" />
+    <result column="bonus_type" property="bonusType" jdbcType="TINYINT" />
+    <result column="bonus_second_type" property="bonusSecondType" jdbcType="TINYINT" />
+    <result column="bonus_kind" jdbcType="TINYINT" property="bonusKind" />
+    <result column="browse_time" property="browseTime" jdbcType="INTEGER" />
+    <result column="bonus_value" property="bonusValue" jdbcType="DECIMAL" />
+    <result column="max_people" property="maxPeople" jdbcType="INTEGER" />
+    <result column="bonus_status" property="bonusStatus" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from kg_article_bonus
+    where bonus_id = #{bonusId,jdbcType=BIGINT}
+  </delete>
+  
+  <delete id="deleteByArticle" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" >
+    delete from kg_article_bonus
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </delete>
+ 
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" >
+    insert into kg_article_bonus (bonus_id, article_id, bonus_type, 
+      bonus_second_type, browse_time, bonus_value, bonus_kind,
+      max_people, bonus_status, create_user, 
+      create_date, update_date, update_user
+      )
+    values (#{bonusId,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, #{bonusType,jdbcType=TINYINT}, 
+      #{bonusSecondType,jdbcType=TINYINT}, #{browseTime,jdbcType=INTEGER}, #{bonusValue,jdbcType=DECIMAL}, #{bonusKind,jdbcType=TINYINT}, 
+      #{maxPeople,jdbcType=INTEGER}, #{bonusStatus,jdbcType=TINYINT}, #{createUser,jdbcType=BIGINT}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" >
+    insert into kg_article_bonus
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bonusId != null" >
+        bonus_id,
+      </if>
+      <if test="articleId != null" >
+        article_id,
+      </if>
+      <if test="bonusType != null" >
+        bonus_type,
+      </if>
+      <if test="bonusSecondType != null" >
+        bonus_second_type,
+      </if>
+      <if test="browseTime != null" >
+        browse_time,
+      </if>
+      <if test="bonusValue != null" >
+        bonus_value,
+      </if>
+      <if test="maxPeople != null" >
+        max_people,
+      </if>
+      <if test="bonusStatus != null" >
+        bonus_status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="bonusKind != null" >
+        bonus_kind,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bonusId != null" >
+        #{bonusId,jdbcType=BIGINT},
+      </if>
+      <if test="articleId != null" >
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusType != null" >
+        #{bonusType,jdbcType=TINYINT},
+      </if>
+      <if test="bonusSecondType != null" >
+        #{bonusSecondType,jdbcType=TINYINT},
+      </if>
+      <if test="browseTime != null" >
+        #{browseTime,jdbcType=INTEGER},
+      </if>
+      <if test="bonusValue != null" >
+        #{bonusValue,jdbcType=DECIMAL},
+      </if>
+      <if test="maxPeople != null" >
+        #{maxPeople,jdbcType=INTEGER},
+      </if>
+      <if test="bonusStatus != null" >
+        #{bonusStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="bonusKind != null" >
+        #{bonusKind,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+ 
+
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" >
+    update kg_article_bonus
+    <set >
+      <if test="articleId != null" >
+        article_id = #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusType != null" >
+        bonus_type = #{bonusType,jdbcType=TINYINT},
+      </if>
+      <if test="bonusSecondType != null" >
+        bonus_second_type = #{bonusSecondType,jdbcType=TINYINT},
+      </if>
+      <if test="browseTime != null" >
+        browse_time = #{browseTime,jdbcType=INTEGER},
+      </if>
+      <if test="bonusValue != null" >
+        bonus_value = #{bonusValue,jdbcType=DECIMAL},
+      </if>
+      <if test="maxPeople != null" >
+        max_people = #{maxPeople,jdbcType=INTEGER},
+      </if>
+      <if test="bonusStatus != null" >
+        bonus_status = #{bonusStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="bonusKind != null" >
+        bonus_kind = #{bonusKind,jdbcType=TINYINT},
+      </if>
+    </set>
+    where bonus_id = #{bonusId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" >
+    update kg_article_bonus
+    set article_id = #{articleId,jdbcType=BIGINT},
+      bonus_type = #{bonusType,jdbcType=TINYINT},
+      bonus_second_type = #{bonusSecondType,jdbcType=TINYINT},
+      bonus_kind = #{bonusKind,jdbcType=TINYINT},
+      browse_time = #{browseTime,jdbcType=INTEGER},
+      bonus_value = #{bonusValue,jdbcType=DECIMAL},
+      max_people = #{maxPeople,jdbcType=INTEGER},
+      bonus_status = #{bonusStatus,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where bonus_id = #{bonusId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateBonusStatusByArticleId" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" >
+    update kg_article_bonus
+    set
+      bonus_status = #{bonusStatus,jdbcType=TINYINT}
+      where
+    article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+      
+  <update id="startBonusStatusByArticleId" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" >
+    update kg_article_bonus
+    set
+      bonus_status = 1
+      where bonus_status=2 and
+    article_id = #{articleId,jdbcType=BIGINT}
+  </update>  
+  
+  <update id="pauseBonusStatusByArticleId" parameterType="com.kg.platform.model.in.KgArticleBonusInModel" >
+    update kg_article_bonus
+    set
+      bonus_status = 2
+      where bonus_status=1 and
+    article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

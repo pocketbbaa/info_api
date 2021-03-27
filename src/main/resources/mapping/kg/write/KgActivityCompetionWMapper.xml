@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgActivityCompetionWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgActivityCompetionOutModel">
+    <id column="competion_id" jdbcType="INTEGER" property="competionId" />
+    <result column="home_team_logo" jdbcType="VARCHAR" property="homeTeamLogo" />
+    <result column="guest_team_logo" jdbcType="VARCHAR" property="guestTeamLogo" />
+    <result column="home_team_name" jdbcType="VARCHAR" property="homeTeamName" />
+    <result column="home_team_id" jdbcType="INTEGER" property="homeTeamId" />
+    <result column="guest_team_name" jdbcType="VARCHAR" property="guestTeamName" />
+    <result column="guest_team_id" jdbcType="INTEGER" property="guestTeamId" />
+    <result column="competition_date" jdbcType="TIMESTAMP" property="competitionDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    competion_id, home_team_logo, guest_team_logo, home_team_name, home_team_id, guest_team_name, 
+    guest_team_id, competition_date
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_activity_competion
+    where competion_id = #{competionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgActivityCompetionInModel">
+    insert into kg_activity_competion (home_team_logo, guest_team_logo, home_team_name,
+      home_team_id, guest_team_name, guest_team_id,
+      competition_date)
+    values (#{homeTeamLogo,jdbcType=VARCHAR}, #{guestTeamLogo,jdbcType=VARCHAR}, #{homeTeamName,jdbcType=VARCHAR},
+      #{homeTeamId,jdbcType=INTEGER}, #{guestTeamName,jdbcType=VARCHAR}, #{guestTeamId,jdbcType=INTEGER},
+      #{competitionDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgActivityCompetionInModel">
+    insert into kg_activity_competion
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="homeTeamLogo != null">
+        home_team_logo,
+      </if>
+      <if test="guestTeamLogo != null">
+        guest_team_logo,
+      </if>
+      <if test="homeTeamName != null">
+        home_team_name,
+      </if>
+      <if test="homeTeamId != null">
+        home_team_id,
+      </if>
+      <if test="guestTeamName != null">
+        guest_team_name,
+      </if>
+      <if test="guestTeamId != null">
+        guest_team_id,
+      </if>
+      <if test="competitionDate != null">
+        competition_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="homeTeamLogo != null">
+        #{homeTeamLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="guestTeamLogo != null">
+        #{guestTeamLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="homeTeamName != null">
+        #{homeTeamName,jdbcType=VARCHAR},
+      </if>
+      <if test="homeTeamId != null">
+        #{homeTeamId,jdbcType=INTEGER},
+      </if>
+      <if test="guestTeamName != null">
+        #{guestTeamName,jdbcType=VARCHAR},
+      </if>
+      <if test="guestTeamId != null">
+        #{guestTeamId,jdbcType=INTEGER},
+      </if>
+      <if test="competitionDate != null">
+        #{competitionDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgActivityCompetionInModel">
+    update kg_activity_competion
+    <set>
+      <if test="homeTeamLogo != null">
+        home_team_logo = #{homeTeamLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="guestTeamLogo != null">
+        guest_team_logo = #{guestTeamLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="homeTeamName != null">
+        home_team_name = #{homeTeamName,jdbcType=VARCHAR},
+      </if>
+      <if test="homeTeamId != null">
+        home_team_id = #{homeTeamId,jdbcType=INTEGER},
+      </if>
+      <if test="guestTeamName != null">
+        guest_team_name = #{guestTeamName,jdbcType=VARCHAR},
+      </if>
+      <if test="guestTeamId != null">
+        guest_team_id = #{guestTeamId,jdbcType=INTEGER},
+      </if>
+      <if test="competitionDate != null">
+        competition_date = #{competitionDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where competion_id = #{competionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgActivityCompetionInModel">
+    update kg_activity_competion
+    set home_team_logo = #{homeTeamLogo,jdbcType=VARCHAR},
+      guest_team_logo = #{guestTeamLogo,jdbcType=VARCHAR},
+      home_team_name = #{homeTeamName,jdbcType=VARCHAR},
+      home_team_id = #{homeTeamId,jdbcType=INTEGER},
+      guest_team_name = #{guestTeamName,jdbcType=VARCHAR},
+      guest_team_id = #{guestTeamId,jdbcType=INTEGER},
+      competition_date = #{competitionDate,jdbcType=TIMESTAMP}
+    where competion_id = #{competionId,jdbcType=INTEGER}
+  </update>
+</mapper>

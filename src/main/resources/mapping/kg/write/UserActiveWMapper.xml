@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.UserActiveWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.UserActive">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="lastlogin_ip" jdbcType="VARCHAR" property="lastloginIp" />
+    <result column="lastlogin_time" jdbcType="TIMESTAMP" property="lastloginTime" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_userid" jdbcType="BIGINT" property="updateUserid" />
+    <result column="lock_date" jdbcType="TIMESTAMP" property="lockDate" />
+    <result column="lock_time" jdbcType="TINYINT" property="lockTime" />
+    <result column="lock_unit" jdbcType="INTEGER" property="lockUnit" />
+    <result column="bowse_num" jdbcType="INTEGER" property="bowseNum" />
+    <result column="share_num" jdbcType="INTEGER" property="shareNum" />
+    <result column="apply_column_time" jdbcType="TIMESTAMP" property="applyColumnTime" />
+    <result column="audit_userid" jdbcType="INTEGER" property="auditUserid" />
+    <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, lastlogin_ip, lastlogin_time, update_date, update_userid, lock_date, lock_time, 
+    lock_unit, bowse_num, share_num, apply_column_time, audit_userid, audit_date,refuse_reason
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_user_active
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.dao.entity.UserActive">
+    insert into kg_user_active (user_id, lastlogin_ip, lastlogin_time, 
+      update_date, update_userid, lock_date, 
+      lock_time, lock_unit, bowse_num, 
+      share_num, apply_column_time, audit_userid, 
+      audit_date)
+    values (#{userId,jdbcType=BIGINT}, #{lastloginIp,jdbcType=VARCHAR}, #{lastloginTime,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{updateUserid,jdbcType=BIGINT}, #{lockDate,jdbcType=TIMESTAMP}, 
+      #{lockTime,jdbcType=TINYINT}, #{lockUnit,jdbcType=BIT}, #{bowseNum,jdbcType=INTEGER}, 
+      #{shareNum,jdbcType=INTEGER}, #{applyColumnTime,jdbcType=TIMESTAMP}, #{auditUserid,jdbcType=INTEGER},
+      #{refuse_reson,jdbcType=VARCHAR},
+      #{auditDate,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateUserSelective" parameterType="com.kg.platform.model.in.UserActiveInModel">
+    update kg_user_active
+    <set>
+      <if test="lastloginIp != null">
+        lastlogin_ip = #{lastloginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastloginTime != null">
+        lastlogin_time = #{lastloginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserid != null">
+        update_userid = #{updateUserid,jdbcType=BIGINT},
+      </if>
+      <if test="lockDate != null">
+        lock_date = #{lockDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockTime != null">
+        lock_time = #{lockTime,jdbcType=TINYINT},
+      </if>
+      <if test="lockUnit != null">
+        lock_unit = #{lockUnit,jdbcType=BIT},
+      </if>
+      <if test="bowseNum != null">
+        bowse_num = #{bowseNum,jdbcType=INTEGER},
+      </if>
+      <if test="shareNum != null">
+        share_num = #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="applyColumnTime != null">
+        apply_column_time = #{applyColumnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditUserid != null">
+        audit_userid = #{auditUserid,jdbcType=INTEGER},
+      </if>
+      <if test="auditDate != null">
+        audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <insert id="insertUserSelective" parameterType="com.kg.platform.model.in.UserActiveInModel">
+    insert into kg_user_active
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="lastloginIp != null">
+        lastlogin_ip,
+      </if>
+      <if test="lastloginTime != null">
+        lastlogin_time,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="updateUserid != null">
+        update_userid,
+      </if>
+      <if test="lockDate != null">
+        lock_date,
+      </if>
+      <if test="lockTime != null">
+        lock_time,
+      </if>
+      <if test="lockUnit != null">
+        lock_unit,
+      </if>
+      <if test="bowseNum != null">
+        bowse_num,
+      </if>
+      <if test="shareNum != null">
+        share_num,
+      </if>
+      <if test="applyColumnTime != null">
+        apply_column_time,
+      </if>
+      <if test="auditUserid != null">
+        audit_userid,
+      </if>
+      <if test="auditDate != null">
+        audit_date,
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="lastloginIp != null">
+        #{lastloginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastloginTime != null">
+        #{lastloginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserid != null">
+        #{updateUserid,jdbcType=BIGINT},
+      </if>
+      <if test="lockDate != null">
+        #{lockDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockTime != null">
+        #{lockTime,jdbcType=TINYINT},
+      </if>
+      <if test="lockUnit != null">
+        #{lockUnit,jdbcType=BIT},
+      </if>
+      <if test="bowseNum != null">
+        #{bowseNum,jdbcType=INTEGER},
+      </if>
+      <if test="shareNum != null">
+        #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="applyColumnTime != null">
+        #{applyColumnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditUserid != null">
+        #{auditUserid,jdbcType=INTEGER},
+      </if>
+      <if test="auditDate != null">
+        #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.kg.platform.dao.entity.UserActive">
+    insert into kg_user_active
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="lastloginIp != null">
+        lastlogin_ip,
+      </if>
+      <if test="lastloginTime != null">
+        lastlogin_time,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="updateUserid != null">
+        update_userid,
+      </if>
+      <if test="lockDate != null">
+        lock_date,
+      </if>
+      <if test="lockTime != null">
+        lock_time,
+      </if>
+      <if test="lockUnit != null">
+        lock_unit,
+      </if>
+      <if test="bowseNum != null">
+        bowse_num,
+      </if>
+      <if test="shareNum != null">
+        share_num,
+      </if>
+      <if test="applyColumnTime != null">
+        apply_column_time,
+      </if>
+      <if test="auditUserid != null">
+        audit_userid,
+      </if>
+      <if test="auditDate != null">
+        audit_date,
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="lastloginIp != null">
+        #{lastloginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastloginTime != null">
+        #{lastloginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserid != null">
+        #{updateUserid,jdbcType=BIGINT},
+      </if>
+      <if test="lockDate != null">
+        #{lockDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockTime != null">
+        #{lockTime,jdbcType=TINYINT},
+      </if>
+      <if test="lockUnit != null">
+        #{lockUnit,jdbcType=BIT},
+      </if>
+      <if test="bowseNum != null">
+        #{bowseNum,jdbcType=INTEGER},
+      </if>
+      <if test="shareNum != null">
+        #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="applyColumnTime != null">
+        #{applyColumnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditUserid != null">
+        #{auditUserid,jdbcType=INTEGER},
+      </if>
+      <if test="auditDate != null">
+        #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.dao.entity.UserActive">
+    update kg_user_active
+    <set>
+      <if test="lastloginIp != null">
+        lastlogin_ip = #{lastloginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastloginTime != null">
+        lastlogin_time = #{lastloginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserid != null">
+        update_userid = #{updateUserid,jdbcType=BIGINT},
+      </if>
+      <if test="lockDate != null">
+        lock_date = #{lockDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockTime != null">
+        lock_time = #{lockTime,jdbcType=TINYINT},
+      </if>
+      <if test="lockUnit != null">
+        lock_unit = #{lockUnit,jdbcType=BIT},
+      </if>
+      <if test="bowseNum != null">
+        bowse_num = #{bowseNum,jdbcType=INTEGER},
+      </if>
+      <if test="shareNum != null">
+        share_num = #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="applyColumnTime != null">
+        apply_column_time = #{applyColumnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditUserid != null">
+        audit_userid = #{auditUserid,jdbcType=INTEGER},
+      </if>
+      <if test="auditDate != null">
+        audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteStatus != null">
+        invite_status = #{inviteStatus,jdbcType=TINYINT},
+      </if>
+      <if test="checkUser != null">
+        check_user = #{checkUser,jdbcType=INTEGER},
+      </if>
+      <if test="checkDate != null">
+        check_date = #{checkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bonusStatus != null">
+        bonus_status = #{bonusStatus,jdbcType=TINYINT},
+      </if>
+      <if test="bonusFreezeReason != null">
+        bonus_freeze_reason = #{bonusFreezeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="freezeUser != null">
+        freeze_user = #{freezeUser,jdbcType=INTEGER},
+      </if>
+      <if test="freezeDate != null">
+        freeze_date = #{freezeDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.dao.entity.UserActive">
+    update kg_user_active
+    set lastlogin_ip = #{lastloginIp,jdbcType=VARCHAR},
+      lastlogin_time = #{lastloginTime,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_userid = #{updateUserid,jdbcType=BIGINT},
+      lock_date = #{lockDate,jdbcType=TIMESTAMP},
+      lock_time = #{lockTime,jdbcType=TINYINT},
+      lock_unit = #{lockUnit,jdbcType=BIT},
+      bowse_num = #{bowseNum,jdbcType=INTEGER},
+      share_num = #{shareNum,jdbcType=INTEGER},
+      apply_column_time = #{applyColumnTime,jdbcType=TIMESTAMP},
+      audit_userid = #{auditUserid,jdbcType=INTEGER},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

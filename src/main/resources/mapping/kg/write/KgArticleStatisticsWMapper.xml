@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kg.platform.dao.write.KgArticleStatisticsWMapper" >
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgArticleStatisticsOutModel" >
+    <id column="article_id" property="articleId" jdbcType="BIGINT" />
+    <result column="browse_num" property="browseNum" jdbcType="INTEGER" />
+    <result column="share_num" property="shareNum" jdbcType="INTEGER" />
+    <result column="thumbup_num" property="thumbupNum" jdbcType="INTEGER" />
+    <result column="collect_num" property="collectNum" jdbcType="INTEGER" />
+    <result column="bonus_num" property="bonusNum" jdbcType="INTEGER" />
+    <result column="bonus_value" property="bonusValue" jdbcType="DECIMAL" />
+    <result column="bonus_total" property="bonusTotal" jdbcType="DECIMAL"/>
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    article_id, browse_num, share_num, thumbup_num, collect_num, bonus_num, bonus_value, 
+    create_user
+  </sql>
+ 
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from kg_article_statistics
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" >
+    delete from kg_article_statistics
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" >
+    insert into kg_article_statistics (article_id, browse_num, share_num, 
+      thumbup_num, collect_num, bonus_num, 
+      bonus_value, create_user)
+    values (#{articleId,jdbcType=BIGINT}, #{browseNum,jdbcType=INTEGER}, #{shareNum,jdbcType=INTEGER}, 
+      #{thumbupNum,jdbcType=INTEGER}, #{collectNum,jdbcType=INTEGER}, #{bonusNum,jdbcType=INTEGER}, 
+      #{bonusValue,jdbcType=DECIMAL}, #{createUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" >
+    insert into kg_article_statistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="articleId != null" >
+        article_id,
+      </if>
+      <if test="browseNum != null" >
+        browse_num,
+      </if>
+      <if test="shareNum != null" >
+        share_num,
+      </if>
+      <if test="thumbupNum != null" >
+        thumbup_num,
+      </if>
+      <if test="collectNum != null" >
+        collect_num,
+      </if>
+      <if test="bonusNum != null" >
+        bonus_num,
+      </if>
+      <if test="bonusValue != null" >
+        bonus_value,
+      </if>
+       <if test="bonusTotal != null" >
+        bonus_total,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="articleId != null" >
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="browseNum != null" >
+        #{browseNum,jdbcType=INTEGER},
+      </if>
+      <if test="shareNum != null" >
+        #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="thumbupNum != null" >
+        #{thumbupNum,jdbcType=INTEGER},
+      </if>
+      <if test="collectNum != null" >
+        #{collectNum,jdbcType=INTEGER},
+      </if>
+      <if test="bonusNum != null" >
+        #{bonusNum,jdbcType=INTEGER},
+      </if>
+      <if test="bonusValue != null" >
+        #{bonusValue,jdbcType=DECIMAL},
+      </if>
+      
+       <if test="bonusTotal != null" >
+         #{bonusTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByExampleSelective" parameterType="map" >
+    update kg_article_statistics
+    <set >
+      <if test="record.articleId != null" >
+        article_id = #{record.articleId,jdbcType=BIGINT},
+      </if>
+      <if test="record.browseNum != null" >
+        browse_num = #{record.browseNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.shareNum != null" >
+        share_num = #{record.shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.thumbupNum != null" >
+        thumbup_num = #{record.thumbupNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.collectNum != null" >
+        collect_num = #{record.collectNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.bonusNum != null" >
+        bonus_num = #{record.bonusNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.bonusValue != null" >
+        bonus_value = #{record.bonusValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update kg_article_statistics
+    set article_id = #{record.articleId,jdbcType=BIGINT},
+      browse_num = #{record.browseNum,jdbcType=INTEGER},
+      share_num = #{record.shareNum,jdbcType=INTEGER},
+      thumbup_num = #{record.thumbupNum,jdbcType=INTEGER},
+      collect_num = #{record.collectNum,jdbcType=INTEGER},
+      bonus_num = #{record.bonusNum,jdbcType=INTEGER},
+      bonus_value = #{record.bonusValue,jdbcType=DECIMAL},
+      create_user = #{record.createUser,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  
+   <update id="updateArticleSelective" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" >
+    update kg_article_statistics
+    <set >
+      <if test="thumbupNum != null" >
+        thumbup_num = thumbup_num-1,
+      </if>
+      <if test="collectNum != null" >
+        collect_num = collect_num-1,
+      </if>
+    </set>
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" >
+    update kg_article_statistics
+    <set >
+      <if test="browseNum != null" >
+        browse_num = browse_num+1,
+      </if>
+      <if test="shareNum != null" >
+        share_num = share_num+1,
+      </if>
+      <if test="thumbupNum != null" >
+        thumbup_num = thumbup_num+1,
+      </if>
+      <if test="collectNum != null" >
+        collect_num = collect_num+1,
+      </if>
+      <if test="bonusNum != null" >
+        bonus_num = bonus_num+1,
+      </if>
+      <if test="bonusValue != null" >
+        bonus_value = bonus_value+#{bonusValue},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" >
+    update kg_article_statistics
+    set browse_num = #{browseNum,jdbcType=INTEGER},
+      share_num = #{shareNum,jdbcType=INTEGER},
+      thumbup_num = #{thumbupNum,jdbcType=INTEGER},
+      collect_num = #{collectNum,jdbcType=INTEGER},
+      bonus_num = #{bonusNum,jdbcType=INTEGER},
+      bonus_value = #{bonusValue,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=BIGINT}
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateAddBonusTotal" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel" >
+   update kg_article_statistics
+   set bonus_total =#{bonusTotal} where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateReductionBonusTotal" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel">
+   update kg_article_statistics
+   set bonus_total =bonus_total-#{bonusTotal} where article_id = #{articleId,jdbcType=BIGINT}
+  
+  </update>
+  <update id="updateBonusValue" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel">
+  UPDATE kg_article_statistics
+   SET bonus_num =bonus_num+1,bonus_value=bonus_value+#{bonusValue} WHERE article_id = #{articleId,jdbcType=BIGINT}
+  
+  </update>
+  
+  <update id="initializeThe" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel">
+  UPDATE kg_article_statistics
+   SET bonus_total =0,bonus_num=0,bonus_value=0 WHERE article_id =#{articleId,jdbcType=BIGINT}
+  </update>
+    
+  <update id="updateStatistics" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel">
+  UPDATE kg_article_statistics
+   SET browse_num = #{browseNum,jdbcType=INTEGER},
+      thumbup_num = #{thumbupNum,jdbcType=INTEGER},
+      collect_num = #{collectNum,jdbcType=INTEGER}
+       WHERE article_id =#{articleId,jdbcType=BIGINT}
+  </update>
+
+  <update id="addBrowseNum" parameterType="com.kg.platform.model.in.KgArticleStatisticsInModel">
+    UPDATE kg_article_statistics
+    SET browse_num=browse_num+1 WHERE article_id =#{articleId,jdbcType=BIGINT}
+  </update>
+</mapper>

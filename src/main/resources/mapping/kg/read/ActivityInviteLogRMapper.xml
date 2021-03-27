@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.ActivityInviteLogRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.ActivityInviteLogOutModel">
+    <id column="invite_id" jdbcType="BIGINT" property="inviteId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="rel_user_id" jdbcType="BIGINT" property="relUserId" />
+    <result column="activity_id" jdbcType="TINYINT" property="activityId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    invite_id, user_id, rel_user_id, activity_id,create_time, status
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_activity_invite_log
+    where invite_id = #{inviteId,jdbcType=BIGINT}
+  </select>
+  
+   <!--查询世界杯活动是否可参加投票-->
+  <select id="checkJoinWordCup" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT 
+     <include refid="Base_Column_List" />
+    from kg_activity_invite_log
+    where user_id = #{userId,jdbcType=BIGINT} and status=0 and activity_id=4
+  </select>
+  
+  
+</mapper>

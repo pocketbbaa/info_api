@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.FriendlyLinkWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.FriendlyLinkOutModel">
+    <id column="link_id" jdbcType="INTEGER" property="linkId" />
+    <result column="link_name" jdbcType="VARCHAR" property="linkName" />
+    <result column="link_address" jdbcType="VARCHAR" property="linkAddress" />
+    <result column="second_channel" jdbcType="INTEGER" property="secondChannel" />
+    <result column="link_status" jdbcType="INTEGER" property="linkStatus" />
+    <result column="link_order" jdbcType="INTEGER" property="linkOrder" />
+    <result column="link_icon" jdbcType="VARCHAR" property="linkIcon" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    link_id, link_name, link_address, second_channel, link_status, link_order, link_icon, 
+    create_user, create_date, update_user, update_date,`type`
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from kg_friendly_link
+    where link_id = #{linkId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.FriendlyLinkInModel">
+    insert into kg_friendly_link (link_id, link_name, link_address, 
+      second_channel, link_status, link_order, 
+      link_icon, create_user, create_date, 
+      update_user, update_date,`type`)
+    values (#{linkId,jdbcType=INTEGER}, #{linkName,jdbcType=VARCHAR}, #{linkAddress,jdbcType=VARCHAR}, 
+      #{secondChannel,jdbcType=INTEGER}, #{linkStatus,jdbcType=INTEGER}, #{linkOrder,jdbcType=INTEGER}, 
+      #{linkIcon,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP},#{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.FriendlyLinkInModel">
+    insert into kg_friendly_link
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="linkId != null">
+        link_id,
+      </if>
+      <if test="linkName != null">
+        link_name,
+      </if>
+      <if test="linkAddress != null">
+        link_address,
+      </if>
+      <if test="secondChannel != null">
+        second_channel,
+      </if>
+      <if test="linkStatus != null">
+        link_status,
+      </if>
+      <if test="linkOrder != null">
+        link_order,
+      </if>
+      <if test="linkIcon != null">
+        link_icon,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+        <if test="type != null">
+            `type`,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="linkId != null">
+        #{linkId,jdbcType=INTEGER},
+      </if>
+      <if test="linkName != null">
+        #{linkName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkAddress != null">
+        #{linkAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="secondChannel != null">
+        #{secondChannel,jdbcType=INTEGER},
+      </if>
+      <if test="linkStatus != null">
+        #{linkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="linkOrder != null">
+        #{linkOrder,jdbcType=INTEGER},
+      </if>
+      <if test="linkIcon != null">
+        #{linkIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+        <if test="type != null">
+            #{type,jdbcType=INTEGER},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.FriendlyLinkInModel">
+    update kg_friendly_link
+    <set>
+      <if test="linkName != null">
+        link_name = #{linkName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkAddress != null">
+        link_address = #{linkAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="secondChannel != null">
+        second_channel = #{secondChannel,jdbcType=INTEGER},
+      </if>
+      <if test="linkStatus != null">
+        link_status = #{linkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="linkOrder != null">
+        link_order = #{linkOrder,jdbcType=INTEGER},
+      </if>
+      <if test="linkIcon != null">
+        link_icon = #{linkIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where link_id = #{linkId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.FriendlyLinkInModel">
+    update kg_friendly_link
+    set link_name = #{linkName,jdbcType=VARCHAR},
+      link_address = #{linkAddress,jdbcType=VARCHAR},
+      second_channel = #{secondChannel,jdbcType=INTEGER},
+      link_status = #{linkStatus,jdbcType=INTEGER},
+      link_order = #{linkOrder,jdbcType=INTEGER},
+      link_icon = #{linkIcon,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where link_id = #{linkId,jdbcType=INTEGER}
+  </update>
+</mapper>

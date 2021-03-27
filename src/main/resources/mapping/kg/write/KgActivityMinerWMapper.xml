@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.KgActivityMinerWMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.KgActivityMinerOutModel">
+    <id column="miner_id" jdbcType="BIGINT" property="minerId" />
+    <result column="miner_name" jdbcType="VARCHAR" property="minerName" />
+    <result column="miner_price" jdbcType="DECIMAL" property="minerPrice" />
+    <result column="miner_assist_frequency" jdbcType="INTEGER" property="minerAssistFrequency" />
+    <result column="miner_join_frequency" jdbcType="INTEGER" property="minerJoinFrequency" />
+    <result column="miner_number" jdbcType="INTEGER" property="minerNumber" />
+    <result column="miner_start_date" jdbcType="TIMESTAMP" property="minerStartDate" />
+    <result column="miner_end_date" jdbcType="TIMESTAMP" property="minerEndDate" />
+    <result column="miner_desc" jdbcType="VARCHAR" property="minerDesc" />
+    <result column="miner_link" jdbcType="VARCHAR" property="minerLink" />
+    <result column="miner_photo" jdbcType="VARCHAR" property="minerPhoto" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    miner_id, miner_name, miner_price, miner_assist_frequency, miner_join_frequency, 
+    miner_number, miner_start_date, miner_end_date, miner_desc, miner_link, miner_photo
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from kg_activity_miner
+    where miner_id = #{minerId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.kg.platform.model.in.KgActivityMinerInModel">
+    insert into kg_activity_miner (miner_id,miner_name, miner_price, miner_assist_frequency,
+      miner_join_frequency, miner_number, miner_start_date, 
+      miner_end_date, miner_desc, miner_link, 
+      miner_photo)
+    values (#{minerId,jdbcType=BIGINT},#{minerName,jdbcType=VARCHAR}, #{minerPrice,jdbcType=DECIMAL}, #{minerAssistFrequency,jdbcType=INTEGER},
+      #{minerJoinFrequency,jdbcType=INTEGER}, #{minerNumber,jdbcType=INTEGER}, #{minerStartDate,jdbcType=TIMESTAMP}, 
+      #{minerEndDate,jdbcType=TIMESTAMP}, #{minerDesc,jdbcType=VARCHAR}, #{minerLink,jdbcType=VARCHAR}, 
+      #{minerPhoto,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kg.platform.model.in.KgActivityMinerInModel">
+    insert into kg_activity_miner
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="minerId != null">
+        miner_id,
+      </if>
+      <if test="minerName != null">
+        miner_name,
+      </if>
+      <if test="minerPrice != null">
+        miner_price,
+      </if>
+      <if test="minerAssistFrequency != null">
+        miner_assist_frequency,
+      </if>
+      <if test="minerJoinFrequency != null">
+        miner_join_frequency,
+      </if>
+      <if test="minerNumber != null">
+        miner_number,
+      </if>
+      <if test="minerStartDate != null">
+        miner_start_date,
+      </if>
+      <if test="minerEndDate != null">
+        miner_end_date,
+      </if>
+      <if test="minerDesc != null">
+        miner_desc,
+      </if>
+      <if test="minerLink != null">
+        miner_link,
+      </if>
+      <if test="minerPhoto != null">
+        miner_photo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="minerId != null">
+        #{minerId,jdbcType=BIGINT},
+      </if>
+      <if test="minerName != null">
+        #{minerName,jdbcType=VARCHAR},
+      </if>
+      <if test="minerPrice != null">
+        #{minerPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="minerAssistFrequency != null">
+        #{minerAssistFrequency,jdbcType=INTEGER},
+      </if>
+      <if test="minerJoinFrequency != null">
+        #{minerJoinFrequency,jdbcType=INTEGER},
+      </if>
+      <if test="minerNumber != null">
+        #{minerNumber,jdbcType=INTEGER},
+      </if>
+      <if test="minerStartDate != null">
+        #{minerStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="minerEndDate != null">
+        #{minerEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="minerDesc != null">
+        #{minerDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="minerLink != null">
+        #{minerLink,jdbcType=VARCHAR},
+      </if>
+      <if test="minerPhoto != null">
+        #{minerPhoto,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kg.platform.model.in.KgActivityMinerInModel">
+    update kg_activity_miner
+    <set>
+      <if test="minerName != null">
+        miner_name = #{minerName,jdbcType=VARCHAR},
+      </if>
+      <if test="minerPrice != null">
+        miner_price = #{minerPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="minerAssistFrequency != null">
+        miner_assist_frequency = #{minerAssistFrequency,jdbcType=INTEGER},
+      </if>
+      <if test="minerJoinFrequency != null">
+        miner_join_frequency = #{minerJoinFrequency,jdbcType=INTEGER},
+      </if>
+      <if test="minerNumber != null">
+        miner_number = #{minerNumber,jdbcType=INTEGER},
+      </if>
+      <if test="minerStartDate != null">
+        miner_start_date = #{minerStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="minerEndDate != null">
+        miner_end_date = #{minerEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="minerDesc != null">
+        miner_desc = #{minerDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="minerLink != null">
+        miner_link = #{minerLink,jdbcType=VARCHAR},
+      </if>
+      <if test="minerPhoto != null">
+        miner_photo = #{minerPhoto,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where miner_id = #{minerId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kg.platform.model.in.KgActivityMinerInModel">
+    update kg_activity_miner
+    set miner_name = #{minerName,jdbcType=VARCHAR},
+      miner_price = #{minerPrice,jdbcType=DECIMAL},
+      miner_assist_frequency = #{minerAssistFrequency,jdbcType=INTEGER},
+      miner_join_frequency = #{minerJoinFrequency,jdbcType=INTEGER},
+      miner_number = #{minerNumber,jdbcType=INTEGER},
+      miner_start_date = #{minerStartDate,jdbcType=TIMESTAMP},
+      miner_end_date = #{minerEndDate,jdbcType=TIMESTAMP},
+      miner_desc = #{minerDesc,jdbcType=VARCHAR},
+      miner_link = #{minerLink,jdbcType=VARCHAR},
+      miner_photo = #{minerPhoto,jdbcType=VARCHAR}
+    where miner_id = #{minerId,jdbcType=BIGINT}
+  </update>
+  
+  
+   <update id="addJoinNums" parameterType="com.kg.platform.model.in.KgActivityMinerInModel">
+    update kg_activity_miner
+    set miner_join_frequency = miner_join_frequency+1
+    where miner_id = #{minerId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="reduceMinerNumber" parameterType="com.kg.platform.model.in.KgActivityMinerInModel">
+    update kg_activity_miner
+    set 
+      miner_number =  miner_number-1
+    where miner_id = #{minerId,jdbcType=BIGINT}
+  </update>
+  
+  
+  
+</mapper>

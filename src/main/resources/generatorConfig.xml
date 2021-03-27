@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+	<classPathEntry
+		location="C:/Users/lzy/.m2/repository/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44.jar" />
+
+	<context id="kg.com">
+		<commentGenerator>
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection connectionURL="jdbc:mysql://47.104.165.109:3306/kgweb"
+			driverClass="com.mysql.jdbc.Driver" password="kgweb!@#" userId="kgweb" />
+
+		<javaModelGenerator targetPackage="com.kg.platform.dao.entity"
+			targetProject="kgapi/src/main/java" />
+
+		<sqlMapGenerator targetPackage="com.kg.platform.dao.read"
+			targetProject="kgapi/src/main/java" />
+
+		<javaClientGenerator targetPackage="com.kg.platform.dao.write"
+			targetProject="kgapi/src/main/java" type="XMLMAPPER" />
+
+		<table schema="kg" tableName="kg_vote" domainObjectName="Vote"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false"/>
+			
+		<table schema="kg" tableName="kg_vote_user" domainObjectName="VoteUser"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false"/>
+	</context>
+</generatorConfiguration>

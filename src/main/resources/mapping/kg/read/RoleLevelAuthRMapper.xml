@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.write.RoleLevelAuthMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.RoleLevelAuth">
+    <id column="auth_id" jdbcType="INTEGER" property="authId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="level_id" jdbcType="INTEGER" property="levelId" />
+    <result column="auth_action" jdbcType="TINYINT" property="authAction" />
+    <result column="auth_action_type" jdbcType="VARCHAR" property="authActionType" />
+    <result column="auth_action_name" jdbcType="VARCHAR" property="authActionName" />
+    <result column="action_times" jdbcType="INTEGER" property="actionTimes" />
+    <result column="action_times_type" jdbcType="BIT" property="actionTimesType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    auth_id, role_id, level_id, auth_action, auth_action_type, auth_action_name, action_times, 
+    action_times_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_role_level_auth
+    where auth_id = #{authId,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

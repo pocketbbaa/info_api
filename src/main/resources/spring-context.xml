@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+
+
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd"
+       default-lazy-init="true">
+
+    <description>Spring Configuration</description>
+
+    <!-- 加载配置属性文件 classpath*:mq.properties,classpath*:dubbo.properties, -->
+    <context:property-placeholder
+            ignore-unresolvable="true"
+            location="classpath:*.properties"/>
+
+    <context:component-scan base-package="com.kg">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <import resource="property.xml"/>
+    <import resource="spring-mybatis.xml"/>
+    <import resource="spring-redis.xml"/>
+    <import resource="spring-message.xml"/>
+    <import resource="spring-mvc.xml"/>
+    <import resource="alimq_producer.xml"/>
+    <import resource="alimq_consumer.xml"/>
+    <import resource="dubbo-consumer.xml"/>
+    <import resource="spring-schedule.xml"/>
+
+    <tx:annotation-driven transaction-manager="kg.transactionManager"/>
+    <bean id="kg.transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="kg.write"/>
+        <property name="globalRollbackOnParticipationFailure" value="false"/> <!--指定此参数为false -->
+    </bean>
+
+
+    <!-- 定时任务 -->
+
+
+    <bean name="newsJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.kg.platform.quartz.NewsQuartz"/>
+        <property name="jobDataMap">
+            <map>
+                <entry key="snacthService" value-ref="snacthService"/>
+            </map>
+        </property>
+        <property name="durability" value="true"/>
+    </bean>
+
+    <bean id="newsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="newsJobDetail"/>
+        <property name="cronExpression" value="0 0 0 0 0/1 ?"/>
+    </bean>
+
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <!-- 				<ref bean="newsJobDetail" /> -->
+            </list>
+        </property>
+
+        <property name="triggers">
+            <list>
+                <!-- 				<ref bean="newsTrigger" /> -->
+
+            </list>
+        </property>
+
+    </bean>
+
+    <bean id="mongoProperty" class="com.kg.platform.common.mongo.MongoProperty" lazy-init="false"/>
+
+    <bean id="emailLinkConfig" class="com.kg.platform.model.EmailLinkConfig">
+        <property name="address" value="${emailLink.address}"/>
+        <property name="url" value="${emailLink.url}"/>
+    </bean>
+
+    <bean name="pushMQProductConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${pushmq.topic}"/>
+    </bean>
+
+    <bean name="mqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${articlemq.topic}"/>
+        <property name="tags" value="${articlemq.consumer.tag}"/>
+    </bean>
+
+    <bean name="awardMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${awardmq.topic}"/>
+        <property name="tags" value="${awardmq.consumer.tag}"/>
+    </bean>
+
+    <bean name="autoPublishArticleMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${autopublisharticlemq.consumer.topic}"/>
+        <property name="tags" value="${autopublisharticlemq.consumer.tag}"/>
+    </bean>
+
+    <bean name="countArticleMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${countarticlemq.topic}"/>
+        <property name="tags" value="${countarticlemq.consumer.tag}"/>
+    </bean>
+
+    <bean name="refreshColumnArticleMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${refreshcolumnarticlemq.topic}"/>
+        <property name="tags" value="${refreshcolumnarticlemq.consumer.tag}"/>
+    </bean>
+
+
+
+    <!--徒弟进贡通知记录-->
+    <bean name="subTributeRecordMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${kgSubTributeRecordMq.topic}"/>
+        <property name="tags" value="${kgSubTributeRecordMq.consumer.tag}"/>
+    </bean>
+
+    <bean name="convertFlowMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${convertFlowMQConsumer.topic}"/>
+        <property name="tags" value="${convertFlowMQConsumer.consumer.tag}"/>
+    </bean>
+
+    <bean name="articleSyncMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${articleSyncMQConsumer.topic}"/>
+        <property name="tags" value="${articleSyncMQConsumer.consumer.tag}"/>
+    </bean>
+
+    <bean name="batchAuditRitWithdrawMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${batchAuditRitWithdrawConsumer.topic}"/>
+        <property name="tags" value="${batchAuditRitWithdrawConsumer.consumer.tag}"/>
+    </bean>
+
+    <!-- 首次发文奖励消息 -->
+    <bean name="kgRewardFirstPostMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${reward.firstPost.topic}"/>
+        <property name="tags" value="${kg.reward.firstPost.consumer.tag}"/>
+    </bean>
+    <!-- 设置优质原创消息 -->
+    <bean name="kgRewardSetQualityMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${reward.setQuality.topic}"/>
+        <property name="tags" value="${kg.reward.setQuality.consumer.tag}"/>
+    </bean>
+    <!-- 设置置顶消息 -->
+    <bean name="kgRewardSetTopMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${reward.SetTop.topic}"/>
+        <property name="tags" value="${kg.reward.SetTop.consumer.tag}"/>
+    </bean>
+    <!-- 设置推荐消息 -->
+    <bean name="kgRewardSetRecommendMqConfig" class="com.kg.platform.common.mq.MQConfig">
+        <property name="topic" value="${reward.SetRecommend.topic}"/>
+        <property name="tags" value="${kg.reward.SetRecommend.consumer.tag}"/>
+    </bean>
+
+    <bean id="userTagsUtil" class="com.kg.platform.common.utils.UserTagsUtil"/>
+
+    <bean id="userLogUtil" class="com.kg.platform.common.utils.UserLogUtil"/>
+
+    <bean id="IDGen" class="com.kg.platform.common.idgen.IDGen">
+
+        <property name="datacenterId" value="1"/>
+    </bean>
+
+    <bean id="ipUtil" class="com.kg.platform.common.utils.IPUtil"/>
+
+    <bean id="cacheService" class="com.kg.platform.common.support.CacheService"/>
+
+    <bean id="coinBgModel" class="com.kg.platform.model.CoinBgModel">
+        <property name="backgroundTv" value="${coin_background_TV}"/>
+        <property name="backgroundKg" value="${coin_background_KG}"/>
+        <property name="backgroundRit" value="${coin_background_RIT}"/>
+        <property name="introTv" value="${coin_intro_TV}"/>
+        <property name="introKg" value="${coin_intro_KG}"/>
+        <property name="introRit" value="${coin_intro_RIT}"/>
+        <property name="compassUrl" value="${compass.url}"/>
+    </bean>
+
+    <bean id="esConfig" class="com.kg.search.config.EsConfig">
+        <property name="host" value="${search.es.host}"/>
+        <property name="clusterName" value="${search.es.clusterName}"/>
+    </bean>
+
+    <bean id="creditTool" class="com.kg.platform.common.duiba.CreditTool">
+        <property name="appKey" value="${duiba.appKey}"/>
+        <property name="appSecret" value="${duiba.appSecret}"/>
+        <property name="duiBaUrl" value="${duiba.url}"/>
+    </bean>
+</beans>

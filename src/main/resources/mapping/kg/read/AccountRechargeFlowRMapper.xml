@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.AccountRechargeFlowRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.AccountRechargeFlow">
+    <id column="recharge_flow_id" jdbcType="BIGINT" property="rechargeFlowId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="recharge_amount" jdbcType="DECIMAL" property="rechargeAmount" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="recharge_time" jdbcType="TIMESTAMP" property="rechargeTime" />
+    <result column="account_time" jdbcType="TIMESTAMP" property="accountTime" />
+    <result column="from_address" jdbcType="VARCHAR" property="fromAddress" />
+    <result column="to_address" jdbcType="VARCHAR" property="toAddress" />
+    <result column="tx_id" jdbcType="VARCHAR" property="txId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    recharge_flow_id, user_id, user_phone, user_email, recharge_amount, account_amount, 
+    recharge_time, account_time, from_address, to_address, tx_id, remark, status
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_account_recharge_flow
+    where recharge_flow_id = #{rechargeFlowId,jdbcType=BIGINT}
+  </select>
+   
+  <select id="selectByTxid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_account_recharge_flow
+    where tx_id = #{txId,jdbcType=VARCHAR}
+  </select>
+ 
+</mapper>

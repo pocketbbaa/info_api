@@ -1,0 +1,22 @@
+CREATE TABLE `kg_order` (
+  `kg_order_num` bigint(20) NOT NULL COMMENT 'KG平台的订单号',
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `credits` bigint(20) NOT NULL COMMENT '消耗数字币数量',
+  `order_num` varchar(50) NOT NULL COMMENT '三方的订单号',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述信息',
+  `item_code` varchar(50) DEFAULT NULL COMMENT '商品编码',
+  `type` varchar(30) DEFAULT NULL COMMENT '类型：QB,Phonebill,Alipay,Coupon  所有类型不区分大小写',
+  `face_price` int(20) NOT NULL DEFAULT '0' COMMENT '面值，分为单位',
+  `actual_price` int(20) NOT NULL DEFAULT '0' COMMENT '实际扣款，分为单位',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `wait_audit` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否等待审核， 如果返回1，表示此订单需要审核，审核通过后才会继续下去。 如果返回0 表示此订单无须审核，会直接继续兑换流程',
+  `ip` varchar(30) DEFAULT NULL COMMENT '用户使用的ip地址',
+  `params` varchar(255) DEFAULT NULL COMMENT '详情参数，不同的类型，返回不同的内容，中间用英文冒号分隔。(支付宝类型带中文，请用utf-8进行解码) 实物商品：返回收货信息(姓名:手机号:省份:城市:区域:详细地址)、支付宝：返回账号信息(支付宝账号:实名)、话费：返回手机号、QB：返回QQ号',
+  `transfer` varchar(50) DEFAULT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '订单状态 0：进行中 1：成功 2: 失败',
+  `coin_type` tinyint(2) NOT NULL COMMENT '1：TV 2：KG 3：RIT',
+  `origin` tinyint(2) NOT NULL COMMENT '三方来源 1：兑吧',
+  PRIMARY KEY (`kg_order_num`),
+  KEY `order_num` (`order_num`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='kg订单';

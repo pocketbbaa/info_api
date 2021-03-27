@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminBonusRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.response.admin.BonusQueryResponse">
+    <id column="bonus_id" jdbcType="VARCHAR" property="id" />
+    <result column="bonus_type_name" jdbcType="VARCHAR" property="name" />
+    <result column="bonus_value" jdbcType="DECIMAL" property="value" />
+    <result column="max_people" jdbcType="INTEGER" property="max" />
+    <result column="bonus_status" jdbcType="INTEGER" property="status" />
+    <result column="bonus_kind" jdbcType="INTEGER" property="kind" />
+  </resultMap>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.kg.platform.model.request.admin.ArticleEditRequest">
+    select a.bonus_status, a.bonus_kind, a.bonus_id, t.bonus_type_name,a.bonus_value,a.max_people from kg_article_bonus a left join kg_bonus_type t on (t.bonus_type_id = a.bonus_type) where a.article_id = #{articleId,jdbcType=BIGINT}
+  </select>
+</mapper>

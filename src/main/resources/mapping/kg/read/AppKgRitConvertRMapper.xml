@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.AppKgRitConvertRMapper">
+    <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.KgRitConvert">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_type" jdbcType="INTEGER" property="userType"/>
+        <result column="rit_rate" jdbcType="VARCHAR" property="ritRate"/>
+        <result column="day_limit" jdbcType="BIGINT" property="dayLimit"/>
+        <result column="next_day_limit" jdbcType="BIGINT" property="nextDayLimit"/>
+        <result column="next_day_cnt" jdbcType="BIGINT" property="nextDayCnt"/>
+        <result column="day_cnt" jdbcType="INTEGER" property="dayCnt"/>
+        <result column="push_time" jdbcType="VARCHAR" property="pushTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_type, rit_rate, day_limit, next_day_limit, next_day_cnt, day_cnt, push_time
+  </sql>
+    <select id="getSet" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_rit_convert
+        order by push_time desc limit 1
+    </select>
+
+
+    <select id="getSetByUserType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kg_rit_convert where user_type = #{userType}
+        order by push_time desc limit 1
+    </select>
+
+</mapper>

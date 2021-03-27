@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.admin.AdminSiteimageRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.dao.entity.Siteimage">
+    <id column="image_id" jdbcType="INTEGER" property="imageId" />
+    <result column="image_address" jdbcType="VARCHAR" property="imageAddress" />
+    <result column="image_type" jdbcType="BIT" property="imageType" />
+    <result column="image_detail" jdbcType="VARCHAR" property="imageDetail" />
+    <result column="navigator_pos" jdbcType="BIT" property="navigatorPos" />
+    <result column="image_pos" jdbcType="BIT" property="imagePos" />
+    <result column="image_status" jdbcType="BIT" property="imageStatus" />
+    <result column="image_order" jdbcType="INTEGER" property="imageOrder" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    
+    <result column="display_port" jdbcType="INTEGER" property="displayPort" />
+    <result column="adver_style" jdbcType="INTEGER" property="adverStyle" />
+    <result column="adver_img_type" jdbcType="INTEGER" property="adverImageType" />
+    <result column="adver_title" jdbcType="VARCHAR" property="adverTitle" />
+    <result column="adver_intro" jdbcType="VARCHAR" property="adverIntro" />
+    <result column="adver_link" jdbcType="VARCHAR" property="adverLink" />
+    <result column="adver_owner" jdbcType="VARCHAR" property="adverOwner" />
+    <result column="adver_target" jdbcType="VARCHAR" property="adverTarget" />
+    <result column="spread_time" jdbcType="INTEGER" property="spreadTime" />
+    <result column="spread_time_s" jdbcType="TIMESTAMP" property="spreadTimeS" />
+    <result column="spread_time_e" jdbcType="TIMESTAMP" property="spreadTimeE" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    image_id, image_address, image_type, image_detail, navigator_pos, image_pos, image_status, 
+    image_order, create_date, (select user_realname from kg_sys_user where sys_user_id = i.create_user) user, update_date, update_user
+    , display_port, adver_style, adver_img_type, adver_title, adver_intro, adver_link,
+    adver_owner, adver_target, spread_time, spread_time_s, spread_time_e
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kg_siteimage i
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </select>
+  
+  <sql id="query_of_where">
+      <if test="imageId != null">
+          and image_id = #{imageId}
+      </if>
+      <if test="navigatorPos != null">
+		and navigator_pos = #{navigatorPos}
+      </if>
+	 <if test="imagePos != null">
+		and image_pos = #{imagePos}
+	</if>
+      <if test="adverType != null and adverType == 1">
+          and image_type !=2
+      </if>
+      <if test="adverType != null and adverType == 2">
+		and image_type = 2
+      </if>
+      <if test="imageType != null">
+		and image_type = #{imageType}
+      </if>
+	<if test="imageStatus != null">
+		and image_status = #{imageStatus}
+	</if>
+      <if test="displayPort != null">
+          and display_port = #{displayPort}
+      </if>
+      <if test="adverStyle != null">
+          and adver_style = #{adverStyle}
+      </if>
+      <if test="adverTitle != null">
+          <bind name="adverTitleLike" value="'%'+adverTitle+'%'"/>
+          and adver_title like #{adverTitleLike}
+      </if>
+      <if test="adverOwner != null">
+          <bind name="adverOwnerLike" value="'%'+adverOwner+'%'"/>
+          and adver_owner like #{adverOwnerLike}
+      </if>
+  </sql>
+  
+  <select id="selectImagesByParam"   parameterType="com.kg.platform.model.request.admin.AdminSiteimageQueryRequest" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List" />
+    from kg_siteimage i
+
+	  <where>
+		  <include refid="query_of_where" />
+	  </where>
+	  order by create_date desc
+	  limit #{start} , #{limit}
+
+  </select>
+  
+ 	<select id="countImagesByParam" parameterType="com.kg.platform.model.request.admin.AdminSiteimageQueryRequest"
+		resultType="java.lang.Integer">
+		select
+		count(image_id)
+		from kg_siteimage i
+		<where>
+			<include refid="query_of_where" />
+		</where>
+	</select>
+ 
+</mapper>

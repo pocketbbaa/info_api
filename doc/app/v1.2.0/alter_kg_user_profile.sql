@@ -1,0 +1,1 @@
+ALTER TABLE kg_user_profile ADD `regist_channel` tinyint(2) DEFAULT NULL COMMENT 'APP注册渠道 1:Android官方渠道|2:小米应用市场|3:vivo应用市场|4:搜狗应用市场|5:360应用市场|6:百度应用市场|7:联想应用市场|8:魅族应用市场|9:oppo应用市场|10:其它应用市场|11:pp手机应用市场|12:渠道1|13:渠道2|14:渠道3|15:应用宝|16:华为应用市场|17:IOS官方渠道|18:马甲1|19:马甲2|20:马甲3|'

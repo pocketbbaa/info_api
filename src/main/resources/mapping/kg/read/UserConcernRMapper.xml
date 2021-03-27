@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.platform.dao.read.UserConcernRMapper">
+  <resultMap id="BaseResultMap" type="com.kg.platform.model.out.UserConcernOutModel">
+    <id column="concern_id" jdbcType="BIGINT" property="concernId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="concern_user_id" jdbcType="BIGINT" property="concernUserId" />
+    <result column="concern_status" jdbcType="TINYINT" property="concernStatus" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    concern_id, user_id, concern_user_id, concern_status,create_date
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_user_concern
+    where concern_id = #{concernId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getConcernInfo" parameterType="com.kg.platform.model.in.UserConcernInModel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from kg_user_concern
+    where  user_id=#{userId} and concern_user_id=#{concernUserId}
+  </select>
+
+  <sql id="Concern_List">
+    ku.user_name as userName,kp.avatar,kp.column_identity as columnName,kuc.concern_user_id as userId,if(ku.user_role=1,kp.resume,kp.column_intro) as resume,
+    if(ku.user_role!=1 and ku.column_authed=1,1,0) as vipTag,ku.user_role as userRole,ku.realname_authed as realnameAuthed,
+    (SELECT count(1) from kg_article ka where ka.create_user=ku.user_id AND ka.display_status !=4 and ka.publish_status=1) as articleNum,ku.column_authed as columnAuthed,
+    (SELECT count(1) from kg_user_concern kuc1 where  kuc1.user_id=kuc.concern_user_id and kuc1.concern_user_id=kuc.user_id) as concernedStatus,
+    if(kuc.concern_status=2,1,kuc.concern_status) as concernUserStatus,ku.user_role as userRole
+  </sql>
+
+  <select id="getConcernList" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="com.kg.platform.model.out.UserConcernListOutModel">
+    SELECT
+     <include refid="Concern_List" />
+    from kg_user_concern kuc
+    LEFT JOIN kg_user ku on kuc.concern_user_id=ku.user_id
+    LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+    where kuc.user_id=#{userId}
+    order by kuc.create_date desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="getConcernCount" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="java.lang.Long">
+    SELECT
+    count(1)
+    from kg_user_concern kuc
+    where user_id=#{userId}
+  </select>
+
+
+  <sql id="Fans_Column_List">
+    ku.user_name as userName,kp.avatar,kp.column_identity as columnName,kuc.user_id as userId,if(ku.user_role=1,kp.resume,kp.column_intro) as resume,
+    if(ku.user_role!=1 and ku.column_authed=1,1,0) as vipTag,ku.user_role as userRole,ku.realname_authed as realnameAuthed,ku.column_authed as columnAuthed,
+    (SELECT count(1) from kg_article ka where ka.create_user=ku.user_id  AND ka.display_status !=4  and ka.publish_status=1) as articleNum,
+    (select count(1) from kg_user_concern kuc1 where kuc1.user_id=kuc.concern_user_id and kuc1.concern_user_id=kuc.user_id ) as concernUserStatus,
+    ku.user_role as userRole,if(kuc.concern_status=2,1,kuc.concern_status) as concernedStatus
+  </sql>
+
+
+  <select id="getFansList" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="com.kg.platform.model.out.UserConcernListOutModel">
+    SELECT
+    <include refid="Fans_Column_List" />
+    from kg_user_concern kuc
+    LEFT JOIN kg_user cu on cu.user_id=kuc.concern_user_id
+    LEFT JOIN kg_user ku on ku.user_id=kuc.user_id
+    LEFT JOIN kg_user_profile kp on kp.user_id=kuc.user_id
+    where kuc.concern_user_id=#{userId}
+    order by kuc.create_date desc
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <select id="getFansCount" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="java.lang.Long">
+    SELECT
+    count(1)
+    from kg_user_concern kuc
+    where kuc.concern_user_id=#{userId}
+  </select>
+
+
+  <select id="concernReminder" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    from kg_user_concern kuc
+    where kuc.concern_user_id=#{userId}
+    and kuc.create_date &gt;= #{lastTime}
+  </select>
+
+  <select id="getConcernDetails" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="com.kg.platform.model.out.UserConcernListOutModel">
+     SELECT
+      ku.user_id,
+      (SELECT count(concern_id) from kg_user_concern where user_id=#{userId,jdbcType=BIGINT} and concern_user_id=ku.user_id) AS concernUserStatus,
+      (SELECT count(concern_id) from kg_user_concern where user_id=ku.user_id and concern_user_id=#{userId,jdbcType=BIGINT}) AS concernedStatus
+     FROM
+     kg_user ku
+     WHERE ku.user_id in
+     <foreach collection="authIds" index="index" item="item" open="(" separator="," close=")">
+           #{item}
+     </foreach>
+  </select>
+
+
+  <select id="getRecommendHotAuthors" parameterType="com.kg.platform.model.in.UserConcernInModel"
+          resultType="com.kg.platform.model.out.HotAuthorsOutModel">
+    SELECT * FROM (
+    SELECT kup.column_name as columnName,kup.column_avatar as avatar,
+    kup.column_intro as resume,kup.user_id as userId,ku.user_order,
+    (SELECT ifnull(SUM(kas.browse_num),0) FROM kg_article_statistics kas WHERE ku.user_id=kas.create_user ) AS
+    browse_num
+    FROM
+    kg_user ku,kg_user_profile kup
+    WHERE ku.hot_user =1 and ku.lock_status=1
+    AND kup.user_id=ku.user_id
+    <if test="authIds.size()!=0">
+     AND ku.user_id not in
+    <foreach collection="authIds" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    </if>
+    GROUP BY ku.user_id ) b ORDER BY b.user_order ASC,b.browse_num DESC
+    limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+   <select id="getRecommendHotAuthorsCount" parameterType="com.kg.platform.model.in.UserConcernInModel"
+          resultType="java.lang.Long">
+    SELECT
+      count(1)
+    FROM
+    kg_user ku
+    WHERE ku.hot_user =1 and ku.lock_status=1
+    <if test="authIds.size()!=0">
+     AND ku.user_id not in
+    <foreach collection="authIds" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+     </if>
+  </select>
+
+
+  <select id="getConcernListIds" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="java.lang.Long">
+    SELECT
+    kuc.concern_user_id
+    from kg_user_concern kuc
+    where kuc.user_id=#{userId}
+  </select>
+
+
+  <!-- 查询已关注的作者ID-->
+  <select id="getConcernedUserIds" parameterType="com.kg.platform.model.in.UserConcernInModel"
+          resultType="java.lang.Long">
+    SELECT concern_user_id from kg_user_concern  kuc
+    LEFT JOIN kg_user ku on kuc.concern_user_id=ku.user_id
+    where kuc.user_id=#{userId} and ku.hot_user=1 and ku.user_role!=1 and ku.lock_status=1
+  </select>
+
+
+
+	<sql id="hot_author_List">
+	   kp.column_name as userName,kp.column_avatar as avatar,kp.column_identity as columnName,if(ku.user_role=1,kp.resume,kp.column_intro) as resume,
+	   if(ku.user_role!=1 and ku.column_authed=1,1,0) as vipTag,ku.user_role as userRole,ku.realname_authed as realnameAuthed,
+	   ku.column_authed as columnAuthed,ku.user_id as userId,
+        <if test="userId==null">
+            0 as concernUserStatus,
+            0 as  concernedStatus,
+        </if>
+	    <if test="userId!=null">
+	     (SELECT count(concern_id) from kg_user_concern where user_id=#{userId} and concern_user_id=ku.user_id) AS concernUserStatus,
+	     (SELECT count(concern_id) from kg_user_concern where user_id=ku.user_id and concern_user_id=#{userId}) AS concernedStatus,
+        </if>
+	   ku.user_role as userRole,ku.user_order,
+	   (SELECT ifnull(SUM(kas.browse_num),0) FROM kg_article_statistics kas WHERE ku.user_id=kas.create_user ) AS  browse_num
+	</sql>
+
+   <!-- 热门作者列表-->
+   <select id="getHotAuthors" parameterType="com.kg.platform.model.in.UserConcernInModel"
+          resultType="com.kg.platform.model.out.UserConcernListOutModel">
+    SELECT
+      <include refid="hot_author_List" />
+    from kg_user ku
+	LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+	where ku.hot_user=1  and ku.lock_status=1
+	ORDER BY ku.user_order ASC,browse_num DESC
+	limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+   <!-- 热门作者总条数-->
+   <select id="getHotAuthorsCount" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="java.lang.Long">
+    SELECT
+    count(1)
+    from kg_user ku 
+    where ku.hot_user=1  and ku.lock_status=1
+  </select>
+
+    <!--获取关注自己的用户信息-->
+    <select id="getConcernedList" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="com.kg.platform.model.out.UserConcernListOutModel">
+      SELECT ku.user_name AS userName,kp.avatar,kg.create_date AS createDate FROM kg_user_concern kg
+        LEFT JOIN kg_user ku ON kg.user_id = ku.user_id
+        LEFT JOIN kg_user_profile kp ON  kg.user_id = kp.user_id
+        WHERE kg.concern_user_id = #{userId} <![CDATA[ AND kg.create_date >= #{lastTime}]]>
+    </select>
+
+    <select id="searchAuthors" parameterType="com.kg.platform.model.in.UserConcernInModel"
+            resultType="com.kg.platform.model.out.UserConcernListOutModel">
+        SELECT
+        <include refid="hot_author_List" />
+        from kg_user ku
+        LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+        where
+        ku.user_role != 1
+        and ku.lock_status=1
+        <if test="searchStr != null and searchStr != ''">
+            <bind name="searchStr" value="'%'+searchStr+'%'"/>
+            and kp.column_name like binary #{searchStr}
+        </if>
+        ORDER BY ku.user_order ASC,browse_num DESC
+        limit #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="searchAuthorsCount" parameterType="com.kg.platform.model.in.UserConcernInModel" resultType="java.lang.Long">
+        SELECT
+        count(1)
+        from kg_user ku
+        LEFT JOIN kg_user_profile kp on kp.user_id=ku.user_id
+        where
+        ku.user_role != 1
+        and ku.lock_status = 1
+        <if test="searchStr != null and searchStr != ''">
+            <bind name="searchStr" value="'%'+searchStr+'%'"/>
+            and kp.column_name like binary #{searchStr}
+        </if>
+    </select>
+
+</mapper>
